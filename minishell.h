@@ -15,6 +15,7 @@ typedef struct  s_commands{
 	char	**command;
 	char	**flags;
 	char	*file;
+	int 	pipe;
 }				t_commands;
 
 #endif

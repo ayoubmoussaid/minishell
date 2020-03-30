@@ -1,14 +1,42 @@
 #include "minishell.h"
 
 
+int		count_char(char *str, char c)
+{
+	int i;
+	int x;
+
+	i = 0;
+	x = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			x++;
+		i++;
+	}
+	return x;
+}
+
+void	check_redirections(char *str, t_commands *cmd)
+{
+	//you missed redirections ... to be done tomorrow inshaallah
+}
+
+
 void	check_pipe_existance(char *str, t_commands *cmd)
 {
 	char **obj;
+	int i = 0;
 
+	cmd->pipe = search_char(str, '|');
 	obj = ft_split(str, '|');
+	while (obj[i] != 0)
+	{
+		
+	}
 }
 
-int     check_for_parse(char *str)
+int     check_for_parse_error(char *str)
 {
 	int i = 0;
 	int size = ft_strlen(str);
@@ -31,12 +59,12 @@ int    read_terminal(t_commands *cmd)
 {
 	get_next_line(0, &(cmd->line));
 	ft_putendl_fd(cmd->line, 1);
-	if (check_for_parse(cmd->line))
+	if (check_for_parse_error(cmd->line))
 		return 1;
 	cmd->command = ft_split(cmd->line, ';');
 	int i = 0;
 	while(cmd->command[i] != 0)
-		ft_putendl_fd(cmd->command[i++], 1);
+		check_pipe_existance(cmd->command[i++], cmd);
 	return 0;
 }
 
@@ -44,6 +72,7 @@ int     main(int argc, char **argv)
 {
 	t_commands *cmd;
 	cmd = (t_commands*)malloc(sizeof(t_commands));
+	cmd->pipe = 0;
 	while(1)
 		if (read_terminal(cmd))
 			break ;
