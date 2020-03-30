@@ -26,8 +26,8 @@ CFLAGS=libft.a
 all: $(NAME)
 
 $(NAME):
-	$(MAKE) -C ./libft
-	mv ./libft/$(LIBFT) .
+	#$(MAKE) -C ./libft
+	#mv ./libft/$(LIBFT) .
 	$(CC) $(SRCS) $(GNL) $(CFLAGS) -o $(NAME)
  
 clean:
@@ -36,4 +36,7 @@ fclean: clean
 	$(MAKE) -C ./libft fclean
 	rm -f $(NAME)
 	rm -f $(LIBFT)
-re: fclean all
+
+ftclean:
+	rm -f $(NAME)
+re: ftclean all
