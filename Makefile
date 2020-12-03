@@ -6,7 +6,7 @@
 #    By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2020/12/01 09:29:45 by amoussai         ###   ########.fr        #
+#    Updated: 2020/12/02 09:15:59 by amoussai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,8 @@ CFLAGS=$(GNL) libft.a
 all: $(NAME)
 
 $(NAME):
-	$(MAKE) -C ./libft
-	mv ./libft/$(LIBFT) .
+	@$(MAKE) -C ./libft
+	@mv ./libft/$(LIBFT) .
 	$(CC) $(FLAGS) $(SRCS) $(CFLAGS) -o $(NAME)
 
 clean:

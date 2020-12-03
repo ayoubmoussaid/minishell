@@ -6,7 +6,7 @@
 #    By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2019/10/26 17:13:47 by amoussai         ###   ########.fr        #
+#    Updated: 2020/12/02 09:15:56 by amoussai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,16 +75,16 @@ INCLUDE=libft.h
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar rcs $(NAME) $(OBJ)
+	@ar rcs $(NAME) $(OBJ)
 
 bonus: all $(BONUS_OBJ)
-	ar rcs $(NAME) $(BONUS_OBJ)
+	@ar rcs $(NAME) $(BONUS_OBJ)
 
 %.o : %.c
-	$(CC) $(FLAGS) -c -o $@ $<
+	@$(CC) $(FLAGS) -c -o $@ $<
 
 clean:
-	rm -f *.o
+	@rm -f *.o
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 re: fclean all
