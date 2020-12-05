@@ -6,23 +6,51 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/05 10:02:48 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/05 13:14:02 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-void fct(int num)
+void	fct(int num)
 {
 	printf("processus fils est terminé ! , %d.\n", num);
 }
 
 
-int     main(){
+void	my_env(char **env, t_shell *shell)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (env[i] != NULL)
+		i++;
+	shell->env = (char**)malloc(sizeof(char*) * (i + 1));
+	
+	j = 0;
+	while (j < i)
+	{
+		shell->env[j] = ft_strdup(env[j]);
+		j++;
+	}
+	shell->env[j] = NULL;
+}
 
 
+int     main(int argc, char **argv, char **env)
+{
+	t_shell shell;
+	if (argc > 1)
+		argv = NULL;
+	my_env(env, &shell);
+	//ft_env(shell.env);
+	ft_pwd();
+	ft_cd(&shell, "..");
+	ft_cd(&shell, "minishell");
 
-	pid_t pid = fork();
+	
+	/* pid_t pid = fork();
 	if(pid == 0)
 	{
 		char *args[] = {"/bin/ls", (char *)0};
@@ -43,7 +71,7 @@ int     main(){
 	else
 	{
 		printf("some error occured!\n");
-	}
+	} */
 
 	//pause();
 	
