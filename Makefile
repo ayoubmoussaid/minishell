@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+         #
+#    By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2020/12/02 09:15:59 by amoussai         ###   ########.fr        #
+#    Updated: 2020/12/05 10:01:27 by amoussai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=minishell
 LIBFT=libft.a
-SRCS= main.c
+SRCS= src/main.c
 
 
 

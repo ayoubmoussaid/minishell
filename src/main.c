@@ -6,11 +6,11 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/03 14:33:25 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/05 10:02:48 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
 void fct(int num)
 {
