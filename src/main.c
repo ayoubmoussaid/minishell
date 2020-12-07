@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/07 10:04:00 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/07 13:48:54 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int     main(int argc, char **argv, char **env)
 	//ft_cd(&shell, "..");
 	//ft_cd(&shell, "minishell");
 	//ft_cd(&shell, "/freak");
-	char *tab[] = {"hello", "world" , "dad", "-n", (void*)0};
+	char *tab[] = {"$PATH","hello", "world" , "dad", "-n", (void*)0};
 	ft_echo(&shell, tab);
 	
 	
