@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/05 13:14:02 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/07 10:04:00 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,14 @@ int     main(int argc, char **argv, char **env)
 	my_env(env, &shell);
 	//ft_env(shell.env);
 	ft_pwd();
-	ft_cd(&shell, "..");
-	ft_cd(&shell, "minishell");
-
+	//ft_cd(&shell, "..");
+	//ft_cd(&shell, "minishell");
+	//ft_cd(&shell, "/freak");
+	char *tab[] = {"hello", "world" , "dad", "-n", (void*)0};
+	ft_echo(&shell, tab);
+	
+	
+	
 	
 	/* pid_t pid = fork();
 	if(pid == 0)
