@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/07 13:48:54 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/08 09:33:55 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,21 @@ void	my_env(char **env, t_shell *shell)
 
 int     main(int argc, char **argv, char **env)
 {
-	t_shell shell;
+	t_shell *shell;
+
+	shell = (t_shell*)malloc(sizeof(t_shell));
+
+	shell->debug_file = fopen("debug.txt", "w");
 	if (argc > 1)
 		argv = NULL;
-	my_env(env, &shell);
+	my_env(env, shell);
 	//ft_env(shell.env);
 	ft_pwd();
 	//ft_cd(&shell, "..");
 	//ft_cd(&shell, "minishell");
 	//ft_cd(&shell, "/freak");
-	char *tab[] = {"$PATH","hello", "world" , "dad", "-n", (void*)0};
-	ft_echo(&shell, tab);
+	char *tab[] = {"$OLDPWD", (void*)0};
+	ft_echo(shell, tab);
 	
 	
 	
@@ -79,7 +83,7 @@ int     main(int argc, char **argv, char **env)
 	} */
 
 	//pause();
-	
+	fclose(shell->debug_file);
 	return (0);
 }
 
