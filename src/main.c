@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/08 09:33:55 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/10 12:32:10 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,30 @@ void	my_env(char **env, t_shell *shell)
 
 int     main(int argc, char **argv, char **env)
 {
+	//TODO export b="\""
+	//TODO echo "\$PWD"
 	t_shell *shell;
 
 	shell = (t_shell*)malloc(sizeof(t_shell));
-
+	//write(1, "\n=============================\n", 31);
 	shell->debug_file = fopen("debug.txt", "w");
 	if (argc > 1)
 		argv = NULL;
 	my_env(env, shell);
 	//ft_env(shell.env);
-	ft_pwd();
+	//ft_pwd();
 	//ft_cd(&shell, "..");
 	//ft_cd(&shell, "minishell");
 	//ft_cd(&shell, "/freak");
-	char *tab[] = {"$OLDPWD", (void*)0};
+	char *tab[] = {"LDPWDwdad", "\\$PWD", (void*)0};
 	ft_echo(shell, tab);
+	//write(1, "=============================\n", 30);
 	
-	
-	
-	
-	/* pid_t pid = fork();
+/* 	pid_t pid = fork();
 	if(pid == 0)
 	{
-		char *args[] = {"/bin/ls", (char *)0};
-		char *env_args[] = {(char*)0};
+		char *args[] = {"/bin/ls", "$l",(char *)0};
+		char *env_args[] = {"l=-la",(char*)0};
 		printf("salut from child\n");
 		int x = execve(args[0], args, env_args);
 		printf("child says: %d\n", x);
@@ -80,7 +80,7 @@ int     main(int argc, char **argv, char **env)
 	else
 	{
 		printf("some error occured!\n");
-	} */
+	}  */
 
 	//pause();
 	fclose(shell->debug_file);
