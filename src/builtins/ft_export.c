@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 09:43:12 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/10 14:57:51 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/11 10:30:31 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,20 @@ int		ft_isvalid(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
+		if (i != 0 && str[i] == '=')
+			break ;
 		if (i == 0 && !(ft_isalpha(str[i]) || str[i] == '_'))
 			return (0);
 		if (i != 0 && !(ft_isalnum(str[i]) || str[i] == '_'))
 			return (0);
-		if (i != 0 && str[i] == '=')
-			break ;
+		i++;
 	}
 	return (1);
+}
+
+void	ft_addvar(t_shell *shell, char  *var)
+{
+	
 }
 
 void	ft_export(t_shell *shell, char **args)
@@ -41,6 +47,7 @@ void	ft_export(t_shell *shell, char **args)
 		if (ft_isvalid(args[i]))
 		{
 			fprintf(shell->debug_file, "-- %s --\n", args[i]);
+
 		}
 		else
 		{
@@ -48,5 +55,6 @@ void	ft_export(t_shell *shell, char **args)
 			ft_putstr_fd(args[i], STDOUT_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDOUT_FILENO);
 		}
+		i++;
 	}
 }

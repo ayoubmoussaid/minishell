@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/10 12:32:10 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/11 10:20:07 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,12 @@ int     main(int argc, char **argv, char **env)
 	//ft_cd(&shell, "..");
 	//ft_cd(&shell, "minishell");
 	//ft_cd(&shell, "/freak");
-	char *tab[] = {"LDPWDwdad", "\\$PWD", (void*)0};
-	ft_echo(shell, tab);
+
+	//tab is a simple table containing args for test
+	char *tab[] = {"x=5", "f=sef", "%dwa=", "awd", "_awd", (void*)0};
+	ft_export(shell, tab);
+
+	//ft_env(shell->env);
 	//write(1, "=============================\n", 30);
 	
 /* 	pid_t pid = fork();

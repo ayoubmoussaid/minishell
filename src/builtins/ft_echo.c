@@ -3,35 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 09:24:53 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/10 08:52:51 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/11 10:32:22 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	*ft_getvar(t_shell *shell, char *search)
-{
-	int		i;
-	int		len;
-	char	*tofree;
 
-	i = 0;
-	len = ft_strlen(search);
-	//fprintf(shell->debug_file, "-- len: %d ---\n", len);
-	while (shell->env && shell->env[i] != NULL)
-	{
-		tofree = ft_substr(shell->env[i], 0, len);
-		if (ft_strcmp(tofree, search) == 0)
-			return (ft_substr(shell->env[i], len + 1, ft_strlen(shell->env[i])));
-		//fprintf(shell->debug_file, "-- tofree: %s ---\n", tofree);
-		free(tofree);
-		i++;
-	}
-	return (ft_strdup(""));
-}
 
 void	ft_specialprint(char *s, int fd)
 {
