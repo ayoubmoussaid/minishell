@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/10 14:59:35 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/11 13:49:34 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ void	my_env(char **env, t_shell *shell)
 
 
 
-// void	printsp(char **sp)
-// {
-// 	int i = -1;
+void	printsp(char **sp)
+{
+	int i = -1;
 
-// 	printf("--------start--------\n");
-// 	while(sp[++i])
-// 		printf("|%s|\n",sp[i]);
-// 	printf("---------end---------\n");
-// }
+	printf("--------start--------\n");
+	while(sp[++i])
+		printf("|%s|\n",sp[i]);
+	printf("---------end---------\n");
+}
 
 
 // int	check_comma(t_getl *getl)
@@ -74,84 +74,74 @@ void	my_env(char **env, t_shell *shell)
 // }
 
 
-// int indexof_char(char *str, char *c)
-// {
-// 	int i;
-// 	char *s;
+int indexof_char(char *str, char *c)
+{
+	int i;
+	char *s;
 
-// 	i = -1;
-// 	s = ft_strtrim(str, c);
-// 	while(s[++i])
-// 	{
-// 		if (s[i] == c[0])
-// 			return (i);
-// 	}
-// 	return (-1);
-// }
+	i = -1;
+	s = ft_strtrim(str, c);
+	while(s[++i])
+	{
+		if (s[i] == c[0])
+			return (i);
+	}
+	return (-1);
+}
 
-// int skip_char(char *s, char *c, int start)
-// {
-// 	int i;
+int skip_char(char *s, char *c, int start)
+{
+	int i;
 
-// 	i = start;
-// 	while(s[i])
-// 	{
-// 		if (s[i] == c[0] && s[i + 1] != c[0])
-// 			return (i+1);
-// 		i++;
-// 	}
-// 	return (-1);
-// }
-
-
+	i = start;
+	while(s[i])
+	{
+		if (s[i] == c[0] && s[i + 1] != c[0])
+			return (i + 1);
+		i++;
+	}
+	return (-1);
+}
 
 
 
 
 
 
-// void	foreach_cmd(char *sp)
-// {
+
+
+void	foreach_cmd(char *sp)
+{
 	
-// 	t_cmd *cmd;
-// 	char *args;
-// 	int in;
+	t_cmd *cmd;
+	char *args;
+	int in;
 	
-
-// 	// int   in;
-
-// 	// in = indexof_char(sp, " ");
-// 	cmd = (t_cmd*)malloc(sizeof(t_cmd));
-// 	cmd->c = ft_substr(sp, 0, (in = indexof_char(sp, " ")));
-// 	in = skip_char(sp, " ", in);
-// 	args = ft_substr(sp, in, ft_strlen(sp) - in);
-// 	printf("|cmd->c:|%s|\n|args:|%s|\n\n",cmd->c, args);
+	cmd = (t_cmd*)malloc(sizeof(t_cmd));
+	cmd->c = ft_substr(sp, 0, (in = indexof_char(sp, " ")));
+	in = skip_char(sp, " ", in);
+	//printf("\n\n\n\nin:%d endofargs:%lu\n\n\n\n",in, ft_strlen(sp) - in);
+	args = ft_substr(sp, in+1, ft_strlen(sp) - in -1);
+	printf("|cmd->c:|%s|\n|args:|%s|\n\n",cmd->c, args);
 	
 
+}
 
+
+
+
+void	get_cmd(t_getl *getl)
+{
+	int i;
+
+	i = -1;
+	getl->sp = ft_split(getl->line_t, ';');
+	while(getl->sp[++i])
+		foreach_cmd(getl->sp[i]);
 	
 	
-
 	
-// }
-
-
-
-
-// void	get_cmd(t_getl *getl)
-// {
-// 	int i;
-
-// 	i = -1;
-// 	getl->sp = ft_split(getl->line_t, ';');
-// 	while(getl->sp[++i])
-// 	{
-// 		foreach_cmd(getl->sp[i]);
-// 		free(getl->sps);
-// 	}
-	
-	
-// }
+}
 
 
 void	errrors(char *err)
@@ -161,7 +151,7 @@ void	errrors(char *err)
 
 
 
-int	check_comma(t_getl *getl, int *i)
+int	check_comma(t_getl *getl, int *i, char c)
 {
 	while(getl->line_t[++(*i)])
 	{
@@ -170,7 +160,7 @@ int	check_comma(t_getl *getl, int *i)
 			getl->zeros[*i] = '1'; //;
 			getl->line_t[*i] = '1'; //;
 		}
-		else if (getl->line_t[*i] == '"')
+		else if (getl->line_t[*i] == c)
 		{
 			getl->quote = 0;
 			return (*i);
@@ -184,7 +174,8 @@ int	check_comma(t_getl *getl, int *i)
 
 void	tozeros(char *s, int len)
 {
-	while(len--)
+	s[len] = '\0';
+	while(--len > -1)
 		*s++ =  '0';
 } 
 
@@ -196,21 +187,17 @@ int	toclear(t_getl *getl)
 	i = -1;
 	while(getl->line_t[++i])
 	{
-		if (getl->line_t[i] == '"')
+		if (getl->line_t[i] == (char)34 || getl->line_t[i] == (char)39)
 		{
+			getl->c = (getl->line_t[i] == (char)34) ? (char)34 : (char)39;
 			getl->quote = 1;
-			i = check_comma(getl, &i);
+			i = check_comma(getl, &i, getl->c);
 		}
 		if (getl->quote == 1)
-		{
-			//printf("error\n");
 			return (-1);// failed
-		}
+	
 
-		// else if (getl->line_t[i] == (char)39)
-		// {
-		// 	printf("syntax error\n");
-		// }
+		
 				
 	}
 	return (1);
@@ -266,12 +253,14 @@ int     main(int argc, char **argv, char **env)
 			printf("|%s|\n\n\n\n",getl->zeros);
 			if ((getl->err = toclear(getl)) == -1)
 			{
-				errrors(g_mishell_err[QUOTES]);
+				getl->errdefine = (getl->c == (char)34 )? QUOTED : QUOTES;
+				errrors(g_mishell_err[getl->errdefine]);
 				continue;// show err and continue to the next cmd
 			}
-				
 			printf("|%s|\n",getl->zeros);
 			printf("|%s|\n",getl->line_t);
+			get_cmd(getl);
+			
 
 			
 				
@@ -282,7 +271,7 @@ int     main(int argc, char **argv, char **env)
 			
 
 
-		free(getl->line);
+		//free(getl->line);
 	}
 	//fprintf(shell->debug_file, "hello %d\n", 22);
 

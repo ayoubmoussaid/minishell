@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/10 14:59:05 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/11 11:03:51 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 
 
 # define COMMA 0
-# define QUOTES 1
 # define QUOTED 1
+# define QUOTES 2
+
 
 
 
@@ -48,9 +49,11 @@ typedef struct	s_getl{
 	char **sp;
 	char *line_t;
 	char **sps;
-	int quote;
+	int quote; // active ' " or inactive
 	char *zeros;
-	int err;
+	int err; // errors
+	char c;
+	int errdefine;
 }				t_getl;
 
 
