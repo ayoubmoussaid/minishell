@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 09:24:53 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/11 10:32:22 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/11 11:52:58 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	ft_specialprint(char *s, int fd)
 	}
 }
 
-//TODO check backslash
 void	ft_echo(t_shell *shell, char *args[])
 {
 	int		i;

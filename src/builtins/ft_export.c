@@ -6,14 +6,12 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 09:43:12 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/11 10:30:31 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/11 11:55:17 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-
-//TODO to fix
 int		ft_isvalid(char *str)
 {
 	int i;
@@ -32,11 +30,6 @@ int		ft_isvalid(char *str)
 	return (1);
 }
 
-void	ft_addvar(t_shell *shell, char  *var)
-{
-	
-}
-
 void	ft_export(t_shell *shell, char **args)
 {
 	int i;
@@ -47,7 +40,7 @@ void	ft_export(t_shell *shell, char **args)
 		if (ft_isvalid(args[i]))
 		{
 			fprintf(shell->debug_file, "-- %s --\n", args[i]);
-
+			ft_addvar(shell, args[i]);
 		}
 		else
 		{

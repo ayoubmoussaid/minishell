@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/11 10:33:28 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/11 11:55:11 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,7 @@ void	ft_cd(t_shell *shell, char *dir);
 void	ft_echo(t_shell *shell, char **args);
 void	ft_export(t_shell *shell, char **args);
 char	*ft_getvar(t_shell *shell, char *search);
+int		ft_len(char **tab);
+void	ft_addvar(t_shell *shell, char *var);
 
 #endif

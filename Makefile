@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+         #
+#    By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2020/12/08 09:34:34 by amoussai         ###   ########.fr        #
+#    Updated: 2020/12/11 10:56:21 by amoussai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=minishell
 LIBFT=libft.a
-SRCS= src/main.c src/builtins/*.c
+SRCS= src/main.c src/builtins/*.c src/core/*
 
 
 OBJ=$(SRCS:.c=.o)
