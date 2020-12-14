@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/12 12:58:08 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/14 13:57:26 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,8 @@ int	toclear(t_getl *getl)
 
 
 
-int	check_syntax(t_getl *getl)
+
+int	check_syntax_c(t_getl *getl)
 {
 	int i;
 
@@ -227,18 +228,19 @@ int	check_syntax(t_getl *getl)
 	getl->space = ' ';
 	while(getl->line[++i])
 	{
-
-		if (getl->quote == 0 && getl->line[i] == ';')
+		if (getl->line[i] == ';')
 		{
-			printf("|%d|%c|\n",getl->quote,getl->line[i]);
-			if (getl->comma == 1 && getl->space == ' ')
+			if (getl->line[i + 1] == ';')
+				return (1);
+			while(getl->line[++i] && getl->line[i] != ';')
 			{
-				return (1);// syntsx error  errrors(g_mishell_err[COMMA]);
+				if (getl->line[i] != ' ')
+					getl->space = getl->line[i];
 			}
-			getl->comma = 1;
+			if (getl->space == ' ')
+				return (1);
+			
 		}
-		if (getl->comma == 1)
-			getl->space = getl->line[i + 1];
 	}
 	return (0);
 }
@@ -287,25 +289,29 @@ int     main(int argc, char **argv, char **env)
 
 			// get_cmd(getl);
 			
-			printf("|%s|\n",getl->line);
+			//printf("|%s|\n",getl->line);
 			len = ft_strlen(getl->line);
 			getl->zeros = (char*)malloc(sizeof(char) * (len + 1));
 			tozeros(getl->zeros, len);
-			printf("|%s|\n\n\n\n",getl->zeros);
+			//printf("|%s|\n\n\n\n",getl->zeros);
 			if ((getl->err = toclear(getl)) == -1)
 			{
 				getl->errdefine = (getl->c == (char)34 )? QUOTED : QUOTES;
 				errrors(g_mishell_err[getl->errdefine]);
 				continue;// show err and continue to the next cmd
 			}
-			if (check_syntax(getl))
+			if (check_syntax_c(getl))
 			{
-				printf("|-------%d\n",getl->quote);
-				errrors(g_mishell_err[COMMA]);
-				continue;
+					errrors(g_mishell_err[COMMA]);
+					continue;			
 			}
-			printf("|%s|\n",getl->zeros);
-			printf("|%s|\n",getl->line);
+			// if (check_syntax_p(getl))
+			// {
+				
+			// }
+
+			//printf("|%s|\n",getl->zeros);
+			//printf("|%s|\n",getl->line);
 			get_cmd(getl);
 			
 

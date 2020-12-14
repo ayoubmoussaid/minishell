@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/12 12:39:08 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/14 13:42:31 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct	s_getl{
 	int r;
 	char **sp;
 	char **sps;
-	int quote; // active ' " or inactive
+	int quote;//active ' " or inactive
 	char *zeros;
 	int err; // errors
 	char c;
