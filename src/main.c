@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/14 13:57:26 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/15 14:29:29 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,42 @@ void	tozeros(char *s, int len)
 		*s++ =  '0';
 } 
 
+
+
+int	check_syntax(t_getl *getl,int *j, char c)
+{
+	int i;
+	int res;
+
+	i = *j;
+	res = 0;
+	getl->space = ' ';
+	if (getl->line[getl->len-1] == c && c != ';')
+		return (1);
+	while(getl->line[++i])
+	{
+		if (c == '>' || c == '|')
+			i++;
+		if (getl->line[i] == c)
+			return (1); 
+		while(getl->line[i] && getl->line[i] != c)
+		{
+			if (getl->line[i] != ' ')
+				return (0);
+			i++;
+		}
+		res = (getl->space == ' ') ? 1 : 0;
+	}
+	return (res); // no err found
+}
+
+
+
+
+
+
+
+
 int	toclear(t_getl *getl)
 {
 	int i;
@@ -200,6 +236,15 @@ int	toclear(t_getl *getl)
 	i = -1;
 	while(getl->line[++i])
 	{
+		if (getl->line[i] == ';')
+			if (check_syntax(getl, &i, ';'))
+				return(COMMA);
+		if (getl->line[i] == '>')
+			if (check_syntax(getl, &i, '>'))
+				return(INFILE);
+		if (getl->line[i] == '|')
+			if (check_syntax(getl, &i, '|'))
+				return(PIPE);
 		if (getl->line[i] == (char)34 || getl->line[i] == (char)39)
 		{
 			getl->c = (getl->line[i] == (char)34) ? (char)34 : (char)39;
@@ -207,44 +252,10 @@ int	toclear(t_getl *getl)
 			i = check_comma(getl, &i, getl->c);
 		}
 		if (getl->quote == 1)
-			return (-1);// failed
-	
-
-		
-				
+			return (QUOTED);// failed		
 	}
-	return (1);
+	return (-1); // nothing happed
 }
-
-
-
-
-int	check_syntax_c(t_getl *getl)
-{
-	int i;
-
-	i = -1;
-	getl->comma = 0;
-	getl->space = ' ';
-	while(getl->line[++i])
-	{
-		if (getl->line[i] == ';')
-		{
-			if (getl->line[i + 1] == ';')
-				return (1);
-			while(getl->line[++i] && getl->line[i] != ';')
-			{
-				if (getl->line[i] != ' ')
-					getl->space = getl->line[i];
-			}
-			if (getl->space == ' ')
-				return (1);
-			
-		}
-	}
-	return (0);
-}
-
 
 
 
@@ -255,7 +266,7 @@ int     main(int argc, char **argv, char **env)
 {
 	t_shell *shell;
 	t_getl *getl;
-	int len;
+
 
 	//t_lst list;
 
@@ -281,82 +292,23 @@ int     main(int argc, char **argv, char **env)
 	while (1)
 	{
 		ft_putstr_fd("\033[92mminishell$> \033[39m", 1);
-		if (get_next_line(0, &getl->line) > 0)
+		if (get_next_line(0, &getl->line_t) > 0)
 		{
-			
-			// getl->line_t =  ft_strtrim(getl->line, " ");
-			// len = ft_strlen(getl->line_t);
-
-			// get_cmd(getl);
-			
-			//printf("|%s|\n",getl->line);
-			len = ft_strlen(getl->line);
-			getl->zeros = (char*)malloc(sizeof(char) * (len + 1));
-			tozeros(getl->zeros, len);
-			//printf("|%s|\n\n\n\n",getl->zeros);
-			if ((getl->err = toclear(getl)) == -1)
+			getl->line = ft_strtrim(getl->line_t, " ");
+			getl->len = ft_strlen(getl->line);
+			getl->zeros = (char*)malloc(sizeof(char) * (getl->len + 1));
+			tozeros(getl->zeros, getl->len);
+			printf("|%s|\n\n\n\n",getl->zeros);
+			if ((getl->err = toclear(getl)) != -1)
 			{
-				getl->errdefine = (getl->c == (char)34 )? QUOTED : QUOTES;
-				errrors(g_mishell_err[getl->errdefine]);
-				continue;// show err and continue to the next cmd
+				errrors(g_mishell_err[getl->err]);
+				continue;
 			}
-			if (check_syntax_c(getl))
-			{
-					errrors(g_mishell_err[COMMA]);
-					continue;			
-			}
-			// if (check_syntax_p(getl))
-			// {
-				
-			// }
-
-			//printf("|%s|\n",getl->zeros);
-			//printf("|%s|\n",getl->line);
 			get_cmd(getl);
-			
-
-			
-				
-			
-			//printsp(getl);
-
+			//printf("|%s|\n\n\n\n",getl->zeros);
 		}
-			
-
-
 		//free(getl->line);
 	}
-	//fprintf(shell->debug_file, "hello %d\n", 22);
-
-
-	
-	
-	
-	
-	/* pid_t pid = fork();
-	if(pid == 0)
-	{
-		char *args[] = {"/bin/ls", (char *)0};
-		char *env_args[] = {(char*)0};
-		printf("salut from child\n");
-		int x = execve(args[0], args, env_args);
-		printf("child says: %d\n", x);
-		sleep(2);
-		exit(0);
-	}
-	else if (pid > 0)
-	{
-		int status;
-		printf("parent process here\n");
-		waitpid(pid, &status, 0);
-		printf("child process exited %d | %d\n", pid, getpid());	
-	}
-	else
-	{
-		printf("some error occured!\n");
-	} */
-
-	//pause();
 	fclose(shell->debug_file);
 	return (0);
 }
@@ -364,49 +316,3 @@ int     main(int argc, char **argv, char **env)
 
 
 
-
-
-/* int     ft_len(char **tab){
-	int i;
-
-	i=0;
-	while(tab[i] != NULL){
-		i++;
-	}
-	return i;
-}
-
-int ft_verify(char *str){
-	int i;
-
-	i = 0;
-	while (str[i] != '\0'){
-		if (str[i] == ';' && str[i + 1] == ';'){
-			return (0);
-		}
-	}
-	return (1);
-}
-
-void    parse_line(char *str){
-	
-	char **str_table = ft_split(str, ';');
-	printf("\nlen: %d\n", ft_len(str_table));
-	int i = 0;
-	while(str_table[i] != NULL){
-		printf("-- %s --\n", str_table[i]);
-		i++;
-	}
-}
-
-void    read_line(){
-	char    *line;
-	int     ret = 0;
-	ft_putstr_fd("\x1B[92m->minishell=> \x1B[39m", STDOUT_FILENO);
-	while((ret = get_next_line(STDIN_FILENO, &line)) != -1){
-		ft_putstr_fd(line, STDOUT_FILENO);
-		parse_line(line);
-		free(line);
-		ft_putstr_fd("\x1B[92m\n-> minishell=> \x1B[39m", STDOUT_FILENO);
-	}
-} */

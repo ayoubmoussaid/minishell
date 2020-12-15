@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/14 13:42:31 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/15 14:16:18 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define COMMA 0
 # define QUOTED 1
 # define QUOTES 2
+# define INFILE 3
+# define PIPE 4
 
 
 
@@ -34,6 +36,8 @@ static char		*(g_mishell_err[]) =
 	"Syntax error near unexpected token `;;' ",
 	"Syntax error near unexpected token  `\"' ",
 	"Syntax error near unexpected token  `\'' ",
+	"Syntax error near unexpected token  `>' ",
+	"Syntax error near unexpected token  `|' ",
 	""
 };
 
@@ -45,6 +49,8 @@ static char		*(g_mishell_err[]) =
 
 typedef struct	s_getl{
 	char *line;
+	char *line_t;
+	int len;
 	int fd;
 	int r;
 	char **sp;
@@ -53,7 +59,6 @@ typedef struct	s_getl{
 	char *zeros;
 	int err; // errors
 	char c;
-	int errdefine;
 	int comma; // for the err ;;    ;       ;
 	int pipe; // for the err || |      |
 	int redirection;
@@ -66,10 +71,11 @@ typedef struct	s_cmd{
 	char			*c;
 	char			**args;
 	int				pipe;
-	char			*infile_s;
-	char			*infile_d;
-	int				outfile;
+	char			**files;
+	int				*num_files;
 }				t_cmd;
+
+
 
 typedef struct	s_lst
 {
