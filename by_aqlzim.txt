@@ -1,0 +1,71 @@
+export a = b ==> then check env and export
+export a
+export a=
+export b=c
+export e=$b
+export z=\v ==> it gives z="v"
+export _=sakdjh ==> u shouldn't have change this var u have to protect the var _
+unset PATH
+export PATH=/bin:/usr/bin ==> should work
+=========================
+env
+=========================
+cd -
+cd ..
+cd .
+cd
+cd ~
+cd ~//////////////////////////////////
+cd ~//////////////////////////////////Path
+cd /
+cd //
+=========================
+echo -n 
+echo -n -n -n -n
+echo -nnnnnnn
+echo $?
+echo hello$?hi
+echo hello$PWD
+echo $PWD
+echo "$"PWD
+echo "$PWD"
+echo '$PWD'
+echo '$'PWD
+echo " "$PWD" "
+echo '" '$PWD' "
+echo \$\$\$\$
+echo \anychar\anychar\anychar
+echo \'\'\'\'
+echo \"\"\"
+echo \\"$PWD
+=========================
+\\
+/
+//
+./ls
+\ls
+=========================
+'/bin/ls'
+'anycmd' ==> should work
+'/bin/ls ; /bin/pwd' ==> shouldn't work
+any test contains double quetes or signle quetes
+=========================
+when running minishell multiple times a var called SHLVL in the env must be added to 1 
+=========================
+exit ==> echo $? == 0
+exit 1 ==> echo $? == 1
+exit 9 ==> echo $? == 9
+exit 255 ==> echo $? == 255
+exit 256 ==> echo $? == 0
+exit MAX_LONG_INT ==> echo $? == 255
+exit MAX_LONG_INT + 1 ==> print Error msg eceho $? == 255
+exit MIN_LONG_INT ==> echo $? == 1
+exit g h and try exit 8 9
+=========================
+signals:
+try ctrl-C ctrl-\ ctrl-D in an empty prompt then check echo $?
+try ctrl-C ctrl-\ ctrl-D after u wrote some stuff then check echo $?
+try ctrl-C ctrl-\ ctrl-D after u run a blocking cmd like cat or wc or sleep 5 then check echo $?
+=========================
+beware of blocking cmd and return status...
+when run ./minishell the var OLDPWD must be Deleted from the env and then to be set after running cd + path

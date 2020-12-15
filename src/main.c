@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/11 11:50:42 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/15 10:18:50 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,18 @@ int     main(int argc, char **argv, char **env)
 	//ft_cd(&shell, "/freak");
 
 	//tab is a simple table containing args for test
-	char *tab[] = {"x=5", "f=sef", "%dwa=", "awd", "_awd", (void*)0};
+	char *tab[] = {"abc=b", "avc=ff", (void*)0};
 	ft_export(shell, tab);
-	//write(1, "=============================\n", 30);
-	//ft_env(shell->env);
+	write(1, "=============================\n", 30);
+	ft_env(shell->env);
+	write(1, "=============================\n", 30);
+	char *test[] = {"abc", "avc", "ef=fe", (void*)0};
+	ft_unset(shell, test);
+	ft_env(shell->env);
+	write(1, "=============================\n", 30);
 
-	char *test[] = {"$x", "$f", "$%dwa=", "$awd", "$_awd", (void*)0};
-	ft_echo(shell, test);
+	//char *test[] = {"$x", "$f", "$%dwa=", "$awd", "$_awd", (void*)0};
+	//ft_echo(shell, test);
 	
 /* 	pid_t pid = fork();
 	if(pid == 0)

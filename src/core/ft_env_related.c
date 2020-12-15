@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/11 10:32:29 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/11 11:55:03 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/15 11:04:18 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,6 @@ char	*ft_getvar(t_shell *shell, char *search)
 	return (ft_strdup(""));
 }
 
-int		ft_len(char **tab)
-{
-	int i;
-
-	i = 0;
-	while (tab && tab[i] != NULL)
-		i++;
-	return (i);
-}
-
 void	ft_addvar(t_shell *shell, char *var)
 {
 	int		len;
@@ -55,8 +45,36 @@ void	ft_addvar(t_shell *shell, char *var)
 		newenv[i] = shell->env[i];
 		i++;
 	}
-	newenv[i++] = var;
+	newenv[i++] = ft_strdup(var);
 	newenv[i] = NULL;
 	free(shell->env);
 	shell->env = newenv;
+}
+
+void	ft_deletevar(t_shell *shell, char *search)
+{
+	int		i;
+	int		len;
+	char	*tofree;
+
+	i = 0;
+	len = ft_strlen(search) + 1;
+	while (shell->env && shell->env[i] != NULL)
+	{
+		tofree = ft_substr(shell->env[i], 0, len - 1);
+		if (ft_strcmp(tofree, search) == 0)
+			break ;
+		free(tofree);
+		i++;
+	}
+	if (shell->env[i] == NULL)
+		return ;
+	free(tofree);
+	free(shell->env[i]);
+	while (shell->env[i] != NULL)
+	{
+		shell->env[i] = shell->env[i + 1];
+		i++;
+	}
+	free(shell->env[i]);
 }
