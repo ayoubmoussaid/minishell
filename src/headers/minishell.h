@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/15 11:55:17 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/17 13:35:47 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,34 @@
 #include "../../libft/libft.h"
 #include "../../gnl/get_next_line.h"
 
+typedef struct  s_env{
+	char            *key;
+	char            *value;
+	struct s_env    *next;
+}				t_env;
 
 typedef struct	s_shell{
+	//t_env			env;
 	char			**env;
 	FILE			*debug_file;
 }				t_shell;
 
+typedef struct  s_files{
+	char    *file;
+	char    type;
+}               t_files;
+
 typedef struct  s_cmd{
-    char			*c;
-    char			**args;
-    int 			pipe;
-    char			**files;
-    int 			*num_files;
+	char			*c;
+	char			**args;
+	int 			pipe;
+	t_files			*files;
+	struct s_cmd    *next;
 }               t_cmd;
 typedef struct  s_lst
 {
-    t_cmd			*content;
-    struct s_list	*next;
+	t_cmd			*content;
+	struct s_list	*next;
 }               t_lst;
 
 void	ft_env(char **env);
