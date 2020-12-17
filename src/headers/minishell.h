@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/17 13:35:47 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/17 13:56:57 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct  s_env{
 }				t_env;
 
 typedef struct	s_shell{
-	//t_env			env;
+	t_env			*envs;
 	char			**env;
 	FILE			*debug_file;
 }				t_shell;
