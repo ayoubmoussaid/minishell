@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/17 13:56:57 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/21 10:41:42 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct  s_env{
 }				t_env;
 
 typedef struct	s_shell{
-	t_env			*envs;
+	t_env			**envs;
 	char			**env;
 	FILE			*debug_file;
 }				t_shell;
@@ -63,5 +63,12 @@ void	ft_addvar(t_shell *shell, char *var);
 int		ft_isvalid(char *str);
 int		ft_isvalid_unset(char *str);
 void	ft_deletevar(t_shell *shell, char *search);
+
+t_env	*create_new_var(char *key, char *value);
+char	*get_env_var(t_shell *shell, char *key);
+void	delete_env_var(t_shell *shell, char *key);
+void	add_env_var(t_shell *shell, t_env *new);
+void	free_env_var(t_env	*del);
+void	print_env(t_shell *shell);
 
 #endif

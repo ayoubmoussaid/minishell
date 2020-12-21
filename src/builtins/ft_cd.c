@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/07 09:16:28 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/21 10:46:58 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,18 @@ char	*ft_specialjoin(char const *s1, char const *s2)
 
 void	ft_updatepwd(t_shell *shell, const char *prop, char *value)
 {
-	int i;
+	t_env	*current;
 
-	i = 0;
-	while (shell->env[i] != NULL)
+	current = *(shell->envs);
+	while (shell->envs != NULL && current != NULL)
 	{
-		if (ft_strcmp(ft_substr(shell->env[i], 0, ft_strlen(prop)), prop) == 0)
+		if (ft_strcmp(current->key, prop) == 0)
 		{
-			free(shell->env[i]);
-			shell->env[i] = ft_specialjoin(prop, value);
-			printf("-- %s --\n", shell->env[i]);
+			free(current->value);
+			current->value = ft_strdup(value);
+			//fprintf(shell->debug_file, "-- %s=%s --\n", current->key, current->value);
 		}
-		i++;
+		current = current->next;
 	}
 }
 

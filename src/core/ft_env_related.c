@@ -6,22 +6,11 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/11 10:32:29 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/17 14:22:10 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/21 09:06:08 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
-t_env	*create_new_var(char *key, char *value)
-{
-	t_env	*env;
-
-	env = (t_env*)malloc(sizeof(t_env));
-	env->key = ft_strup(key);
-	env->value = ft_strdup(value);
-	env->next = NULL;
-	return (env);
-}
 
 char	*ft_getvar(t_shell *shell, char *search)
 {
