@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/21 10:41:42 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/24 11:22:10 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,48 +21,51 @@
 #include "../../gnl/get_next_line.h"
 
 typedef struct  s_env{
+	struct s_env    *next;
 	char            *key;
 	char            *value;
-	struct s_env    *next;
+	//char			*full;
 }				t_env;
 
 typedef struct	s_shell{
-	t_env			**envs;
-	char			**env;
+	t_env			*envs;
 	FILE			*debug_file;
+	t_cmd			*cmd;
 }				t_shell;
 
 typedef struct  s_files{
+	struct s_files *next;
 	char    *file;
 	char    type;
 }               t_files;
 
 typedef struct  s_cmd{
+	struct s_cmd    *next;
 	char			*c;
 	char			**args;
 	int 			pipe;
+	int				prepipe;
 	t_files			*files;
-	struct s_cmd    *next;
 }               t_cmd;
-typedef struct  s_lst
-{
-	t_cmd			*content;
-	struct s_list	*next;
-}               t_lst;
 
-void	ft_env(char **env);
+
+// typedef struct  s_lst
+// {
+// 	t_cmd			*content;
+// 	struct s_list	*next;
+// }               t_lst;
+
+void	ft_env(t_env *env);
 void	ft_pwd();
 void	ft_cd(t_shell *shell, char *dir);
 void	ft_echo(t_shell *shell, char **args);
 void	ft_export(t_shell *shell, char **args);
 void	ft_unset(t_shell *shell, char **args);
 void	ft_exit();
-char	*ft_getvar(t_shell *shell, char *search);
+
 int		ft_len(char **tab);
-void	ft_addvar(t_shell *shell, char *var);
 int		ft_isvalid(char *str);
 int		ft_isvalid_unset(char *str);
-void	ft_deletevar(t_shell *shell, char *search);
 
 t_env	*create_new_var(char *key, char *value);
 char	*get_env_var(t_shell *shell, char *key);
@@ -70,5 +73,7 @@ void	delete_env_var(t_shell *shell, char *key);
 void	add_env_var(t_shell *shell, t_env *new);
 void	free_env_var(t_env	*del);
 void	print_env(t_shell *shell);
+int		ft_str_index(char *str, char c);
+void	my_env(char **env, t_shell *shell);
 
 #endif

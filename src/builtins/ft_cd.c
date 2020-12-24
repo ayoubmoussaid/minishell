@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/21 10:46:58 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/24 10:36:54 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_updatepwd(t_shell *shell, const char *prop, char *value)
 {
 	t_env	*current;
 
-	current = *(shell->envs);
+	current = shell->envs;
 	while (shell->envs != NULL && current != NULL)
 	{
 		if (ft_strcmp(current->key, prop) == 0)

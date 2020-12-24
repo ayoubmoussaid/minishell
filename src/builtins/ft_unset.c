@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 10:24:24 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/15 10:48:54 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:16:25 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_unset(t_shell *shell, char **args)
 		if (ret == 1)
 		{
 			//fprintf(shell->debug_file, "-- %s --\n", args[i]);
-			ft_deletevar(shell, args[i]);
+			delete_env_var(shell, args[i]);
 		}
 		else if (ret == 0)
 		{
