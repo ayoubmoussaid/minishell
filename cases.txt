@@ -1,1 +1,11 @@
 echo hi > ok > ok1 >> ok2 > ok3
+echo hi$var\hi
+echo hi$varhi
+
+$  > df
+
+
+;| its an error
+; 
+;      l
+

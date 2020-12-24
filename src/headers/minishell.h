@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/15 14:16:18 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/24 12:37:42 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 
 static char		*(g_mishell_err[]) =
 {
-	"Syntax error near unexpected token `;;' ",
+	"Syntax error near unexpected token `;' ",
 	"Syntax error near unexpected token  `\"' ",
 	"Syntax error near unexpected token  `\'' ",
 	"Syntax error near unexpected token  `>' ",
@@ -48,28 +48,40 @@ static char		*(g_mishell_err[]) =
 
 
 typedef struct	s_getl{
-	char *line;
-	char *line_t;
-	int len;
-	int fd;
-	int r;
-	char **sp;
-	char **sps;
-	int quote;//active ' " or inactive
-	char *zeros;
-	int err; // errors
-	char c;
-	int comma; // for the err ;;    ;       ;
-	int pipe; // for the err || |      |
-	int redirection;
-	char space;
+	// char *line;
+	// char *line_t;
+	// int len;
+	// int fd;
+	// int r;
+	// char **sp;
+	// char **sps;
+	// int quote;//active ' " or inactive
+	// int err; // errors
+	// char c;
+	// int comma; // for the err ;;    ;       ;
+	// int pipe; // for the err || |      |
+	// int redirection;
+	// char space;
+	// char **spp;
 
+	char	*line;
+	int 	i;
+	int 	s_quote;
+	int 	d_quote;
+	int 	dollar;
+	int		semicolon;
+	int 	red_in;
+	int 	red_out;
+	int 	append;
+	int		pipe;
+	int		err;
+	char		space;
 }				t_getl;
 
 
 typedef struct	s_cmd{
 	char			*c;
-	char			**args;
+	char			*arg;
 	int				pipe;
 	char			**files;
 	int				*num_files;
