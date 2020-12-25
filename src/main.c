@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/24 12:31:05 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/25 10:02:59 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,44 @@ t_cmd	*create_fake_cmd()
 	cmd->next = create_one("cat", (char**){"-e", NULL}, 0, 1, NULL);
 	cmd->next->next = create_one("echo", (char**){"$PATH", "hello", NULL}, 0, 0, NULL);
 	return (cmd);
+}
+
+void	prepare_fd(t_cmd *cmd)
+{
+	int write, read;
+
+	write = 1;
+	read = 1;
+	if(cmd->files)
+	{
+		//make a traversal on files;
+		read = 0;
+		write = 0;
+	}	
+	if(write && cmd->pipe)
+	{
+		//open pipe for read;
+	}
+	if(read && cmd->prepipe)
+	{
+		//read from pipe already openned
+	}
+
+}
+
+void	execute(t_shell *shell)
+{
+	t_cmd *cur;
+	
+	cur = shell->cmd;
+	int p[2];
+	while(cur != NULL)
+	{
+		prepare_fd(cur);
+		
+
+		cur = cur->next;
+	}
 }
 
 
