@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/24 12:37:42 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/26 12:08:38 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define QUOTES 2
 # define INFILE 3
 # define PIPE 4
+# define COMMAD 5
+#define RED 6
+#define INFILED 7
 
 
 
@@ -38,6 +41,9 @@ static char		*(g_mishell_err[]) =
 	"Syntax error near unexpected token  `\'' ",
 	"Syntax error near unexpected token  `>' ",
 	"Syntax error near unexpected token  `|' ",
+	"Syntax error near unexpected token `;;'",
+	"syntax error near unexpected token `newline'",
+	"Syntax error near unexpected token  `>>' ",
 	""
 };
 
@@ -70,12 +76,13 @@ typedef struct	s_getl{
 	int 	d_quote;
 	int 	dollar;
 	int		semicolon;
-	int 	red_in;
-	int 	red_out;
-	int 	append;
+	int 	red_in; // >
+	int 	red_out; // <
+	int 	append; // >>
 	int		pipe;
-	int		err;
-	char		space;
+	int		brake;
+	
+	
 }				t_getl;
 
 

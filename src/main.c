@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/24 13:02:43 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/26 12:54:50 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,26 +263,91 @@ void	errrors(char *err)
 		getl->red_in = 0;
 		getl->red_out = 0;
 		getl->append = 0;
-		getl->err = -1; // no syntax err 
-		getl->space = ' ';
+		getl->pipe = 0;
+		getl->brake = 0;
+	
 
 	}
 
+
+
+	int is_special_char(char c)
+	{
+		return (c == ';' || c == '|' || c == ' ');
+	}
+
+
+
 	int is_all_off(t_getl *getl)
 	{
-		return (!getl->pipe && !getl->semicolon);
+		return (getl->pipe || getl->semicolon ||  getl->red_in || getl->red_out);
+	}
+
+
+
+	int is_on(t_getl *getl)
+	{
+		int is_on;
+
+		is_on = 0;
+		if (getl->semicolon)
+			is_on = 1;
+		else if (getl->pipe)
+			is_on = 2;
+		else if (getl->red_in)
+			is_on = 3;
+		else if (getl->red_out)
+			is_on = 4;
+	
+
+
+
+		return (is_on);// 0
+	}
+
+
+	void	verify_rest(t_getl *getl, int *i)
+	{
+		//TODO check the on and make it off 
+		//printf("%d|%c|\n",getl->semicolon,getl->line[*i]);
+		if (getl->semicolon && !is_special_char(getl->line[*i]) && getl->line[*i] != ' ')
+			getl->semicolon = 0;
+		else if (getl->pipe && !is_special_char(getl->line[*i]))
+			getl->pipe = 0;
+		else if (getl->red_in && !is_special_char(getl->line[*i]))
+		{
+			printf("> is off");
+			getl->red_in = 0;
+		}
+		else if (getl->red_out && !is_special_char(getl->line[*i]))
+		{
+			printf(">> is off");
+			getl->red_out = 0;
+		}
+		else
+		{
+			printf("%c\n",getl->line[*i]);
+		}
+		
+			
+		
+		
+
+			
+		//printf("%d|%c|\n",getl->semicolon,getl->line[*i]);
+		
+
 	}
 
 
 	int	verify_s_quote(t_getl *getl)
 	{
-		getl->s_quote = (getl->s_quote) ? 0 : 1;
+		getl->s_quote = !(getl->s_quote);
 		return (getl->s_quote);
 	}
 
 	int	verify_d_quote(t_getl *getl)
 	{
-		
 		getl->d_quote = (getl->d_quote) ? 0 : 1;
 		return (getl->d_quote);
 	}
@@ -291,10 +356,12 @@ void	errrors(char *err)
 	{
 		if (getl->s_quote || getl->d_quote)
 			getl->line[*i] = -getl->line[*i];
-		else if (getl->semicolon || !is_all_off(getl))
+		else if (is_all_off(getl) || !getl->i)
 		{
-			printf("this is why|%c|\n",getl->line[*i]);
-			errrors(g_mishell_err[COMMA]);
+			if (getl->line[*i - 1] == ';' || (getl->line[*i + 1] && getl->line[*i + 1] == ';'))
+				errrors(g_mishell_err[COMMAD]);
+			else 
+				errrors(g_mishell_err[COMMA]);
 			return (1);
 		}
 		else 
@@ -310,39 +377,49 @@ void	errrors(char *err)
 	}
 
 
-	int is_special_char(char c)
-	{
-		return (c == ';' || c == '|');
-	}
-
-
-	void	verify_rest(t_getl *getl, int *i)
-	{
-		//TODO check the on and make it off 
-		printf("%d|%c|\n",getl->semicolon,getl->line[*i]);
-		if (getl->semicolon && !is_special_char(getl->line[*i]) && getl->line[*i] != ' ')
-			getl->semicolon = 0;
-			
-		//printf("%d|%c|\n",getl->semicolon,getl->line[*i]);
-		
-			
-		
-
-
-	}
+	
+	
 
 	int	verify_s_pipe(t_getl *getl, int *i)
 	{
 		printf("\n\n%d\n\n",is_all_off(getl));
 		if (getl->s_quote || getl->d_quote)
 			getl->line[*i] = -getl->line[*i];
-		else if (getl->pipe || !is_all_off(getl))
+		else if (is_all_off(getl) || !getl->i)
 		{
 			errrors(g_mishell_err[PIPE]);
 			return (1);	
 		}
 		else 
 			getl->pipe = 1;
+		return (0);
+	}
+
+
+
+
+	int	verify_s_red(t_getl *getl, int *i)
+	{
+		
+		if (getl->s_quote || getl->d_quote)
+			getl->line[*i] =  -getl->line[*i];
+		else if (getl->line[*i + 1] && getl->line[*i + 1] == '>')
+		{
+			printf(">> is on\n");
+			getl->red_out = 1;
+			getl->i += 2;
+			
+		}
+		else if (is_all_off(getl))
+		{
+			errrors("error\n");
+			return (1);	
+		}
+		else
+		{
+			printf("red is on\n");
+			getl->red_in = 1;
+		}	
 		return (0);
 	}
 	
@@ -357,8 +434,15 @@ void	errrors(char *err)
 			errrors(g_mishell_err[err]);
 			return (1);
 		}
-	
-
+		else if ((err = is_on(getl)) > 1)
+		{
+			if (err == 2)
+				errrors(g_mishell_err[PIPE]);
+			else if (err == 3 || err == 4)
+				errrors(g_mishell_err[RED]);
+			return (1);
+		}
+			
 		return (0);
 	}
 
@@ -424,7 +508,6 @@ int     main(int argc, char **argv, char **env)
 	while (1)
 	{
 
-		
 		ft_putstr_fd("\033[92mminishell$> \033[39m", 1);
 		if (get_next_line(0, &getl->line) > 0)
 		{
@@ -434,30 +517,50 @@ int     main(int argc, char **argv, char **env)
 			{
 				if (getl->line[getl->i] == (char)39)
 					verify_s_quote(getl);
-				if (getl->line[getl->i] == (char)34)
+				else if (getl->line[getl->i] == (char)34)
 					verify_d_quote(getl);
-				if (getl->line[getl->i] == ' ')
+				else if (getl->line[getl->i] == ' ')
 					verify_space(getl, &getl->i);
-				if (getl->line[getl->i] == ';')
+				else if (getl->line[getl->i] == ';')
 				{
 					if (verify_s_semicolon(getl, &getl->i))
+					{
+						getl->brake = 1;
 						break;
+					}
+						
 				}
-					
 				// if (getl->line[getl->i] == '$')
 				// 	verify_s_red_out(getl);
-				if (getl->line[getl->i] == '|')
+				else if (getl->line[getl->i] == '|')
 				{
 					if (verify_s_pipe(getl, &getl->i))
+					{
+						getl->brake = 1;
 						break;
+					}	
 				}
-					
-				// if (getl->line[getl->i] == '>')
-				// 	verify_s_red(getl);
+				else if (getl->line[getl->i] == '>')
+				{
+					if (verify_s_red(getl, &getl->i))
+					{
+						printf("not here");
+						getl->brake = 1;
+						break;
+					}	
+				}
 				// if (getl->line[getl->i] == '<')
 				// 	verify_s_red_out(getl);
 				else
+				{
+					// int j = getl->i;
+					// while(getl->line[j++])
+					// 	printf("%c",getl->line[j]);
+					// printf("\n");
+					printf("rest: %c\n",getl->line[getl->i]);
 					verify_rest(getl, &getl->i);
+				}
+					
 
 				
 				
@@ -466,7 +569,7 @@ int     main(int argc, char **argv, char **env)
 					
 				
 			}
-			if (verify_final(getl))
+			if (!getl->brake && verify_final(getl))
 				continue;
 			// printf("line:%s\n",getl->line);
 		}
