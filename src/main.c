@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/26 12:54:50 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2020/12/26 13:01:20 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,17 +403,17 @@ void	errrors(char *err)
 		
 		if (getl->s_quote || getl->d_quote)
 			getl->line[*i] =  -getl->line[*i];
+		else if (is_all_off(getl))
+		{
+			errrors("error\n");
+			return (1);	
+		}
 		else if (getl->line[*i + 1] && getl->line[*i + 1] == '>')
 		{
 			printf(">> is on\n");
 			getl->red_out = 1;
 			getl->i += 2;
 			
-		}
-		else if (is_all_off(getl))
-		{
-			errrors("error\n");
-			return (1);	
 		}
 		else
 		{
