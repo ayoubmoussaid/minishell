@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/25 10:02:59 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/28 12:53:23 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-t_cmd *create_one(char *c, char **args, int pipe, int prepipe, t_files *files)
+t_cmd *create_one(char *c, char *args[], int pipe, int prepipe, t_files *files)
 {
 	t_cmd	*cmd;
 	cmd = (t_cmd*)malloc(sizeof(t_cmd));
@@ -29,13 +29,13 @@ t_cmd *create_one(char *c, char **args, int pipe, int prepipe, t_files *files)
 t_cmd	*create_fake_cmd()
 {
 	t_cmd *cmd;
-	cmd = create_one("ls", (char**){"-la", NULL}, 1, 0, NULL);
-	cmd->next = create_one("cat", (char**){"-e", NULL}, 0, 1, NULL);
-	cmd->next->next = create_one("echo", (char**){"$PATH", "hello", NULL}, 0, 0, NULL);
+	cmd = create_one("ls", (char**){(char*)"-la", (char*)0}, 1, 0, NULL);
+	cmd->next = create_one("cat", (char**){(char*)"-e", (char*)0}, 0, 1, NULL);
+	cmd->next->next = create_one("echo", (char**){(char*)"$PATH", (char*)"hello", (char*)0}, 0, 0, NULL);
 	return (cmd);
 }
 
-void	prepare_fd(t_cmd *cmd)
+void	prepare_fd(t_cmd *cmd/* , int p[2], int std[2] */)
 {
 	int write, read;
 
@@ -63,10 +63,11 @@ void	execute(t_shell *shell)
 	t_cmd *cur;
 	
 	cur = shell->cmd;
-	int p[2];
+	// int p[2];
+	// int std[2];
 	while(cur != NULL)
 	{
-		prepare_fd(cur);
+		prepare_fd(cur/* , p, std */);
 		
 
 		cur = cur->next;
