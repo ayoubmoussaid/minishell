@@ -6,11 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/28 12:53:23 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/28 15:08:21 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
+
+char	*g_builtins[] = {"echo", "pwd", "env", "export", "unset", "exit"};
 
 t_cmd *create_one(char *c, char *args[], int pipe, int prepipe, t_files *files)
 {
@@ -29,9 +31,12 @@ t_cmd *create_one(char *c, char *args[], int pipe, int prepipe, t_files *files)
 t_cmd	*create_fake_cmd()
 {
 	t_cmd *cmd;
-	cmd = create_one("ls", (char**){(char*)"-la", (char*)0}, 1, 0, NULL);
-	cmd->next = create_one("cat", (char**){(char*)"-e", (char*)0}, 0, 1, NULL);
-	cmd->next->next = create_one("echo", (char**){(char*)"$PATH", (char*)"hello", (char*)0}, 0, 0, NULL);
+	char *tab[] = {"-la", (char*)0};
+	cmd = create_one("ls", tab, 1, 0, NULL);
+	char *tab1[] = {"-e", (char*)0};
+	cmd->next = create_one("cat", tab1, 0, 1, NULL);
+	char *tab2[] = {"$PATH", "hello", (char*)0};
+	cmd->next->next = create_one("echo", tab2, 0, 0, NULL);
 	return (cmd);
 }
 
@@ -88,7 +93,7 @@ int     main(int argc, char **argv, char **env)
 	if (argc > 1)
 		argv = NULL;
 	my_env(env, shell);
-	//print_env(shell);
+	print_env(shell);
 	//ft_env(shell->envs);
 	//ft_pwd();
 	//ft_cd(shell, "..");

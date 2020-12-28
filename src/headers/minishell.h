@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/28 12:24:37 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/28 15:07:39 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ typedef struct	s_shell{
 // # define UNSET 4
 // # define EXIT 5
 
-//char	*g_builtins[6] = {"echo", "pwd", "env", "export", "unset", "exit"};
-
 void	ft_env(t_env *env);
 void	ft_pwd();
 void	ft_cd(t_shell *shell, char *dir);
@@ -72,7 +70,7 @@ void	ft_export(t_shell *shell, char **args);
 void	ft_unset(t_shell *shell, char **args);
 void	ft_exit();
 
-//void 	(*g_functions[6]) = {&ft_echo, &ft_pwd, &ft_env, &ft_export, &ft_unset, &ft_exit};
+//void 	(*g_functions[]) = {&ft_echo, &ft_pwd, &ft_env, &ft_export, &ft_unset, &ft_exit};
 
 int		ft_len(char **tab);
 int		ft_isvalid(char *str);

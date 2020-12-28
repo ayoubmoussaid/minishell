@@ -1,16 +1,14 @@
 |TMPDIR|=|/var/folders/zz/zyxvpxvq6csfxvn_n000cb040032r1/T/|
+|__CF_USER_TEXT_ENCODING|=|0x18B01:0x0:0x0|
 |SHELL|=|/bin/zsh|
 |HOME|=|/Users/amoussai|
-|SSH_AUTH_SOCK|=|/private/tmp/com.apple.launchd.ujVDYP1OnT/Listeners|
-|Apple_PubSub_Socket_Render|=|/private/tmp/com.apple.launchd.CnvpwEM6FM/Render|
-|LOGNAME|=|amoussai|
+|Apple_PubSub_Socket_Render|=|/private/tmp/com.apple.launchd.KPB8LTRF1g/Render|
+|SSH_AUTH_SOCK|=|/private/tmp/com.apple.launchd.cHe8xHAcN6/Listeners|
 |PATH|=|/Users/amoussai/.brew/bin:/Users/amoussai/.brew/bin:/Users/amoussai/nasm:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/amoussai/.brew/bin:/Users/amoussai/nasm:/Users/amoussai/goinfre/flutter/bin:/goinfre/amoussai/android/platform-tools:/Users/amoussai/goinfre/flutter/bin:/goinfre/amoussai/android/platform-tools|
+|LOGNAME|=|amoussai|
 |XPC_SERVICE_NAME|=|0|
-|COMMAND_MODE|=|unix2003|
 |USER|=|amoussai|
-|SECURITYSESSIONID|=|186a8|
 |XPC_FLAGS|=|0x0|
-|__CF_USER_TEXT_ENCODING|=|0x18B01:0x0:0x0|
 |ORIGINAL_XDG_CURRENT_DESKTOP|=|undefined|
 |ANDROID_HOME|=|/goinfre/amoussai/android|
 |HOMEBREW_CACHE|=|/tmp/amoussai/Homebrew/Caches|
@@ -32,5 +30,3 @@
 |VSCODE_GIT_ASKPASS_MAIN|=|/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js|
 |TERM|=|xterm-256color|
 |_|=|/Users/amoussai/Desktop/minishell/./minishell|
-|abc|=|d=5|
-|avc|=|ff|
