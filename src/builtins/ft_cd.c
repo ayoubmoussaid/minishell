@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/24 10:36:54 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/31 18:22:12 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	*ft_specialjoin(char const *s1, char const *s2)
+char	*ft_specialjoin(char const *s1, char const *s2, char c)
 {
 	char			*newstr;
 	unsigned int	i;
@@ -29,7 +29,7 @@ char	*ft_specialjoin(char const *s1, char const *s2)
 	i = -1;
 	while (++i < n - 1)
 		newstr[i] = s1[i];
-	newstr[i++] = '=';
+	newstr[i++] = c;
 	while (i - n < m)
 	{
 		newstr[i] = s2[i - n];
@@ -73,7 +73,7 @@ void	ft_cd(t_shell *shell, char *dir)
 		ft_updatepwd(shell, "PWD", newdir);
 	}
 	else
-		ft_putendl_fd(strerror(errno), STDOUT_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	free(olddir);
 	free(newdir);
 }

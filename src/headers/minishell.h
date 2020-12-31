@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/28 15:07:39 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/31 18:22:17 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/errno.h>
+#include <dirent.h>
+#include <sys/stat.h>
 #include "../../libft/libft.h"
 #include "../../gnl/get_next_line.h"
 
@@ -29,31 +31,31 @@ typedef struct  s_env{
 
 
 typedef struct  s_files{
-	struct s_files *next;
-	char    *file;
-	char    type;
+	struct s_files	*next;
+	char			*name;
+	char			type;
 }               t_files;
 
 typedef struct  s_cmd{
 	struct s_cmd    *next;
 	char			*c;
+	char			*executable;
 	char			**args;
-	int 			pipe;
-	int				prepipe;
 	t_files			*files;
 }               t_cmd;
+
+typedef struct  s_pipeline
+{
+	struct s_pipeline	*next;
+	t_cmd				*pipe;
+}               t_pipeline;
 
 typedef struct	s_shell{
 	t_env			*envs;
 	FILE			*debug_file;
-	t_cmd			*cmd;
+	t_pipeline		*pipeline;
 }				t_shell;
 
-// typedef struct  s_lst
-// {
-// 	t_cmd			*content;
-// 	struct s_list	*next;
-// }               t_lst;
 
 // # define ECHO 0
 // # define PWD 1
@@ -84,5 +86,6 @@ void	free_env_var(t_env	*del);
 void	print_env(t_shell *shell);
 int		ft_str_index(char *str, char c);
 void	my_env(char **env, t_shell *shell);
+char	*ft_specialjoin(char const *s1, char const *s2, char c);
 
 #endif

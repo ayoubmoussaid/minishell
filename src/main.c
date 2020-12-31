@@ -6,76 +6,182 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/28 15:08:21 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/31 18:43:36 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-char	*g_builtins[] = {"echo", "pwd", "env", "export", "unset", "exit"};
+char	*g_builtins[] = {"echo", "pwd", "env", "export", "unset", "exit", (void*)0};
 
-t_cmd *create_one(char *c, char *args[], int pipe, int prepipe, t_files *files)
+t_cmd *create_one(char *c, char *args[], t_files *files)
 {
 	t_cmd	*cmd;
 	cmd = (t_cmd*)malloc(sizeof(t_cmd));
 	cmd->c = c;
 	cmd->args = args;
-	cmd->pipe = pipe;
-	cmd->prepipe = prepipe;
 	cmd->files = files;
 	cmd->next = NULL;
 	return (cmd);
 }
 
 
-t_cmd	*create_fake_cmd()
+t_pipeline	*create_fake_cmd()
 {
-	t_cmd *cmd;
+	t_pipeline *pipeline;
+	pipeline = (t_pipeline*)malloc((sizeof(t_pipeline)));
 	char *tab[] = {"-la", (char*)0};
-	cmd = create_one("ls", tab, 1, 0, NULL);
+	pipeline->pipe = create_one("ls", tab, NULL);
 	char *tab1[] = {"-e", (char*)0};
-	cmd->next = create_one("cat", tab1, 0, 1, NULL);
+	pipeline->pipe->next = create_one("cat", tab1, NULL);
 	char *tab2[] = {"$PATH", "hello", (char*)0};
-	cmd->next->next = create_one("echo", tab2, 0, 0, NULL);
-	return (cmd);
+	pipeline->next = (t_pipeline*)malloc((sizeof(t_pipeline)));
+	pipeline->next->pipe = create_one("echo", tab2, NULL);
+	pipeline->next->next = NULL;
+	return (pipeline);
 }
 
-void	prepare_fd(t_cmd *cmd/* , int p[2], int std[2] */)
+void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2])
 {
-	int write, read;
+	t_files *file;
 
-	write = 1;
-	read = 1;
-	if(cmd->files)
+	file = cmd->files;
+	p[0] = -1;
+	p[1] = -1;
+	if(!file && cmd->next)
 	{
-		//make a traversal on files;
-		read = 0;
-		write = 0;
-	}	
-	if(write && cmd->pipe)
-	{
-		//open pipe for read;
+		fprintf(shell->debug_file, "i got here \n");
+		pipe(p);
+		dup2(p[0], STDIN_FILENO);
+		dup2(p[1], STDOUT_FILENO);
 	}
-	if(read && cmd->prepipe)
+	while(file)
 	{
-		//read from pipe already openned
+		fprintf(shell->debug_file, "name: %s\n", file->name);
+		if(file->type == '>' || file->type == 'a')
+		{
+			if(p[STDOUT_FILENO] != -1)
+				close(p[STDOUT_FILENO]);
+			p[STDOUT_FILENO] = open(file->name, O_CREAT | (file->type == '>' ? O_WRONLY : O_APPEND));
+			if(p[STDOUT_FILENO] == -1)
+			{
+				ft_putendl_fd(strerror(errno), STDERR_FILENO);
+				exit(0);
+			}	
+		}
+		else
+		{
+			if(p[STDIN_FILENO] != -1)
+				close(p[STDIN_FILENO]);
+			p[STDIN_FILENO] = open(file->name, O_RDONLY);
+			if(p[STDIN_FILENO] == -1)
+			{
+				ft_putendl_fd(strerror(errno), STDERR_FILENO);
+				exit(0);
+			}
+		}
+		file = file->next;
 	}
+	
+}
 
+int		check_for_slash(char *str)
+{
+	int i;
+
+	i = -1;
+	while (str && str[++i] != '\0')
+		if (str[i] == '/')
+			return (1);
+	return (0);	
+}
+
+int		check_builtins(char *str)
+{
+	int i;
+
+	i = -1;
+	while(g_builtins[++i])
+		if(ft_strcmp(g_builtins[i], str) == 0)
+			return (i);
+	return (-1);
+}
+
+char	*get_path(t_shell *shell, t_cmd	*cmd)
+{
+	char			*path;
+	char			**all_paths;
+	int				i;
+	DIR				*dfd;
+	struct dirent	*dp;
+	struct stat		stbuf;
+
+	i = -1;
+	path = get_env_var(shell, "PATH");
+	all_paths = ft_split(path, ':');
+	while (all_paths[++i] != 0)
+	{
+		fprintf(shell->debug_file, "************ %s ************\n", all_paths[i]);
+		if ((dfd = opendir(all_paths[i])) == NULL)
+			continue;
+		while ((dp = readdir(dfd)) != NULL)
+		{
+			path = ft_specialjoin(all_paths[i], dp->d_name, '/');
+			ft_putendl_fd(path, 1);
+			if (stat(path, &stbuf) == -1){
+				//ft_putendl_fd(strerror(errno), STDERR_FILENO);
+				continue;
+			}
+			if ((stbuf.st_mode & S_IFMT) == S_IFDIR)
+				continue;
+			fprintf(shell->debug_file, "*** %s ***\n", dp->d_name);
+			if(ft_strcmp(dp->d_name, cmd->c) == 0)
+				return (path);
+		}
+		closedir(dfd);
+	}
+	return "hi";
+}
+
+int 	get_real_cmd(t_shell *shell, t_cmd *cmd)
+{
+	int		index;
+
+	index = -1;
+	
+	if(check_for_slash(cmd->c) || (index = check_builtins(cmd->c)) != -1)
+		cmd->executable = cmd->c;
+	else
+		cmd->executable = get_path(shell, cmd);
+	
+	return (index);
 }
 
 void	execute(t_shell *shell)
 {
-	t_cmd *cur;
-	
-	cur = shell->cmd;
-	// int p[2];
-	// int std[2];
-	while(cur != NULL)
-	{
-		prepare_fd(cur/* , p, std */);
-		
+	t_pipeline	*pipeline;
+	t_cmd		*cmd;
+	//int p[2];
+	int std[2];
 
-		cur = cur->next;
+	pipeline = shell->pipeline;
+	std[STDIN_FILENO] = dup(STDIN_FILENO);
+	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
+	while(pipeline)
+	{
+		cmd = pipeline->pipe;
+		fprintf(shell->debug_file, "------------------------------\n");
+		while(cmd)
+		{
+			fprintf(shell->debug_file, "-- %s --\n", cmd->c);
+			//prepare_fd(shell, cmd, p);
+			get_real_cmd(shell, cmd);
+			cmd = cmd->next;
+			dup2(std[STDIN_FILENO], STDIN_FILENO);
+			dup2(std[STDOUT_FILENO], STDOUT_FILENO);
+		}
+
+		pipeline = pipeline->next;
 	}
 }
 
@@ -87,13 +193,14 @@ int     main(int argc, char **argv, char **env)
 
 	shell = (t_shell*)malloc(sizeof(t_shell));
 	shell->envs = NULL;
-	shell->cmd = create_fake_cmd();
+	shell->pipeline = create_fake_cmd();
 	//write(1, "\n=============================\n", 31);
 	shell->debug_file = fopen("debug.txt", "w");
 	if (argc > 1)
 		argv = NULL;
 	my_env(env, shell);
-	print_env(shell);
+	//print_env(shell);
+	execute(shell);
 	//ft_env(shell->envs);
 	//ft_pwd();
 	//ft_cd(shell, "..");
