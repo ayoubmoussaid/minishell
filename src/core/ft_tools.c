@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_tools.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/05 12:14:06 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/21 10:49:06 by amoussai         ###   ########.fr       */
+/*   Created: 2020/12/14 10:41:42 by amoussai          #+#    #+#             */
+/*   Updated: 2020/12/14 10:41:51 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	ft_pwd()
+int		ft_len(char **tab)
 {
-	char	*dir;
+	int i;
 
-	dir = NULL;
-	dir = getcwd(dir, 0);
-	ft_putendl_fd(dir, 1);
-	free(dir);
+	i = 0;
+	while (tab && tab[i] != NULL)
+		i++;
+	return (i);
 }

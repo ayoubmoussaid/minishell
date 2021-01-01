@@ -3,44 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 09:24:53 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/08 09:34:55 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/21 10:47:47 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	*ft_getvar(t_shell *shell, char *search)
+
+
+void	ft_specialprint(char *s, int fd)
 {
-	int		i;
-	int		len;
-	char	*tofree;
-	i = 0;
-	len = ft_strlen(search);
-	fprintf(shell->debug_file, "-- len: %d ---\n", len);
-	while (shell->env && shell->env[i] != NULL)
+	if (s == NULL)
+		return ;
+	while (*s)
 	{
-		//ft_putendl_fd(shell->env[i], STDOUT_FILENO);
-		tofree = ft_substr(shell->env[i], 0, len);
-		//ft_putendl_fd(tofree, STDOUT_FILENO);
-		//ft_putendl_fd("\n", STDOUT_FILENO);
-		if (ft_strcmp(tofree, search) == 0)
-			return (ft_substr(shell->env[i], len + 1, ft_strlen(shell->env[i])));
-		free(tofree);
-		i++;
+		if (*s == '\\' && *(s + 1) == '\\')
+			ft_putchar_fd(*s, fd);
+		else if (*s != '\\')
+		{
+			ft_putchar_fd(*s, fd);
+		}
+		s++;
 	}
-	return (ft_strdup(""));
 }
 
 void	ft_echo(t_shell *shell, char *args[])
 {
 	int		i;
-	char	backline;
+	int		char_count;
 	char	*str;
 
-	backline = '\n';
+	char_count = 1;
 	i = -1;
 	if (!args)
 		ft_putendl_fd("", STDOUT_FILENO);
@@ -49,21 +45,25 @@ void	ft_echo(t_shell *shell, char *args[])
 		if (ft_strcmp(args[0], "-n") == 0)
 		{
 			args++;
-			backline = '\0';
+			char_count = 0;
 		}
 		while (args[++i] != NULL)
 		{
 			if (args[i][0] == '$')
 			{
-				str = ft_getvar(shell, &args[i][1]);
+				str = get_env_var(shell, &args[i][1]);
 				ft_putstr_fd(str, STDOUT_FILENO);
+				if (ft_strlen(str) != 0 && args[i + 1] != NULL)
+					ft_putstr_fd(" ", STDOUT_FILENO);
 				free(str);
 			}
 			else
+			{
 				ft_putstr_fd(args[i], STDOUT_FILENO);
-			if (args[i + 1] != NULL)
-				ft_putstr_fd(" ", STDOUT_FILENO);
+				if (args[i + 1] != NULL)
+					ft_putstr_fd(" ", STDOUT_FILENO);
+			}
 		}
-		ft_putstr_fd(&backline, STDOUT_FILENO);
+		write(STDOUT_FILENO, "\n", char_count);
 	}
 }

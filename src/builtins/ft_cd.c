@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/07 09:16:28 by amoussai         ###   ########.fr       */
+/*   Updated: 2020/12/31 18:22:12 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	*ft_specialjoin(char const *s1, char const *s2)
+char	*ft_specialjoin(char const *s1, char const *s2, char c)
 {
 	char			*newstr;
 	unsigned int	i;
@@ -29,7 +29,7 @@ char	*ft_specialjoin(char const *s1, char const *s2)
 	i = -1;
 	while (++i < n - 1)
 		newstr[i] = s1[i];
-	newstr[i++] = '=';
+	newstr[i++] = c;
 	while (i - n < m)
 	{
 		newstr[i] = s2[i - n];
@@ -41,18 +41,18 @@ char	*ft_specialjoin(char const *s1, char const *s2)
 
 void	ft_updatepwd(t_shell *shell, const char *prop, char *value)
 {
-	int i;
+	t_env	*current;
 
-	i = 0;
-	while (shell->env[i] != NULL)
+	current = shell->envs;
+	while (shell->envs != NULL && current != NULL)
 	{
-		if (ft_strcmp(ft_substr(shell->env[i], 0, ft_strlen(prop)), prop) == 0)
+		if (ft_strcmp(current->key, prop) == 0)
 		{
-			free(shell->env[i]);
-			shell->env[i] = ft_specialjoin(prop, value);
-			printf("-- %s --\n", shell->env[i]);
+			free(current->value);
+			current->value = ft_strdup(value);
+			//fprintf(shell->debug_file, "-- %s=%s --\n", current->key, current->value);
 		}
-		i++;
+		current = current->next;
 	}
 }
 
@@ -73,7 +73,7 @@ void	ft_cd(t_shell *shell, char *dir)
 		ft_updatepwd(shell, "PWD", newdir);
 	}
 	else
-		ft_putendl_fd(strerror(errno), STDOUT_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	free(olddir);
 	free(newdir);
 }

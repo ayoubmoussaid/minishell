@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/05 12:14:06 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/21 10:49:06 by amoussai         ###   ########.fr       */
+/*   Created: 2020/12/15 10:41:49 by amoussai          #+#    #+#             */
+/*   Updated: 2020/12/15 11:05:19 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	ft_pwd()
-{
-	char	*dir;
+/*
+**	//TODO fix exit, later though
+*/
 
-	dir = NULL;
-	dir = getcwd(dir, 0);
-	ft_putendl_fd(dir, 1);
-	free(dir);
+void	ft_exit(void)
+{
+	exit(0);
 }

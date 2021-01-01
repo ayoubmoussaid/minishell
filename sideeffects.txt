@@ -1,0 +1,5 @@
+//TODO export b="\""
+//TODO echo "\$PWD"
+//TODO echo $%dwa //it escapes de $ role
+//TODO check backslash
+//TODO echo $PWD ; cd ; echo $PWD ; echo $OLDPWD

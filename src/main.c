@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:27:24 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/01 12:36:02 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,16 @@ void	errrors(char *err)
 	ft_putendl_fd(err, 1);
 }
 
+int		check_for_slash(char *str)
+{
+	int i;
+
+	i = -1;
+	while (str && str[++i] != '\0')
+		if (str[i] == '/')
+			return (1);
+	return (0);	
+}
 
 // int	check_syntax(t_getl *getl,int i, char c)
 // {
@@ -491,9 +501,17 @@ void	errrors(char *err)
 
 
 
-int     main()
+int     main(int argc, char **argv, char **env)
 {
+	t_shell *shell;
 
+	shell = (t_shell*)malloc(sizeof(t_shell));
+	shell->envs = NULL;
+	//write(1, "\n=============================\n", 31);
+	shell->debug_file = fopen("debug.txt", "w");
+	if (argc > 1)
+		argv = NULL;
+	my_env(env, shell);
 	t_getl *getl;
 
 
@@ -580,7 +598,7 @@ int     main()
 	
 		free(getl->line);
 	}
-
+fclose(shell->debug_file);
 	return (0);
 }
 
