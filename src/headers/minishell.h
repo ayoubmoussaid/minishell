@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/26 12:08:38 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/01 12:26:08 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define COMMAD 5
 #define RED 6
 #define INFILED 7
+#define OUTFILE 8
 
 
 
@@ -44,6 +45,7 @@ static char		*(g_mishell_err[]) =
 	"Syntax error near unexpected token `;;'",
 	"syntax error near unexpected token `newline'",
 	"Syntax error near unexpected token  `>>' ",
+	"Syntax error near unexpected token  `<' ",
 	""
 };
 
@@ -75,44 +77,62 @@ typedef struct	s_getl{
 	int 	s_quote;
 	int 	d_quote;
 	int 	dollar;
-	int		semicolon;
+	int		semicolon; //;
 	int 	red_in; // >
 	int 	red_out; // <
 	int 	append; // >>
 	int		pipe;
 	int		brake;
+	char	**sp_c;
+	char	**sp_p;
+
 	
 	
 }				t_getl;
 
 
-typedef struct	s_cmd{
-	char			*c;
-	char			*arg;
-	int				pipe;
-	char			**files;
-	int				*num_files;
-}				t_cmd;
+typedef struct  s_env{
+    struct s_env    *next;
+    char            *key;
+    char            *value;
+    //char          *full;
+}               t_env;
 
 
 
-typedef struct	s_lst
+typedef struct  s_files{
+    struct s_files  *next;
+    char            *name;
+    char            type;
+}               t_files;
+
+
+
+typedef struct  s_cmd{
+    struct s_cmd    *next;
+    char            *c;
+    char            *executable;
+    char            **args;
+    t_files         *files;
+}               t_cmd;
+
+
+
+typedef struct  s_pipeline
 {
-	t_cmd			*content;
-	struct s_list	*next;
-}				t_lst;
+    struct s_pipeline   *next;
+    t_cmd               *pipe;
+}               t_pipeline;
 
 
-typedef struct	s_shell{
-	char	**env;
-	FILE	*debug_file;
-}				t_shell;
+typedef struct  s_shell{
+    t_env           *envs;
+    FILE            *debug_file;
+    t_pipeline      *pipeline;
+}      t_shell;
 
 
 
-void	ft_env(char **env);
-void	ft_pwd();
-void	ft_cd(t_shell *shell, char *dir);
-void	ft_echo(t_shell *shell, char **args);
+
 
 #endif
