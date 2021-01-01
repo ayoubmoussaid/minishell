@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/31 18:43:36 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/01 12:57:51 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2])
 		}
 		file = file->next;
 	}
-	
+	//TODO dupliacte fd .. you forgot it
 }
 
 int		check_for_slash(char *str)
@@ -153,7 +153,6 @@ int 	get_real_cmd(t_shell *shell, t_cmd *cmd)
 		cmd->executable = cmd->c;
 	else
 		cmd->executable = get_path(shell, cmd);
-	
 	return (index);
 }
 
@@ -161,8 +160,9 @@ void	execute(t_shell *shell)
 {
 	t_pipeline	*pipeline;
 	t_cmd		*cmd;
-	//int p[2];
+	int p[2];
 	int std[2];
+	int index;
 
 	pipeline = shell->pipeline;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
@@ -174,8 +174,9 @@ void	execute(t_shell *shell)
 		while(cmd)
 		{
 			fprintf(shell->debug_file, "-- %s --\n", cmd->c);
-			//prepare_fd(shell, cmd, p);
-			get_real_cmd(shell, cmd);
+			prepare_fd(shell, cmd, p);
+			index = get_real_cmd(shell, cmd);
+			//TODO execute
 			cmd = cmd->next;
 			dup2(std[STDIN_FILENO], STDIN_FILENO);
 			dup2(std[STDOUT_FILENO], STDOUT_FILENO);

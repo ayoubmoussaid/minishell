@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/31 18:22:17 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/01 12:48:07 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ typedef struct	s_shell{
 // # define UNSET 4
 // # define EXIT 5
 
-void	ft_env(t_env *env);
-void	ft_pwd();
-void	ft_cd(t_shell *shell, char *dir);
-void	ft_echo(t_shell *shell, char **args);
-void	ft_export(t_shell *shell, char **args);
-void	ft_unset(t_shell *shell, char **args);
-void	ft_exit();
+void	ft_env(t_shell *shell, t_cmd *cmd);
+void	ft_pwd(t_shell *shell, t_cmd *cmd);
+void	ft_cd(t_shell *shell, t_cmd *cmd);
+void	ft_echo(t_shell *shell, t_cmd *cmd);
+void	ft_export(t_shell *shell, t_cmd	*cmd);
+void	ft_unset(t_shell *shell, t_cmd *cmd);
+void	ft_exit(t_shell *shell, t_cmd *cmd);
 
 //void 	(*g_functions[]) = {&ft_echo, &ft_pwd, &ft_env, &ft_export, &ft_unset, &ft_exit};
 

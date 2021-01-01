@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 09:24:53 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/21 10:47:47 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/01 12:12:33 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,37 +30,37 @@ void	ft_specialprint(char *s, int fd)
 	}
 }
 
-void	ft_echo(t_shell *shell, char *args[])
+void	ft_echo(t_shell *shell, t_cmd *cmd)
 {
 	int		i;
 	int		char_count;
 	char	*str;
 
 	char_count = 1;
-	i = -1;
-	if (!args)
+	i = 0;
+	if (!cmd->args)
 		ft_putendl_fd("", STDOUT_FILENO);
 	else
 	{
-		if (ft_strcmp(args[0], "-n") == 0)
+		if (ft_strcmp(cmd->args[1], "-n") == 0)
 		{
-			args++;
+			cmd->args++;
 			char_count = 0;
 		}
-		while (args[++i] != NULL)
+		while (cmd->args[++i] != NULL)
 		{
-			if (args[i][0] == '$')
+			if (cmd->args[i][0] == '$')
 			{
-				str = get_env_var(shell, &args[i][1]);
+				str = get_env_var(shell, &cmd->args[i][1]);
 				ft_putstr_fd(str, STDOUT_FILENO);
-				if (ft_strlen(str) != 0 && args[i + 1] != NULL)
+				if (ft_strlen(str) != 0 && cmd->args[i + 1] != NULL)
 					ft_putstr_fd(" ", STDOUT_FILENO);
 				free(str);
 			}
 			else
 			{
-				ft_putstr_fd(args[i], STDOUT_FILENO);
-				if (args[i + 1] != NULL)
+				ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
+				if (cmd->args[i + 1] != NULL)
 					ft_putstr_fd(" ", STDOUT_FILENO);
 			}
 		}
