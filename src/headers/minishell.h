@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:53:00 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/04 08:45:22 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,6 @@ typedef struct  s_files{
     char            *name;
     char            type; // > < a
 }               t_files;
-
-
 
 
 typedef struct  s_cmd{

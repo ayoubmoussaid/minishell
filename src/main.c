@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:36:02 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/04 08:46:28 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -488,14 +488,9 @@ int		check_for_slash(char *str)
 
 	void	get_command(t_getl *getl)
 	{
-
-		
 		printf("|%s|\n",getl->line);
 		getl->sp_c = ft_split(getl->line, ';');
 		printsplit(getl->sp_c);
-
-		
-
 	}
 
 
