@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:57:51 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/04 09:21:47 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-char	*g_builtins[] = {"echo", "pwd", "env", "export", "unset", "exit", (void*)0};
+char	*g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void*)0};
 
 t_cmd *create_one(char *c, char *args[], t_files *files)
 {
@@ -32,12 +32,13 @@ t_pipeline	*create_fake_cmd()
 	pipeline = (t_pipeline*)malloc((sizeof(t_pipeline)));
 	char *tab[] = {"-la", (char*)0};
 	pipeline->pipe = create_one("ls", tab, NULL);
-	char *tab1[] = {"-e", (char*)0};
-	pipeline->pipe->next = create_one("cat", tab1, NULL);
-	char *tab2[] = {"$PATH", "hello", (char*)0};
-	pipeline->next = (t_pipeline*)malloc((sizeof(t_pipeline)));
-	pipeline->next->pipe = create_one("echo", tab2, NULL);
-	pipeline->next->next = NULL;
+	pipeline->next = NULL;
+	// char *tab1[] = {"-e", (char*)0};
+	// pipeline->pipe->next = create_one("cat", tab1, NULL);
+	// char *tab2[] = {"$PATH", "hello", (char*)0};
+	// pipeline->next = (t_pipeline*)malloc((sizeof(t_pipeline)));
+	// pipeline->next->pipe = create_one("echo", tab2, NULL);
+	// pipeline->next->next = NULL;
 	return (pipeline);
 }
 
@@ -121,7 +122,7 @@ char	*get_path(t_shell *shell, t_cmd	*cmd)
 	all_paths = ft_split(path, ':');
 	while (all_paths[++i] != 0)
 	{
-		fprintf(shell->debug_file, "************ %s ************\n", all_paths[i]);
+		//fprintf(shell->debug_file, "************ %s ************\n", all_paths[i]);
 		if ((dfd = opendir(all_paths[i])) == NULL)
 			continue;
 		while ((dp = readdir(dfd)) != NULL)
@@ -156,6 +157,30 @@ int 	get_real_cmd(t_shell *shell, t_cmd *cmd)
 	return (index);
 }
 
+void	execute_builtin(t_shell *shell, t_cmd *cmd, int index)
+{
+	static void (*builtin_functions[7])(t_shell *shell, t_cmd *cmd) = {ft_echo, ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
+	builtin_functions[index](shell, cmd);
+}
+
+void	execute_non_builtin(t_shell *shell, t_cmd *cmd)
+{
+		pid_t pid = fork();
+		if(pid == 0)
+		{
+			int x = execve(cmd->executable, cmd->args, NULL);
+			ft_putendl_fd(strerror(errno), STDERR_FILENO);
+			exit(x);
+		}
+		else if (pid > 0)
+		{
+			int status;
+			fprintf(shell->debug_file, "parent process here\n");
+			waitpid(pid, &status, 0);
+			fprintf(shell->debug_file, "child process exited %d | %d --- status:%d\n", pid, getpid(), status);
+		}
+}
+
 void	execute(t_shell *shell)
 {
 	t_pipeline	*pipeline;
@@ -175,7 +200,13 @@ void	execute(t_shell *shell)
 		{
 			fprintf(shell->debug_file, "-- %s --\n", cmd->c);
 			prepare_fd(shell, cmd, p);
-			index = get_real_cmd(shell, cmd);
+			if ((index = get_real_cmd(shell, cmd)) != -1)
+				execute_builtin(shell, cmd, index);
+			else
+			{
+				/* code */
+			}
+			
 			//TODO execute
 			cmd = cmd->next;
 			dup2(std[STDIN_FILENO], STDIN_FILENO);
