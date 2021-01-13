@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/04 08:51:29 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/13 08:27:14 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@
 #include <sys/stat.h>
 #include "../../libft/libft.h"
 #include "../../gnl/get_next_line.h"
+
+
+# define READ 0
+# define WRITE 1
+
 
 typedef struct  s_env{
 	struct s_env    *next;
