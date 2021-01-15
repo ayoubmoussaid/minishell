@@ -6,69 +6,11 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/04 08:46:28 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/15 09:24:01 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
-
-
-
-
-
-
-// int	check_comma(t_getl *getl)
-// {
-// 	int i;
-// 	int sq;
-// 	int dq;
-
-// 	i = -1;
-// 	dq = 34;
-// 	sq = 39;
-
-// 	while(getl->line[++i])
-// 	{
-// 		if (getl->line[i] == ';')
-// 		{
-// 			if ((getl->line[i - 1] == (char)dq && getl->line[i + 1] == (char)dq) || 
-// 			(getl->line[i - 1] == (char)sq && getl->line[i + 1] == (char)sq))
-// 				return (1);
-// 		}
-// 	}
-// 	return (0);
-// }
-
-
-// int indexof_char(char *str, char *c)
-// {
-// 	int i;
-// 	char *s;
-
-// 	i = -1;
-// 	s = ft_strtrim(str, c);
-// 	while(s[++i])
-// 	{
-// 		if (s[i] == c[0])
-// 			return (i);
-// 	}
-// 	return (-1);
-// }
-
-// int skip_char(char *s, char *c, int start)
-// {
-// 	int i;
-
-// 	i = start;
-// 	while(s[i])
-// 	{
-// 		if (s[i] == c[0] && s[i + 1] != c[0])
-// 			return (i + 1);
-// 		i++;
-// 	}
-// 	return (-1);
-// }
-
 
 void	errrors(char *err)
 {
@@ -86,149 +28,11 @@ int		check_for_slash(char *str)
 	return (0);	
 }
 
-// int	check_syntax(t_getl *getl,int i, char c)
-// {
-	
-
-// 	int res;
-
-// 	res = 0;
-// 	getl->space = ' ';
-
-// 	while(getl->line[++i])
-// 	{ 
-// 		if (c == '>')
-// 			i++;
-// 		else if (getl->line[i] == c)
-// 			return (1); 
-// 		while(getl->line[i] && getl->line[i] != c)
-// 		{
-// 			printf("|%c|\n",getl->line[i]);
-// 			if (getl->line[i] != ' ')
-// 				return (0);	
-// 			i++;
-// 		}
-// 		res = (getl->space == ' ') ? 1 : 0;
-// 	}
-// 	return (res); // no err found
-// }
 
 
 
 
-
-// int	foreach_cmd(char *sp, t_getl *getl)
-// {
-	
-// 	int err;
-// 	int i;
-// 	int aff;
-	
-// 	i = -1; 
-// 	err = -1;
-// 	printf("|%s|\n",sp);
-// 	while(sp[++i])
-// 	{
-// 		if (sp[i] ==  '>' || sp[i] == '|')
-// 		{
-// 			err = (sp[i] == '>') ? INFILE : PIPE;
-// 			if ((aff = check_syntax(getl, i, sp[i])))
-// 			{
-// 				printf("aff:%d\n",aff);
-// 				return(err);
-// 			}
-// 			printf("aff:%d\n",aff);
-				
-
-// 		}
-// 	}
-	
-	
-
-
-
-// 	//TODO
-// 	return (err);// -1 : everything is good
-
-	
-	
-
-// }
-
-
-
-
-// int	get_cmd(t_getl *getl)
-// {
-// 	int i;
-
-
-// 	i = -1;
-// 	getl->err = -1;
-// 	getl->sp = ft_split(getl->line, ';');
-// 	while(getl->sp[++i])
-// 	{
-// 		if ((getl->err = foreach_cmd(getl->sp[i], getl)) != -1)
-// 		{
-// 			errrors(g_mishell_err[getl->err]);
-// 			break;
-// 		}
-// 	}
-// 	return (getl->err);
-// }
-
-
-
-
-// int	check_comma(t_getl *getl, int *i, char c)
-// {
-// 	while(getl->line[++(*i)])
-// 	{
-// 		if (getl->line[*i] == ';' || getl->line[*i] == '|' || getl->line[*i] == '>' || getl->line[*i] == ' ')
-// 			getl->line[*i] = -getl->line[*i]; //     1 ;
-// 		else if (getl->line[*i] == c)
-// 		{
-// 			getl->quote = 0;
-// 			return (*i);
-// 		}
-// 	}
-// 	return (-1);
-// }
-
-
-
-
-// void	tozeros(char *s, int len)
-// {
-// 	s[len] = '\0';
-// 	while(--len > -1)
-// 		*s++ =  '0';
-// } 
-
-
-
-// int	toclear(t_getl *getl)
-// {
-// 	int i;
-
-// 	getl->quote = 0;
-// 	i = -1;
-// 	while(getl->line[++i])
-// 	{
-// 		if (getl->line[i] == ';')
-// 			if (check_syntax(getl, i, ';'))
-// 				return(COMMA);
-// 		if (getl->line[i] == (char)34 || getl->line[i] == (char)39)
-// 		{
-// 			getl->c = (getl->line[i] == (char)34) ? (char)34 : (char)39;
-// 			getl->quote = 1;
-// 			i = check_comma(getl, &i, getl->c);
-// 		}
-// 		if (getl->quote == 1)
-// 			return (QUOTED);// failed		
-// 	}
-// 	return (-1); // nothing happed
-// }
+/*linekd list of cmd*/
 
 
 
@@ -473,6 +277,14 @@ int		check_for_slash(char *str)
 
 
 
+
+
+
+
+
+
+
+
 	void	printsplit(char **sp)
 	{
 		int i = -1;
@@ -485,12 +297,122 @@ int		check_for_slash(char *str)
 
 
 
+	// t_cmd 	*add_new_cmd(t_cmd *cmd)
+	// {
+	// 	int i;
 
-	void	get_command(t_getl *getl)
+	// 	i = 0;
+
+	// 	while(cmd->next)
+	// 		i++;
+	// 	cmd->c  =  
+	// 	cmd->args = 
+	// 	cmd->files = 
+	// 	cmd->next =  NULL;
+		
+
+	// 	return (cmd);
+	// }
+
+
+	// t_pipeline *add_new_pipeline(t_pipeline *pipelines)
+	// {
+
+	// 	int i;
+	// 	t_pipeline *prevpipe;
+
+
+	// 	i = 0;
+	// 	prevpipe = NULL;
+	// 	while(pipelines->next)
+	// 	{
+	// 		prevpipe = pipelines->next;
+	// 		i++;
+	// 	}
+	// 	// pipelines->pipe = add_new_cmd();
+	// 	pipelines->next = prevpipe;
+		
+
+
+
+	// }
+
+
+
+	void	ft_free(char **s)
 	{
+		int i;
+
+		i = -1;
+		while(s[++i])
+		{
+			free(s[i]);
+			s[i] = NULL;
+		}
+		s = NULL;
+	}
+
+	int sp_len(char **str)
+	{
+		int i;
+
+		i = 0;
+		while(*str)
+			i++;
+		return(i);
+	}
+
+
+
+
+
+	void	add_new_pipe(t_pipeline *pipeline, t_getl *getl, int i)
+	{
+		int i;
+
+		i = -1;
+		getl->sp_p = ft_split(getl->sp_c[i], '|');
+
+		if(sp_len > 0)
+		{
+			// add to cmd list 
+		}
+		// while(getl->sp_p[++i])
+		// {
+		
+		// }
+		if ()
+		
+		
+
+		
+	}
+
+
+
+
+	// void	get_command(t_getl *getl, t_pipeline* pipelines)
+	void	get_command(t_getl *getl, t_pipeline *pipeline)
+	{
+
+		// element needed:
+		// pipelines // g_list
+		// currenty pipeline // current element;
+
+		int i;		
+
+
+		i = -1;
+
+
 		printf("|%s|\n",getl->line);
 		getl->sp_c = ft_split(getl->line, ';');
-		printsplit(getl->sp_c);
+		while(getl->sp_c[++i])
+			add_new_pipe(pipeline,getl,i);
+			 
+		ft_free(getl->sp_c);		
+
+		// add_new_pipeline(pipelines);
 	}
 
 
@@ -499,6 +421,7 @@ int		check_for_slash(char *str)
 int     main(int argc, char **argv, char **env)
 {
 	t_shell *shell;
+
 
 	shell = (t_shell*)malloc(sizeof(t_shell));
 	shell->envs = NULL;
@@ -514,7 +437,7 @@ int     main(int argc, char **argv, char **env)
 
 
 	getl = (t_getl*)malloc(sizeof(t_getl));
-	
+	shell->pipeline = (t_pipeline*)malloc(sizeof(t_pipeline));
 	while (1)
 	{
 
@@ -581,7 +504,8 @@ int     main(int argc, char **argv, char **env)
 				continue;
 			else 
 			{
-				get_command(getl);
+				// get_command(getl, pipelines);
+				get_command(getl, shell->pipeline);
 			}
 				
 			
@@ -589,48 +513,9 @@ int     main(int argc, char **argv, char **env)
 			
 		}
 		
-		
-	
 		free(getl->line);
 	}
 fclose(shell->debug_file);
 	return (0);
 }
 
-
-
-
-/*t_cmd *cmd;
-
-	char *s;
-	int i;
-	
-	//char *args;
-	//int in;
-	
-	cmd = (t_cmd*)malloc(sizeof(t_cmd));
-	int k = -1;
-	while(sp[++k])
-	{
-		if (sp[k] < 0)
-			sp[k] = -sp[k];
-
-	}
-	printf("fixed: |%s|\n", sp);
-
-
-	getl->fd = 0;
-	// getl->spp = ft_split(sp, '|');
-	// while(getl->spp[++k])
-	// 	printf("|%s|\n",getl->spp[k]);
-	
-	//getl-spp = ft_split(sp, '|');
-*	s = ft_strtrim(sp, " ");
-//	printf("|%s|\n",s);
-	//cmd->c = ft_substr(s, 0, (i = indexof_char(s, " ")));
-	//printf("\n\n|%s|\n", cmd->c);
-	// //printf("\n\nin:%d \n\n",in);
-	// in = skip_char(sp, " ", in);
-	// //printf("\n\n\n\nin:%d endofargs:%lu\n\n\n\n",in, ft_strlen(sp) - in);
-	// args = ft_substr(sp, in, ft_strlen(sp) - in);
-	//printf("|cmd->c:|%s|\n|args:|%s|\n\n",cmd->c, arg*/

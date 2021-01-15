@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/04 08:45:22 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/04 09:57:36 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,9 @@ typedef struct	s_getl{
 	int 	append; // >>
 	int		pipe;
 	int		brake;
-	char	**sp_c;
-	char	**sp_p;
+	char	**sp_c; // split with semicolone
+	char	**sp_p; //split with pipe
+	char 	**sp_re; // split with redirection
 
 	
 	
