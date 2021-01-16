@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/15 09:24:01 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/16 12:37:14 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,7 @@ int		check_for_slash(char *str)
 				return 1;
 			}
 			// printf("red is on\n");
+
 			getl->red_in = 1;
 		}
 		getl->semicolon = 0;
@@ -289,10 +290,10 @@ int		check_for_slash(char *str)
 	{
 		int i = -1;
 
-		printf("--------start--------\n");
+		// printf("--------start--------\n");
 		while(sp[++i])
 			printf("|%s|\n",sp[i]);
-		printf("---------end---------\n");
+		// printf("---------end---------\n");
 	}
 
 
@@ -364,26 +365,64 @@ int		check_for_slash(char *str)
 
 
 
+	// int	ft_pipelinelen(t_pipeline *t)
+	// {
+	// 	int len;
+
+	// 	len = 1;
+	// 	if (!t)
+	// 		len = 0;
+	// 	while(t->next)
+	// 		len++;
+	// 	return(len);
+	// }
 
 
-	void	add_new_pipe(t_pipeline *pipeline, t_getl *getl, int i)
+	
+
+
+
+	void	add_new_pipe(t_shell *shell, t_getl *getl, int i)
 	{
-		int i;
 
-		i = -1;
-		getl->sp_p = ft_split(getl->sp_c[i], '|');
+		t_pipeline *pipeline;
+		t_pipeline *current;
 
-		if(sp_len > 0)
+		current = NULL;
+		pipeline = NULL;
+	
+		if (shell->head == NULL)
 		{
-			// add to cmd list 
+			pipeline = (t_pipeline*)malloc(sizeof(t_pipeline));
+			pipeline->pipe = (t_cmd*)malloc(sizeof(t_cmd)); 
+		 	pipeline->pipe->c = getl->sp_c[i];
+			pipeline->next = NULL;
+			shell->head = pipeline;
+			printf("linked_list:|%s|%p\n",pipeline->pipe->c, shell->head);
+			printf("head:|%p|\n",shell->head);
 		}
-		// while(getl->sp_p[++i])
-		// {
+		else
+		{
+			current = shell->head;
+			while(!current)
+			{
+				if (!current->next)
+					current = current->next;
+			}
+			pipeline = (t_pipeline*)malloc(sizeof(t_pipeline));
+			pipeline->pipe = (t_cmd*)malloc(sizeof(t_cmd));
+			current = pipeline;
+			pipeline->pipe->c = getl->sp_c[i];
+			pipeline->next = NULL;
+			// printf("****%p|%s\n",current,current->pipe->c);
+			
+			
+			
+			
+		}
 		
-		// }
-		if ()
-		
-		
+
+
 
 		
 	}
@@ -392,7 +431,7 @@ int		check_for_slash(char *str)
 
 
 	// void	get_command(t_getl *getl, t_pipeline* pipelines)
-	void	get_command(t_getl *getl, t_pipeline *pipeline)
+	void	get_command(t_getl *getl, t_shell *shell)
 	{
 
 		// element needed:
@@ -405,11 +444,14 @@ int		check_for_slash(char *str)
 		i = -1;
 
 
-		printf("|%s|\n",getl->line);
+		// printf("|%s|\n",getl->line);
 		getl->sp_c = ft_split(getl->line, ';');
 		while(getl->sp_c[++i])
-			add_new_pipe(pipeline,getl,i);
-			 
+		{
+			// printf("%s\n",getl->sp_c[i]);
+			add_new_pipe(shell,getl,i); 
+			// printf("*******|%p\n",shell->head);
+		}	
 		ft_free(getl->sp_c);		
 
 		// add_new_pipeline(pipelines);
@@ -437,7 +479,7 @@ int     main(int argc, char **argv, char **env)
 
 
 	getl = (t_getl*)malloc(sizeof(t_getl));
-	shell->pipeline = (t_pipeline*)malloc(sizeof(t_pipeline));
+	shell->head = NULL;
 	while (1)
 	{
 
@@ -505,7 +547,7 @@ int     main(int argc, char **argv, char **env)
 			else 
 			{
 				// get_command(getl, pipelines);
-				get_command(getl, shell->pipeline);
+				get_command(getl, shell);
 			}
 				
 			

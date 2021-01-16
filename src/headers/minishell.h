@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/04 09:57:36 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/16 10:21:21 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,7 @@ static char		*(g_mishell_err[]) =
 };
 
 
-
-
-
-
-
 typedef struct	s_getl{
-	// char *line;
-	// char *line_t;
-	// int len;
-	// int fd;
-	// int r;
-	// char **sp;
-	// char **sps;
-	// int quote;//active ' " or inactive
-	// int err; // errors
-	// char c;
-	// int comma; // for the err ;;    ;       ;
-	// int pipe; // for the err || |      |
-	// int redirection;
-	// char space;
-	// char **spp;
-
 	char	*line;
 	int 	i;
 	int 	s_quote;
@@ -132,7 +111,7 @@ typedef struct  s_pipeline
 typedef struct  s_shell{
     t_env           *envs;
     FILE            *debug_file;
-    t_pipeline      *pipeline;
+    t_pipeline      *head;
 }      			t_shell;
 
 void	ft_env(t_env *env);
