@@ -1,0 +1,11 @@
+------------------------------
+-- ls --
+i got here 
+name: testing
+parent process here
+child process exited 82759 | 82758 --- status:0
+command: /bin/ls
+-- cat --
+parent process here
+child process exited 82760 | 82758 --- status:2
+command: /bin/cat

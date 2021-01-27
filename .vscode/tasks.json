@@ -1,0 +1,31 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "C/C++: gcc build active file",
+            "command": "/usr/bin/gcc",
+            "args": [
+                "-g",
+                "${file}",
+                "${workspaceFolder}/src/builtins/*.c",
+                "${workspaceFolder}/src/core/*.c",
+                "${workspaceFolder}/gnl/get_next_line.c",
+                "${workspaceFolder}/gnl/get_next_line_utils.c",
+                "${workspaceFolder}/libft.a",
+                "-o",
+                "${workspaceFolder}/minishell"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

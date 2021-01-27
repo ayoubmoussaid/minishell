@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/13 08:52:53 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/27 17:52:10 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ t_cmd *create_one(char *c, char **args, t_files *files)
 	return (cmd);
 }
 
+t_files *get_one_file(){
+	t_files *file = (t_files*)malloc(sizeof(t_files));
+	file->name = ft_strdup("testing");
+	file->type = '>';
+	file->next = NULL;
+	return file;
+}
 
 t_pipeline	*create_fake_cmd()
 {
@@ -34,40 +41,47 @@ t_pipeline	*create_fake_cmd()
 	tab[0] = ft_strdup("ls");
 	tab[1] = ft_strdup("-la");
 	tab[2] = NULL;
-	pipeline->pipe = create_one(tab[0], tab, NULL);
+	pipeline->pipe = create_one(tab[0], tab, get_one_file());
 	char **tab1 = (char**)malloc(sizeof(char*)*3);
 	tab1[0] = ft_strdup("cat");
 	tab1[1] = ft_strdup("-e");
 	tab1[2] = NULL;
 	pipeline->pipe->next = create_one(tab1[0], tab1, NULL);
+	// char **tab2 = (char**)malloc(sizeof(char*)*3);
+	// tab2[0] = ft_strdup("grep");
+	// tab2[1] = ft_strdup("l");
+	// tab2[2] = NULL;
+	// pipeline->pipe->next->next = create_one(tab2[0], tab2, NULL);
+	// char **tab3 = (char**)malloc(sizeof(char*)*3);
+	// tab3[0] = ft_strdup("cat");
+	// tab3[1] = ft_strdup("-e");
+	// tab3[2] = NULL;
+	// pipeline->pipe->next->next->next = create_one(tab3[0], tab3, NULL);
 	pipeline->next = NULL;
-	//char *tab2[] = {"$PATH", "hello", (char*)0};
-	// pipeline->next = (t_pipeline*)malloc((sizeof(t_pipeline)));
-	// pipeline->next->pipe = create_one("echo", tab2, NULL);
-	// pipeline->next->next = NULL;
 	return (pipeline);
 }
 
-void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2])
+void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2], int std[2])
 {
 	t_files *file;
 
 	file = cmd->files;
-	p[0] = -1;
-	p[1] = -1;
+	int res = 0;
 	if(cmd->next)
 	{
 		fprintf(shell->debug_file, "i got here \n");
-		pipe(p);
+		close(p[0]);
+		close(p[1]);
+		res = pipe(p);
 	}
 	while(file)
 	{
 		fprintf(shell->debug_file, "name: %s\n", file->name);
 		if(file->type == '>' || file->type == 'a')
 		{
-			if(p[WRITE] != -1)
-				close(p[WRITE]);
-			p[WRITE] = open(file->name, O_CREAT | (file->type == '>' ? O_WRONLY : O_APPEND));
+			close(p[WRITE]);
+			int x = open(file->name, O_WRONLY | O_CREAT | (file->type == '>' ? O_TRUNC : O_APPEND), 0644);
+			p[WRITE] = x;
 			if(p[WRITE] == -1)
 			{
 				ft_putendl_fd(strerror(errno), STDERR_FILENO);
@@ -87,20 +101,23 @@ void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2])
 		}
 		file = file->next;
 	}
-	dup2(p[WRITE], STDOUT_FILENO);
-	//TODO dupliacte fd .. you forgot it
+	if(cmd->next && res != -1){
+		dup2(p[WRITE], STDOUT_FILENO);
+		close(p[WRITE]);
+	}	
+	if(!file && !cmd->next)
+		dup2(std[WRITE], STDOUT_FILENO);
 }
 
 void	finish_fd(t_shell *shell, t_cmd *cmd, int p[2], int std[2])
 {
-	if(shell && cmd->next)
+	if(shell && cmd->next && p[READ] != -1)
 		dup2(p[READ], STDIN_FILENO);
 	else
 	{
 		dup2(std[READ], STDIN_FILENO);
 		dup2(std[WRITE], STDOUT_FILENO);
 	}
-	
 }
 
 int		check_for_slash(char *str)
@@ -210,8 +227,7 @@ void	execute_non_builtin(t_shell *shell, t_cmd *cmd)
 	if(pid == 0)
 	{
 		char **envp = get_env(shell->envs);
-		write(1, cmd->executable, 30);
-		write(1, "\n", 1);
+		fprintf(shell->debug_file, "executable: %s\n",cmd->executable);
 		for(int i = 0; cmd->args[i]; i++)
 			ft_putendl_fd(cmd->args[i], 1);
 		int x = execve(cmd->executable, cmd->args, envp);
@@ -224,7 +240,7 @@ void	execute_non_builtin(t_shell *shell, t_cmd *cmd)
 
 		status = 2;
 		fprintf(shell->debug_file, "parent process here\n");
-		if(!cmd->next)
+		if(cmd->next)
 			waitpid(pid, &status, 0);
 		fprintf(shell->debug_file, "child process exited %d | %d --- status:%d\n", pid, getpid(), status);
 	}
@@ -248,15 +264,15 @@ void	execute(t_shell *shell)
 		while(cmd)
 		{
 			fprintf(shell->debug_file, "-- %s --\n", cmd->c);
-			prepare_fd(shell, cmd, p);
+			prepare_fd(shell, cmd, p, std);
 			if ((index = get_real_cmd(shell, cmd)) != -1)
 				execute_builtin(shell, cmd, index);
 			else
 			{
 				execute_non_builtin(shell, cmd);
 			}
+			fprintf(shell->debug_file, "command: %s\n", cmd->executable);
 			finish_fd(shell, cmd, p, std);
-			//TODO execute
 			cmd = cmd->next;
 		}
 
