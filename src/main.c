@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/27 17:52:10 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/27 18:44:15 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ t_files *get_one_file(){
 	t_files *file = (t_files*)malloc(sizeof(t_files));
 	file->name = ft_strdup("testing");
 	file->type = '>';
-	file->next = NULL;
+	file->next =(t_files*)malloc(sizeof(t_files)); 
+	file->next->name = ft_strdup("testing1");
+	file->next->type = '<';
+	file->next->next = NULL;
 	return file;
 }
 
@@ -37,16 +40,16 @@ t_pipeline	*create_fake_cmd()
 {
 	t_pipeline *pipeline;
 	pipeline = (t_pipeline*)malloc((sizeof(t_pipeline)));
-	char **tab = (char**)malloc(sizeof(char*)*3);
-	tab[0] = ft_strdup("ls");
-	tab[1] = ft_strdup("-la");
-	tab[2] = NULL;
-	pipeline->pipe = create_one(tab[0], tab, get_one_file());
+	// char **tab = (char**)malloc(sizeof(char*)*3);
+	// tab[0] = ft_strdup("ls");
+	// tab[1] = ft_strdup("-la");
+	// tab[2] = NULL;
+	// pipeline->pipe = create_one(tab[0], tab, get_one_file());
 	char **tab1 = (char**)malloc(sizeof(char*)*3);
 	tab1[0] = ft_strdup("cat");
 	tab1[1] = ft_strdup("-e");
 	tab1[2] = NULL;
-	pipeline->pipe->next = create_one(tab1[0], tab1, NULL);
+	pipeline->pipe = create_one(tab1[0], tab1, get_one_file());
 	// char **tab2 = (char**)malloc(sizeof(char*)*3);
 	// tab2[0] = ft_strdup("grep");
 	// tab2[1] = ft_strdup("l");
@@ -67,6 +70,7 @@ void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2], int std[2])
 
 	file = cmd->files;
 	int res = 0;
+	int check = 0;
 	if(cmd->next)
 	{
 		fprintf(shell->debug_file, "i got here \n");
@@ -90,22 +94,27 @@ void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2], int std[2])
 		}
 		else
 		{
-			if(p[READ] != -1)
-				close(p[READ]);
+
+			close(p[READ]);
 			p[READ] = open(file->name, O_RDONLY);
 			if(p[READ] == -1)
 			{
 				ft_putendl_fd(strerror(errno), STDERR_FILENO);
 				exit(0);
 			}
+			check = 1;
 		}
 		file = file->next;
 	}
-	if(cmd->next && res != -1){
+	if((cmd->next && res != -1) || cmd->files){
 		dup2(p[WRITE], STDOUT_FILENO);
 		close(p[WRITE]);
-	}	
-	if(!file && !cmd->next)
+	}
+	if(check){
+		dup2(p[READ], STDIN_FILENO);
+		close(p[READ]);
+	}
+	if(!cmd->files && !cmd->next)
 		dup2(std[WRITE], STDOUT_FILENO);
 }
 
