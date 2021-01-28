@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/13 08:27:14 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/28 16:43:43 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct  s_cmd{
 	char			*executable;
 	char			**args;
 	t_files			*files;
+	int				fdr;
+	int				fdw;
 }               t_cmd;
 
 typedef struct  s_pipeline

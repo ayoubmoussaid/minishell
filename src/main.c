@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/27 18:44:15 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/28 17:57:25 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@ t_cmd *create_one(char *c, char **args, t_files *files)
 t_files *get_one_file(){
 	t_files *file = (t_files*)malloc(sizeof(t_files));
 	file->name = ft_strdup("testing");
-	file->type = '>';
+	file->type = '<';
 	file->next =(t_files*)malloc(sizeof(t_files)); 
 	file->next->name = ft_strdup("testing1");
 	file->next->type = '<';
-	file->next->next = NULL;
+	file->next->next =(t_files*)malloc(sizeof(t_files)); 
+	file->next->next->name = ft_strdup("testing2");
+	file->next->next->type = '<';
+	file->next->next->next = NULL;
 	return file;
 }
 
@@ -40,16 +43,16 @@ t_pipeline	*create_fake_cmd()
 {
 	t_pipeline *pipeline;
 	pipeline = (t_pipeline*)malloc((sizeof(t_pipeline)));
-	// char **tab = (char**)malloc(sizeof(char*)*3);
-	// tab[0] = ft_strdup("ls");
-	// tab[1] = ft_strdup("-la");
-	// tab[2] = NULL;
-	// pipeline->pipe = create_one(tab[0], tab, get_one_file());
+	char **tab = (char**)malloc(sizeof(char*)*3);
+	tab[0] = ft_strdup("ls");
+	tab[1] = ft_strdup("-la");
+	tab[2] = NULL;
+	pipeline->pipe = create_one(tab[0], tab, NULL);
 	char **tab1 = (char**)malloc(sizeof(char*)*3);
 	tab1[0] = ft_strdup("cat");
 	tab1[1] = ft_strdup("-e");
 	tab1[2] = NULL;
-	pipeline->pipe = create_one(tab1[0], tab1, get_one_file());
+	pipeline->pipe->next = create_one(tab1[0], tab1, get_one_file());
 	// char **tab2 = (char**)malloc(sizeof(char*)*3);
 	// tab2[0] = ft_strdup("grep");
 	// tab2[1] = ft_strdup("l");
@@ -64,58 +67,58 @@ t_pipeline	*create_fake_cmd()
 	return (pipeline);
 }
 
-void	prepare_fd(t_shell *shell, t_cmd *cmd, int p[2], int std[2])
+int parse_files(t_cmd *cmd)
 {
-	t_files *file;
+	t_files *iterator;
 
-	file = cmd->files;
-	int res = 0;
-	int check = 0;
-	if(cmd->next)
+	cmd->fdr = -2;
+	cmd->fdw = -2;
+	iterator = cmd->files;
+	int no_error = 1;
+	while(iterator && no_error)
 	{
-		fprintf(shell->debug_file, "i got here \n");
-		close(p[0]);
-		close(p[1]);
-		res = pipe(p);
-	}
-	while(file)
-	{
-		fprintf(shell->debug_file, "name: %s\n", file->name);
-		if(file->type == '>' || file->type == 'a')
+		if (iterator->type == 'a' || iterator->type == '>')
 		{
-			close(p[WRITE]);
-			int x = open(file->name, O_WRONLY | O_CREAT | (file->type == '>' ? O_TRUNC : O_APPEND), 0644);
-			p[WRITE] = x;
-			if(p[WRITE] == -1)
-			{
-				ft_putendl_fd(strerror(errno), STDERR_FILENO);
-				exit(0);
-			}
+			close(cmd->fdw);
+			if((cmd->fdw = open(iterator->name, O_WRONLY | O_CREAT | (iterator->type == '>' ? O_TRUNC : O_APPEND), 0644)) < 0)
+				no_error = 0;
 		}
 		else
 		{
-
-			close(p[READ]);
-			p[READ] = open(file->name, O_RDONLY);
-			if(p[READ] == -1)
-			{
-				ft_putendl_fd(strerror(errno), STDERR_FILENO);
-				exit(0);
-			}
-			check = 1;
+			close(cmd->fdr);
+			if((cmd->fdr = open(iterator->name, O_RDONLY)) < 0)
+				no_error = 0;
 		}
-		file = file->next;
+		iterator = iterator->next;
 	}
-	if((cmd->next && res != -1) || cmd->files){
+	if(!no_error){
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		return (0);
+	}
+	return (1);
+}
+
+int	prepare_fd(t_cmd *cmd, int p[2], int std[2])
+{
+	int check = parse_files(cmd);
+	if(cmd->next && pipe(p) == 0)
+	{
 		dup2(p[WRITE], STDOUT_FILENO);
 		close(p[WRITE]);
 	}
-	if(check){
-		dup2(p[READ], STDIN_FILENO);
-		close(p[READ]);
-	}
-	if(!cmd->files && !cmd->next)
+	if(cmd->next == NULL)
 		dup2(std[WRITE], STDOUT_FILENO);
+	if(cmd->files && cmd->fdw > 0)
+	{
+		dup2(cmd->fdw, STDOUT_FILENO);
+		close(cmd->fdw);
+	}
+	if(cmd->files && cmd->fdr > 0)
+	{
+		dup2(cmd->fdr, STDIN_FILENO);
+		close(cmd->fdr);
+	}
+	return check;
 }
 
 void	finish_fd(t_shell *shell, t_cmd *cmd, int p[2], int std[2])
@@ -237,8 +240,6 @@ void	execute_non_builtin(t_shell *shell, t_cmd *cmd)
 	{
 		char **envp = get_env(shell->envs);
 		fprintf(shell->debug_file, "executable: %s\n",cmd->executable);
-		for(int i = 0; cmd->args[i]; i++)
-			ft_putendl_fd(cmd->args[i], 1);
 		int x = execve(cmd->executable, cmd->args, envp);
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 		exit(x);
@@ -273,7 +274,7 @@ void	execute(t_shell *shell)
 		while(cmd)
 		{
 			fprintf(shell->debug_file, "-- %s --\n", cmd->c);
-			prepare_fd(shell, cmd, p, std);
+			prepare_fd(cmd, p, std);
 			if ((index = get_real_cmd(shell, cmd)) != -1)
 				execute_builtin(shell, cmd, index);
 			else

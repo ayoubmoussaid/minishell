@@ -1,7 +1,9 @@
 ------------------------------
--- cat --
-name: testing
-name: testing1
+-- ls --
 parent process here
-child process exited 5988 | 5987 --- status:2
+child process exited 70480 | 70479 --- status:0
+command: /bin/ls
+-- cat --
+parent process here
+child process exited 70481 | 70479 --- status:2
 command: /bin/cat
