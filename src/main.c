@@ -6,13 +6,28 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/28 17:57:25 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/29 18:53:58 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 char	*g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void*)0};
+
+
+void signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putendl_fd("\n", STDOUT_FILENO);
+		// g_all->exit_status = 128 + sig;
+	}
+	if (sig == SIGQUIT)
+	{
+		//if (getpid() == 0)
+		write(1, "\b \b\b \b", 6);
+	}
+}
 
 t_cmd *create_one(char *c, char **args, t_files *files)
 {
@@ -25,17 +40,18 @@ t_cmd *create_one(char *c, char **args, t_files *files)
 	return (cmd);
 }
 
-t_files *get_one_file(){
+t_files *get_one_file(char *name, char type){
 	t_files *file = (t_files*)malloc(sizeof(t_files));
-	file->name = ft_strdup("testing");
-	file->type = '<';
-	file->next =(t_files*)malloc(sizeof(t_files)); 
-	file->next->name = ft_strdup("testing1");
-	file->next->type = '<';
-	file->next->next =(t_files*)malloc(sizeof(t_files)); 
-	file->next->next->name = ft_strdup("testing2");
-	file->next->next->type = '<';
-	file->next->next->next = NULL;
+	file->name = ft_strdup(name);
+	file->type = type;
+	file->next = NULL;
+	// file->next =(t_files*)malloc(sizeof(t_files));
+	// file->next->name = ft_strdup("testing1");
+	// file->next->type = '<';
+	// file->next->next =(t_files*)malloc(sizeof(t_files)); 
+	// file->next->next->name = ft_strdup("testing2");
+	// file->next->next->type = '<';
+	// file->next->next->next = NULL;
 	return file;
 }
 
@@ -47,23 +63,28 @@ t_pipeline	*create_fake_cmd()
 	tab[0] = ft_strdup("ls");
 	tab[1] = ft_strdup("-la");
 	tab[2] = NULL;
-	pipeline->pipe = create_one(tab[0], tab, NULL);
+	pipeline->pipe = create_one(tab[0], tab, get_one_file("hello", '>'));
 	char **tab1 = (char**)malloc(sizeof(char*)*3);
 	tab1[0] = ft_strdup("cat");
 	tab1[1] = ft_strdup("-e");
 	tab1[2] = NULL;
-	pipeline->pipe->next = create_one(tab1[0], tab1, get_one_file());
+	pipeline->pipe->next = create_one(tab1[0], tab1, get_one_file("txt", '<'));
 	// char **tab2 = (char**)malloc(sizeof(char*)*3);
 	// tab2[0] = ft_strdup("grep");
 	// tab2[1] = ft_strdup("l");
 	// tab2[2] = NULL;
 	// pipeline->pipe->next->next = create_one(tab2[0], tab2, NULL);
-	// char **tab3 = (char**)malloc(sizeof(char*)*3);
-	// tab3[0] = ft_strdup("cat");
-	// tab3[1] = ft_strdup("-e");
-	// tab3[2] = NULL;
-	// pipeline->pipe->next->next->next = create_one(tab3[0], tab3, NULL);
-	pipeline->next = NULL;
+	char **tab3 = (char**)malloc(sizeof(char*)*2);
+	tab3[0] = ft_strdup("ls");
+	tab3[1] = NULL;
+	pipeline->next = (t_pipeline*)malloc(sizeof(t_pipeline));
+	pipeline->next->pipe = create_one(tab3[0], tab3, NULL);
+	char **tab2 = (char**)malloc(sizeof(char*)*3);
+	tab2[0] = ft_strdup("grep");
+	tab2[1] = ft_strdup("l");
+	tab2[2] = NULL;
+	pipeline->next->pipe->next = create_one(tab2[0], tab2, NULL);
+	pipeline->next->next = NULL;
 	return (pipeline);
 }
 
@@ -98,26 +119,23 @@ int parse_files(t_cmd *cmd)
 	return (1);
 }
 
+void dup_close(int fd1, int fd2)
+{
+	dup2(fd1, fd2);
+	close(fd1);
+}
+
 int	prepare_fd(t_cmd *cmd, int p[2], int std[2])
 {
 	int check = parse_files(cmd);
 	if(cmd->next && pipe(p) == 0)
-	{
-		dup2(p[WRITE], STDOUT_FILENO);
-		close(p[WRITE]);
-	}
+		dup_close(p[WRITE], STDOUT_FILENO);
 	if(cmd->next == NULL)
 		dup2(std[WRITE], STDOUT_FILENO);
 	if(cmd->files && cmd->fdw > 0)
-	{
-		dup2(cmd->fdw, STDOUT_FILENO);
-		close(cmd->fdw);
-	}
+		dup_close(cmd->fdw, STDOUT_FILENO);
 	if(cmd->files && cmd->fdr > 0)
-	{
-		dup2(cmd->fdr, STDIN_FILENO);
-		close(cmd->fdr);
-	}
+		dup_close(cmd->fdr, STDIN_FILENO);
 	return check;
 }
 
@@ -295,7 +313,8 @@ int     main(int argc, char **argv, char **env)
 {
 	
 	t_shell *shell;
-
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 	shell = (t_shell*)malloc(sizeof(t_shell));
 	shell->envs = NULL;
 	shell->pipeline = create_fake_cmd();
