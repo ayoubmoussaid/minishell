@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 10:24:24 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:17:12 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 07:49:30 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	ft_unset(t_shell *shell, t_cmd *cmd)
+void	ft_unset( t_cmd *cmd)
 {
 	int i;
 	int ret;
@@ -23,8 +23,8 @@ void	ft_unset(t_shell *shell, t_cmd *cmd)
 		ret = ft_isvalid_unset(cmd->args[i]);
 		if (ret == 1)
 		{
-			//fprintf(shell->debug_file, "-- %s --\n", cmd->args[i]);
-			delete_env_var(shell, cmd->args[i]);
+			//fprintf(g_shell->debug_file, "-- %s --\n", cmd->args[i]);
+			delete_env_var(cmd->args[i]);
 		}
 		else if (ret == 0)
 		{

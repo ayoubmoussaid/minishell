@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/29 18:53:58 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 11:38:21 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void signal_handler(int sig)
 	if (sig == SIGINT)
 	{
 		ft_putendl_fd("\n", STDOUT_FILENO);
-		// g_all->exit_status = 128 + sig;
+		g_shell->exit_status = 128 + sig;
 	}
 	if (sig == SIGQUIT)
 	{
@@ -59,32 +59,35 @@ t_pipeline	*create_fake_cmd()
 {
 	t_pipeline *pipeline;
 	pipeline = (t_pipeline*)malloc((sizeof(t_pipeline)));
-	char **tab = (char**)malloc(sizeof(char*)*3);
-	tab[0] = ft_strdup("ls");
-	tab[1] = ft_strdup("-la");
+	char **tab = (char**)malloc(sizeof(char*)*5);
+	tab[0] = ft_strdup("export");
+	tab[1] = ft_strdup("b=c");
 	tab[2] = NULL;
-	pipeline->pipe = create_one(tab[0], tab, get_one_file("hello", '>'));
-	char **tab1 = (char**)malloc(sizeof(char*)*3);
-	tab1[0] = ft_strdup("cat");
-	tab1[1] = ft_strdup("-e");
-	tab1[2] = NULL;
-	pipeline->pipe->next = create_one(tab1[0], tab1, get_one_file("txt", '<'));
+	pipeline->pipe = create_one(tab[0], tab, NULL);
+	// char **tab1 = (char**)malloc(sizeof(char*)*3);
+	// tab1[0] = ft_strdup("cat");
+	// tab1[1] = ft_strdup("-e");
+	// tab1[2] = NULL;
+	// pipeline->pipe->next = create_one(tab1[0], tab1, NULL);
 	// char **tab2 = (char**)malloc(sizeof(char*)*3);
 	// tab2[0] = ft_strdup("grep");
 	// tab2[1] = ft_strdup("l");
 	// tab2[2] = NULL;
 	// pipeline->pipe->next->next = create_one(tab2[0], tab2, NULL);
+
 	char **tab3 = (char**)malloc(sizeof(char*)*2);
-	tab3[0] = ft_strdup("ls");
+	tab3[0] = ft_strdup("export");
 	tab3[1] = NULL;
 	pipeline->next = (t_pipeline*)malloc(sizeof(t_pipeline));
 	pipeline->next->pipe = create_one(tab3[0], tab3, NULL);
-	char **tab2 = (char**)malloc(sizeof(char*)*3);
-	tab2[0] = ft_strdup("grep");
-	tab2[1] = ft_strdup("l");
-	tab2[2] = NULL;
-	pipeline->next->pipe->next = create_one(tab2[0], tab2, NULL);
+	// char **tab2 = (char**)malloc(sizeof(char*)*3);
+	// tab2[0] = ft_strdup("grep");
+	// tab2[1] = ft_strdup("l");
+	// tab2[2] = NULL;
+	// pipeline->next->pipe->next = create_one(tab2[0], tab2, NULL);
 	pipeline->next->next = NULL;
+
+	//pipeline->next = NULL;
 	return (pipeline);
 }
 
@@ -139,9 +142,9 @@ int	prepare_fd(t_cmd *cmd, int p[2], int std[2])
 	return check;
 }
 
-void	finish_fd(t_shell *shell, t_cmd *cmd, int p[2], int std[2])
+void	finish_fd(t_cmd *cmd, int p[2], int std[2])
 {
-	if(shell && cmd->next && p[READ] != -1)
+	if(g_shell && cmd->next && p[READ] != -1)
 		dup2(p[READ], STDIN_FILENO);
 	else
 	{
@@ -172,7 +175,7 @@ int		check_builtins(char *str)
 	return (-1);
 }
 
-char	*get_path(t_shell *shell, t_cmd	*cmd)
+char	*get_path( t_cmd	*cmd)
 {
 	char			*path;
 	char			**all_paths;
@@ -182,11 +185,11 @@ char	*get_path(t_shell *shell, t_cmd	*cmd)
 	struct stat		stbuf;
 
 	i = -1;
-	path = get_env_var(shell, "PATH");
+	path = get_env_var("PATH");
 	all_paths = ft_split(path, ':');
 	while (all_paths[++i] != 0)
 	{
-		//fprintf(shell->debug_file, "************ %s ************\n", all_paths[i]);
+		//fprintf(g_shell->debug_file, "************ %s ************\n", all_paths[i]);
 		if ((dfd = opendir(all_paths[i])) == NULL)
 			continue;
 		while ((dp = readdir(dfd)) != NULL)
@@ -199,7 +202,7 @@ char	*get_path(t_shell *shell, t_cmd	*cmd)
 			}
 			if ((stbuf.st_mode & S_IFMT) == S_IFDIR)
 				continue;
-			//fprintf(shell->debug_file, "*** %s ***\n", dp->d_name);
+			//fprintf(g_shell->debug_file, "*** %s ***\n", dp->d_name);
 			if(ft_strcmp(dp->d_name, cmd->c) == 0)
 				return (path);
 		}
@@ -208,7 +211,7 @@ char	*get_path(t_shell *shell, t_cmd	*cmd)
 	return "hi";
 }
 
-int 	get_real_cmd(t_shell *shell, t_cmd *cmd)
+int 	get_real_cmd( t_cmd *cmd)
 {
 	int		index;
 
@@ -217,14 +220,14 @@ int 	get_real_cmd(t_shell *shell, t_cmd *cmd)
 	if(check_for_slash(cmd->c) || (index = check_builtins(cmd->c)) != -1)
 		cmd->executable = cmd->c;
 	else
-		cmd->executable = get_path(shell, cmd);
+		cmd->executable = get_path(cmd);
 	return (index);
 }
 
-void	execute_builtin(t_shell *shell, t_cmd *cmd, int index)
+void	execute_builtin( t_cmd *cmd, int index)
 {
-	static void (*builtin_functions[7])(t_shell *shell, t_cmd *cmd) = {ft_echo, ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
-	builtin_functions[index](shell, cmd);
+	static void (*builtin_functions[7])( t_cmd *cmd) = {ft_echo, ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
+	builtin_functions[index](cmd);
 }
 
 char **get_env(t_env *env)
@@ -251,13 +254,13 @@ char **get_env(t_env *env)
 	return tab;
 }
 
-void	execute_non_builtin(t_shell *shell, t_cmd *cmd)
+void	execute_non_builtin( t_cmd *cmd)
 {
 	pid_t pid = fork();
 	if(pid == 0)
 	{
-		char **envp = get_env(shell->envs);
-		fprintf(shell->debug_file, "executable: %s\n",cmd->executable);
+		char **envp = get_env(g_shell->envs);
+		fprintf(g_shell->debug_file, "executable: %s\n",cmd->executable);
 		int x = execve(cmd->executable, cmd->args, envp);
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 		exit(x);
@@ -267,14 +270,16 @@ void	execute_non_builtin(t_shell *shell, t_cmd *cmd)
 		int status;
 
 		status = 2;
-		fprintf(shell->debug_file, "parent process here\n");
-		if(cmd->next)
+		fprintf(g_shell->debug_file, "parent process here\n");
+		if(!cmd->next){
 			waitpid(pid, &status, 0);
-		fprintf(shell->debug_file, "child process exited %d | %d --- status:%d\n", pid, getpid(), status);
+			g_shell->exit_status = status;
+		}
+		fprintf(g_shell->debug_file, "child process exited %d | %d --- status:%d\n", pid, getpid(), status);
 	}
 }
 
-void	execute(t_shell *shell)
+void	execute(t_shell *g_shell)
 {
 	t_pipeline	*pipeline;
 	t_cmd		*cmd;
@@ -282,25 +287,25 @@ void	execute(t_shell *shell)
 	int std[2];
 	int index;
 
-	pipeline = shell->pipeline;
+	pipeline = g_shell->pipeline;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	while(pipeline)
 	{
 		cmd = pipeline->pipe;
-		fprintf(shell->debug_file, "------------------------------\n");
+		fprintf(g_shell->debug_file, "------------------------------\n");
 		while(cmd)
 		{
-			fprintf(shell->debug_file, "-- %s --\n", cmd->c);
+			fprintf(g_shell->debug_file, "-- %s --\n", cmd->c);
 			prepare_fd(cmd, p, std);
-			if ((index = get_real_cmd(shell, cmd)) != -1)
-				execute_builtin(shell, cmd, index);
+			if ((index = get_real_cmd(cmd)) != -1)
+				execute_builtin(cmd, index);
 			else
 			{
-				execute_non_builtin(shell, cmd);
+				execute_non_builtin(cmd);
 			}
-			fprintf(shell->debug_file, "command: %s\n", cmd->executable);
-			finish_fd(shell, cmd, p, std);
+			fprintf(g_shell->debug_file, "command: %s\n", cmd->executable);
+			finish_fd(cmd, p, std);
 			cmd = cmd->next;
 		}
 
@@ -312,40 +317,39 @@ void	execute(t_shell *shell)
 int     main(int argc, char **argv, char **env)
 {
 	
-	t_shell *shell;
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
-	shell = (t_shell*)malloc(sizeof(t_shell));
-	shell->envs = NULL;
-	shell->pipeline = create_fake_cmd();
+	g_shell = (t_shell*)malloc(sizeof(t_shell));
+	g_shell->envs = NULL;
+	g_shell->pipeline = create_fake_cmd();
 	//write(1, "\n=============================\n", 31);
-	shell->debug_file = fopen("debug.txt", "w");
+	g_shell->debug_file = fopen("debug.txt", "w");
 	if (argc > 1)
 		argv = NULL;
-	my_env(env, shell);
-	//print_env(shell);
-	execute(shell);
-	//ft_env(shell->envs);
+	my_env(env);
+	//print_env(g_shell);
+	execute(g_shell);
+	//ft_env(g_shell->envs);
 	//ft_pwd();
-	//ft_cd(shell, "..");
-	//ft_cd(shell, "minishell");
-	//ft_cd(shell, "/freak");
+	//ft_cd(g_shell, "..");
+	//ft_cd(g_shell, "minishell");
+	//ft_cd(g_shell, "/freak");
 
 	// tab is a simple table containing args for test
 	// char *tab[] = {"abc=b", "avc=ff", "abc=d=5", "=a%ef", (void*)0};
-	// ft_export(shell, tab);
-	// print_env(shell);
+	// ft_export(g_shell, tab);
+	// print_env(g_shell);
 	// write(1, "=============================\n", 30);
-	// ft_env(shell->env);
+	// ft_env(g_shell->env);
 	// write(1, "=============================\n", 30);
 	//char *test[] = {"abc", "ef&fe", (void*)0};
-	//ft_unset(shell, test);
-	//print_env(shell);
-	// fprintf(shell->debug_file, "=============================\n");
+	//ft_unset(g_shell, test);
+	//print_env(g_shell);
+	// fprintf(g_shell->debug_file, "=============================\n");
 	// write(1, "=============================\n", 30);
 
 	// char *test[] = {"$abc", "$PATH", "$%dwa=", "$awd", "drgdrgdrg", (void*)0};
-	// ft_echo(shell, test);
+	// ft_echo(g_shell, test);
 	 
 /* 	pid_t pid = fork();
 	if(pid == 0)
@@ -371,7 +375,7 @@ int     main(int argc, char **argv, char **env)
 	}  */
 
 	//pause();
-	fclose(shell->debug_file);
+	fclose(g_shell->debug_file);
 	return (0);
 }
 

@@ -1,18 +1,6 @@
 ------------------------------
--- ls --
-parent process here
-child process exited 67538 | 67537 --- status:0
-command: /bin/ls
--- cat --
-parent process here
-child process exited 67540 | 67537 --- status:2
-command: /bin/cat
+-- export --
+command: export
 ------------------------------
--- ls --
-parent process here
-child process exited 67541 | 67537 --- status:0
-command: /bin/ls
--- grep --
-parent process here
-child process exited 67542 | 67537 --- status:2
-command: /usr/bin/grep
+-- export --
+command: export

@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 09:03:37 by amoussai          #+#    #+#             */
-/*   Updated: 2020/12/24 10:21:15 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 11:22:37 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,18 @@ t_env	*create_new_var(char *key, char *value)
 	if (!env)
 		return (NULL);
 	env->key = ft_strdup(key);
-	env->value = ft_strdup(value);
+	env->value = value ? ft_strdup(value) : NULL;
 	env->next = NULL;
 	return (env);
 }
 
-void	add_env_var(t_shell *shell, t_env *new)
+void	add_env_var(t_env *new)
 {
 	t_env	*current;
 
-	if (shell->envs)
+	if (g_shell->envs)
 	{
-		current = shell->envs;
+		current = g_shell->envs;
 		if (ft_strcmp(current->key, new->key) == 0)
 		{
 			free(current->value);
@@ -59,20 +59,20 @@ void	add_env_var(t_shell *shell, t_env *new)
 		}
 	}
 	else
-		shell->envs = new;
+		g_shell->envs = new;
 }
 
-void	delete_env_var(t_shell *shell, char *key)
+void	delete_env_var( char *key)
 {
 	t_env	*current;
 	t_env	*tobefreed;
 
-	if (shell->envs)
+	if (g_shell->envs)
 	{
-		current = shell->envs;
+		current = g_shell->envs;
 		if (ft_strcmp(current->key, key) == 0)
 		{
-			shell->envs = current->next;
+			g_shell->envs = current->next;
 			free_env_var(current);
 			return ;
 		}
@@ -88,13 +88,13 @@ void	delete_env_var(t_shell *shell, char *key)
 	}
 }
 
-char	*get_env_var(t_shell *shell, char *key)
+char	*get_env_var( char *key)
 {
 	t_env	*current;
 
-	if (shell->envs)
+	if (g_shell->envs)
 	{
-		current = shell->envs;
+		current = g_shell->envs;
 		while (current != NULL && ft_strcmp(current->key, key) != 0)
 			current = current->next;
 		if (current == NULL)
@@ -104,16 +104,16 @@ char	*get_env_var(t_shell *shell, char *key)
 	return (ft_strdup(""));
 }
 
-void	print_env(t_shell *shell)
+void	print_env(t_shell *g_shell)
 {
 	t_env	*current;
 
-	if (shell->envs)
+	if (g_shell->envs)
 	{
-		current = shell->envs;
+		current = g_shell->envs;
 		while (current != NULL)
 		{
-			fprintf(shell->debug_file, "|%s|=|%s|\n", current->key, current->value);
+			fprintf(g_shell->debug_file, "|%s|=|%s|\n", current->key, current->value);
 			current = current->next;
 		}
 	}

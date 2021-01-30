@@ -6,17 +6,17 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:14:06 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:48:41 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 07:47:23 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	ft_pwd(t_shell *shell, t_cmd *cmd)
+void	ft_pwd( t_cmd *cmd)
 {
 	char	*dir;
 
-	if (cmd->args && shell)
+	if (cmd->args && g_shell)
 		ft_putendl_fd("there should be no args", STDERR_FILENO);
 	dir = NULL;
 	dir = getcwd(dir, 0);

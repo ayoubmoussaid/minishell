@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 09:24:53 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:12:33 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 07:49:14 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_specialprint(char *s, int fd)
 	}
 }
 
-void	ft_echo(t_shell *shell, t_cmd *cmd)
+void	ft_echo( t_cmd *cmd)
 {
 	int		i;
 	int		char_count;
@@ -51,7 +51,7 @@ void	ft_echo(t_shell *shell, t_cmd *cmd)
 		{
 			if (cmd->args[i][0] == '$')
 			{
-				str = get_env_var(shell, &cmd->args[i][1]);
+				str = get_env_var(&cmd->args[i][1]);
 				ft_putstr_fd(str, STDOUT_FILENO);
 				if (ft_strlen(str) != 0 && cmd->args[i + 1] != NULL)
 					ft_putstr_fd(" ", STDOUT_FILENO);

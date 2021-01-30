@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/01 12:11:03 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 07:49:05 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ char	*ft_specialjoin(char const *s1, char const *s2, char c)
 	return (newstr);
 }
 
-void	ft_updatepwd(t_shell *shell, const char *prop, char *value)
+void	ft_updatepwd( const char *prop, char *value)
 {
 	t_env	*current;
 
-	current = shell->envs;
-	while (shell->envs != NULL && current != NULL)
+	current = g_shell->envs;
+	while (g_shell->envs != NULL && current != NULL)
 	{
 		if (ft_strcmp(current->key, prop) == 0)
 		{
@@ -55,7 +55,7 @@ void	ft_updatepwd(t_shell *shell, const char *prop, char *value)
 	}
 }
 
-void	ft_cd(t_shell *shell, t_cmd	*cmd)
+void	ft_cd( t_cmd	*cmd)
 {
 	char	*olddir;
 	char	*newdir;
@@ -70,7 +70,7 @@ void	ft_cd(t_shell *shell, t_cmd	*cmd)
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	else if (len == 0)
 	{
-		dir = get_env_var(shell, "HOME");
+		dir = get_env_var("HOME");
 		if (ft_strlen(dir) == 0)
 		{
 			ft_putendl_fd("bash: cd: HOME not set", STDERR_FILENO);
@@ -84,8 +84,8 @@ void	ft_cd(t_shell *shell, t_cmd	*cmd)
 	newdir = getcwd(newdir, 0);
 	if (ret == 0)
 	{
-		ft_updatepwd(shell, "OLDPWD", olddir);
-		ft_updatepwd(shell, "PWD", newdir);
+		ft_updatepwd("OLDPWD", olddir);
+		ft_updatepwd("PWD", newdir);
 	}
 	else
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);

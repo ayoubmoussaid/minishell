@@ -2,8 +2,8 @@ export a = b ==> then check env and export
 export a
 export a=
 export b=c
-export e=$b
-export z=\v ==> it gives z="v"
+export e=$b   ***
+export z=\v ==> it gives z="v" ***
 export _=sakdjh ==> u shouldn't have change this var u have to protect the var _
 unset PATH
 export PATH=/bin:/usr/bin ==> should work
