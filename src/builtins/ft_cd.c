@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 07:49:05 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 15:30:59 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ void	ft_cd( t_cmd	*cmd)
 	len = ft_len(cmd->args);
 	if (len > 2)
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
-	else if (len == 0)
+	else if (len == 1 || (len == 2 && cmd->args[1][0] == '~'))
 	{
-		dir = get_env_var("HOME");
-		if (ft_strlen(dir) == 0)
+		dir = ft_strjoin(get_env_var("HOME"), cmd->args[1] + 1);
+		if (ft_strlen(dir) == 1)
 		{
 			ft_putendl_fd("bash: cd: HOME not set", STDERR_FILENO);
 			exit(0);

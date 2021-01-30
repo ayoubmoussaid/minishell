@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 11:38:21 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 16:42:08 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,11 @@ t_pipeline	*create_fake_cmd()
 	t_pipeline *pipeline;
 	pipeline = (t_pipeline*)malloc((sizeof(t_pipeline)));
 	char **tab = (char**)malloc(sizeof(char*)*5);
-	tab[0] = ft_strdup("export");
-	tab[1] = ft_strdup("b=c");
-	tab[2] = NULL;
+	tab[0] = ft_strdup("echo");
+	tab[1] = ft_strdup("-n");
+	tab[2] = ft_strdup("-n");
+	tab[3] = ft_strdup("what");
+	tab[4] = NULL;
 	pipeline->pipe = create_one(tab[0], tab, NULL);
 	// char **tab1 = (char**)malloc(sizeof(char*)*3);
 	// tab1[0] = ft_strdup("cat");
@@ -75,19 +77,19 @@ t_pipeline	*create_fake_cmd()
 	// tab2[2] = NULL;
 	// pipeline->pipe->next->next = create_one(tab2[0], tab2, NULL);
 
-	char **tab3 = (char**)malloc(sizeof(char*)*2);
-	tab3[0] = ft_strdup("export");
-	tab3[1] = NULL;
-	pipeline->next = (t_pipeline*)malloc(sizeof(t_pipeline));
-	pipeline->next->pipe = create_one(tab3[0], tab3, NULL);
+	// char **tab3 = (char**)malloc(sizeof(char*)*2);
+	// tab3[0] = ft_strdup("pwd");
+	// tab3[1] = NULL;
+	// pipeline->next = (t_pipeline*)malloc(sizeof(t_pipeline));
+	// pipeline->next->pipe = create_one(tab3[0], tab3, NULL);
 	// char **tab2 = (char**)malloc(sizeof(char*)*3);
 	// tab2[0] = ft_strdup("grep");
 	// tab2[1] = ft_strdup("l");
 	// tab2[2] = NULL;
 	// pipeline->next->pipe->next = create_one(tab2[0], tab2, NULL);
-	pipeline->next->next = NULL;
+	// pipeline->next->next = NULL;
 
-	//pipeline->next = NULL;
+	pipeline->next = NULL;
 	return (pipeline);
 }
 

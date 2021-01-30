@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 09:03:37 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 11:22:37 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/30 14:57:24 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	add_env_var(t_env *new)
 		g_shell->envs = new;
 }
 
-void	delete_env_var( char *key)
+void	delete_env_var(char *key)
 {
 	t_env	*current;
 	t_env	*tobefreed;
@@ -97,9 +97,8 @@ char	*get_env_var( char *key)
 		current = g_shell->envs;
 		while (current != NULL && ft_strcmp(current->key, key) != 0)
 			current = current->next;
-		if (current == NULL)
-			return (ft_strdup(""));
-		return (current->value);
+		if (current != NULL)
+			return (current->value);
 	}
 	return (ft_strdup(""));
 }
@@ -113,7 +112,7 @@ void	print_env(t_shell *g_shell)
 		current = g_shell->envs;
 		while (current != NULL)
 		{
-			fprintf(g_shell->debug_file, "|%s|=|%s|\n", current->key, current->value);
+			// fprintf(g_shell->debug_file, "|%s|=|%s|\n", current->key, current->value);
 			current = current->next;
 		}
 	}
