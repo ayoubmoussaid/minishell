@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 11:50:52 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/30 15:02:41 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct	s_getl{
 	int 	s_quote;
 	int 	d_quote;
 	int 	dollar;
+	char 	*l;
 	int		semicolon; //;
 	int 	red_in; // >
 	int 	red_out; // <

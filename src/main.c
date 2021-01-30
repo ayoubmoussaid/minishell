@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 12:20:27 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/30 16:54:16 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -406,8 +406,30 @@ void clear_list(t_shell *shell)
 }
 
 
+t_cmd	*get_cmd_list(t_shell *shell, char **pipes)
+{
+	int i;
+
+	i = 0;
+	t_cmd *cmd;
+	while(pipes[i])
+	{
+		cmd = (t_cmd*)malloc(sizeof(t_cmd));
+		if ()
 
 
+
+
+
+
+		i++;
+	}
+
+
+
+
+
+}
 
 void	add_new_pipe(t_shell *shell, t_getl *getl, int i)
 {
@@ -415,16 +437,24 @@ void	add_new_pipe(t_shell *shell, t_getl *getl, int i)
 	t_pipeline *pipeline;
 	t_pipeline *current;
 
+	int i;
+
 	current = NULL;
 	pipeline = NULL;
+	i = 0;
 	pipeline = (t_pipeline*)malloc(sizeof(t_pipeline));
 	pipeline->pipe = (t_cmd*)malloc(sizeof(t_cmd));
 	pipeline->next = NULL;
 	getl->sp_p = ft_split(getl->sp_c[i], '|');
 	if (shell->head == NULL)
 	{
-		pipeline->pipe->c = ft_strdup(getl->sp_c[i]);
-		shell->head = pipeline;
+		while(getl->sp_p[i])
+		{
+			get_new_cmd();
+			i++;
+		}
+		// pipeline->pipe->c = ft_strdup(getl->sp_c[i]);
+		shell->head = pipeline;	
 	}
 	else
 	{
@@ -432,15 +462,16 @@ void	add_new_pipe(t_shell *shell, t_getl *getl, int i)
 		current = shell->head;
 		while(current->next)
 			current = current->next;
-		pipeline->pipe->c = ft_strdup(getl->sp_c[i]);
+		// pipeline->pipe->c = ft_strdup(getl->sp_c[i]);
 		current->next = pipeline;
 	}
-	int j = 0;
-	while(getl->sp_p[j])
-	{
-		printf("**%s**\n",getl->sp_p[j]);
-		j++;
-	}
+	ft_free(getl->sp_p);
+	// int j = 0;
+	// while(getl->sp_p[j])
+	// {
+	// 	printf("**---------------%s---------------**\n",getl->sp_p[j]);
+	// 	j++;
+	// }
 
 	
 }
