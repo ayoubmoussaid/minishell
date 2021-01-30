@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/16 10:21:21 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/01/30 11:50:52 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,6 @@ void	print_env(t_shell *shell);
 int		ft_str_index(char *str, char c);
 void	my_env(char **env, t_shell *shell);
 char	*ft_specialjoin(char const *s1, char const *s2, char c);
-
-
 
 
 #endif
