@@ -69,3 +69,13 @@ try ctrl-C ctrl-\ ctrl-D after u run a blocking cmd like cat or wc or sleep 5 th
 =========================
 beware of blocking cmd and return status...
 when run ./minishell the var OLDPWD must be Deleted from the env and then to be set after running cd + path
+
+
+
+
+
+
+export hi=salam
+echo hello world > $hi +> it works, creates file named salam
+export hi=
+echo hello world > $hi   => bash: $hi: ambiguous redirect

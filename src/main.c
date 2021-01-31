@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 16:42:08 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/01/31 18:18:38 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,7 +281,7 @@ void	execute_non_builtin( t_cmd *cmd)
 	}
 }
 
-void	execute(t_shell *g_shell)
+void	execute()
 {
 	t_pipeline	*pipeline;
 	t_cmd		*cmd;
@@ -316,67 +316,84 @@ void	execute(t_shell *g_shell)
 }
 
 
-int     main(int argc, char **argv, char **env)
+void	do_the_work(char **env)
 {
-	
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
 	g_shell = (t_shell*)malloc(sizeof(t_shell));
 	g_shell->envs = NULL;
 	g_shell->pipeline = create_fake_cmd();
 	//write(1, "\n=============================\n", 31);
 	g_shell->debug_file = fopen("debug.txt", "w");
+	my_env(env);
+	//execute();
+}
+
+
+void flip_line()
+{
+	int i = -1;
+	int d = 0;
+	int s = 0;
+
+	//TODO variable expansion and backslash handle in double quotes
+	while(g_shell->line[++i] != '\0')
+	{
+		if(g_shell->line[i] == '\"' && s == 0)
+		{
+			i += d == 0 ? 1 : 0;
+			d = !d;
+		}	
+		if(g_shell->line[i] == '\'' && d == 0)
+		{
+			i += s == 0 ? 1 : 0;
+			s = !s;
+		}
+		if(d || s)
+		{
+			g_shell->line[i] = -g_shell->line[i];
+		}		
+	}
+}
+
+
+void check_line()
+{
+	int i = 0;
+
+	while(g_shell->line[++i] != '\0')
+	{
+		if(g_shell->line[i] == '>' || g_shell->line[i] == '<')
+		{
+			//get file
+		}
+		else if(g_shell->line[i] == "|")
+		{
+			//new var ... jump to next of course
+		}
+		else
+		{
+			//add variable to command
+		}
+	}
+}
+int     main(int argc, char **argv, char **env)
+{
+	
+	//signal(SIGINT, signal_handler);
+	//signal(SIGQUIT, signal_handler);
 	if (argc > 1)
 		argv = NULL;
-	my_env(env);
-	//print_env(g_shell);
-	execute(g_shell);
-	//ft_env(g_shell->envs);
-	//ft_pwd();
-	//ft_cd(g_shell, "..");
-	//ft_cd(g_shell, "minishell");
-	//ft_cd(g_shell, "/freak");
-
-	// tab is a simple table containing args for test
-	// char *tab[] = {"abc=b", "avc=ff", "abc=d=5", "=a%ef", (void*)0};
-	// ft_export(g_shell, tab);
-	// print_env(g_shell);
-	// write(1, "=============================\n", 30);
-	// ft_env(g_shell->env);
-	// write(1, "=============================\n", 30);
-	//char *test[] = {"abc", "ef&fe", (void*)0};
-	//ft_unset(g_shell, test);
-	//print_env(g_shell);
-	// fprintf(g_shell->debug_file, "=============================\n");
-	// write(1, "=============================\n", 30);
-
-	// char *test[] = {"$abc", "$PATH", "$%dwa=", "$awd", "drgdrgdrg", (void*)0};
-	// ft_echo(g_shell, test);
-	 
-/* 	pid_t pid = fork();
-	if(pid == 0)
+	do_the_work(env);
+	while(1)
 	{
-		char *args[] = {"/bin/ls", "$l",(char *)0};
-		char *env_args[] = {"l=-la",(char*)0};
-		printf("salut from child\n");
-		int x = execve(args[0], args, env_args);
-		printf("child says: %d\n", x);
-		sleep(2);
-		exit(0);
+		ft_putstr_fd("minishell $> ", STDOUT_FILENO);
+		get_next_line(STDIN_FILENO, &(g_shell->line));
+		//g_shell->line = ft_strdup("echo salam'$hi'\"$PWD\"salam");
+		ft_putendl_fd(g_shell->line, STDOUT_FILENO);
+		flip_line();
+		check_line();
+		ft_putendl_fd(g_shell->line, STDOUT_FILENO);
+		free(g_shell->line);
 	}
-	else if (pid > 0)
-	{
-		int status;
-		printf("parent process here\n");
-		waitpid(pid, &status, 0);
-		printf("child process exited %d | %d\n", pid, getpid());	
-	}
-	else
-	{
-		printf("some error occured!\n");
-	}  */
-
-	//pause();
 	fclose(g_shell->debug_file);
 	return (0);
 }
