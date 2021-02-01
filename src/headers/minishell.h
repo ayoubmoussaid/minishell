@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 16:20:23 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/01 16:38:16 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,36 +25,89 @@
 
 # define READ 0
 # define WRITE 1
+# define COMMA 0
+# define QUOTED 1
+# define QUOTES 2
+# define INFILE 3
+# define PIPE 4
+# define COMMAD 5
+#define RED 6
+#define INFILED 7
+#define OUTFILE 8
+
+
+
+
+
+static char		*(g_mishell_err[]) =
+{
+	"Syntax error near unexpected token `;' ",
+	"Syntax error near unexpected token  `\"' ",
+	"Syntax error near unexpected token  `\'' ",
+	"Syntax error near unexpected token  `>' ",
+	"Syntax error near unexpected token  `|' ",
+	"Syntax error near unexpected token `;;'",
+	"syntax error near unexpected token `newline'",
+	"Syntax error near unexpected token  `>>' ",
+	"Syntax error near unexpected token  `<' ",
+	""
+};
+
+
+typedef struct	s_getl{
+	char	*line;
+	int 	i;
+	int 	s_quote;
+	int 	d_quote;
+	int 	dollar;
+	char 	*l;
+	int		semicolon; //;
+	int 	red_in; // >
+	int 	red_out; // <
+	int 	append; // >>
+	int		pipe;
+	int		brake;
+	char	**sp_c; // split with semicolone
+	char	**sp_p; //split with pipe
+	char 	**sp_re; // split with redirection
+
+	
+	
+}				t_getl;
 
 
 typedef struct  s_env{
-	struct s_env    *next;
-	char            *key;
-	char            *value;
-	//char			*full;
-}				t_env;
+    struct s_env    *next;
+    char            *key;
+    char            *value;
+    //char          *full;
+}               t_env;
+
 
 
 typedef struct  s_files{
-	struct s_files	*next;
-	char			*name;
-	char			type;
+    struct s_files  *next;
+    char            *name;
+    char            type; // > < a
 }               t_files;
+
 
 typedef struct  s_cmd{
 	struct s_cmd    *next;
-	char			*c;
-	char			*executable;
-	char			**args;
-	t_files			*files;
+    char            *c;
+    char            *executable;
+    char            **args;
+    t_files         *files;
 	int				fdr;
 	int				fdw;
 }               t_cmd;
 
+
+
 typedef struct  s_pipeline
 {
-	struct s_pipeline	*next;
-	t_cmd				*pipe;
+	struct s_pipeline   *next;
+    t_cmd               *pipe;
 }               t_pipeline;
 
 typedef struct	s_shell{
@@ -69,12 +122,7 @@ typedef struct	s_shell{
 
 
 t_shell *g_shell;
-// # define ECHO 0
-// # define PWD 1
-// # define ENV 2
-// # define EXPORT 3
-// # define UNSET 4
-// # define EXIT 5
+
 
 void	ft_env(t_cmd *cmd);
 void	ft_pwd(t_cmd *cmd);
@@ -98,5 +146,6 @@ void	print_env();
 int		ft_str_index(char *str, char c);
 void	my_env(char **env);
 char	*ft_specialjoin(char const *s1, char const *s2, char c);
+
 
 #endif

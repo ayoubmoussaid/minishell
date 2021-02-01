@@ -1,0 +1,78 @@
+echo hi > ok > ok1 >> ok2 > ok3
+echo hi$var\hi
+echo hi$varhi
+
+$  > df
+
+errors of ;
+
+;| its an error
+; 
+;      l
+;       ;
+;;
+
+
+errors of |
+
+|
+djh ||
+efhkjf  ||| 
+kgdjg |   |
+id |
+gvgnd  >    |
+sahgdfh >>    |
+
+
+
+ >jh
+ << error
+
+ >> >> 
+ kdhfg  >>    >>
+ >   >
+ fkh ;> syntax error near unexpected token `newline'
+ ngf ; >> syntax error near unexpected token `newline'
+
+ fef ; " " ;
+
+ >>>
+bash: syntax error near unexpected token `>'
+
+
+
+
+jdfv  >     ;
+bash: syntax error near unexpected token `;'
+
+
+
+
+echo "rfr\wrf"
+echo "ecjbec\"
+echo "\$PWD"
+echo '$PWD'
+echo "efknef\"efjbec"
+echo 'ecjejbc\'ecec'
+echo \chec
+echo \"chec
+
+
+
+
+
+
+
+
+
+<
+<<
+<<<
+<<<<<<<<<<<<<<<<
+
+sefjv | < sf
+
+
+
+echo ; ls -la |grep m >  tes
+>>> newline
