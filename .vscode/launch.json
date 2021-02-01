@@ -16,6 +16,10 @@
 				{
 					"name" : "PATH",
 					"value" : "/Users/amoussai/.brew/bin:/Users/amoussai/.brew/bin:/Users/amoussai/nasm:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/amoussai/.brew/bin:/Users/amoussai/nasm:/Users/amoussai/goinfre/flutter/bin:/goinfre/amoussai/android/platform-tools:/Users/amoussai/goinfre/flutter/bin:/goinfre/amoussai/android/platform-tools"
+				},
+				{
+					"name" : "PWD",
+					"value" : "/Users/amoussai/Desktop/minishell"
 				}
 			],
 			"externalConsole": false,

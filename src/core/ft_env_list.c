@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 09:03:37 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 14:57:24 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/01 09:40:30 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	delete_env_var(char *key)
 	}
 }
 
-char	*get_env_var( char *key)
+char	*get_env_var(char *key)
 {
 	t_env	*current;
 
@@ -98,7 +98,7 @@ char	*get_env_var( char *key)
 		while (current != NULL && ft_strcmp(current->key, key) != 0)
 			current = current->next;
 		if (current != NULL)
-			return (current->value);
+			return (ft_strdup(current->value));
 	}
 	return (ft_strdup(""));
 }
