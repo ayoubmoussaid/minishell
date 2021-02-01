@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 16:38:16 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/01 16:58:09 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ typedef struct	s_shell{
 	//char			**splitted;
 	t_env			*envs;
 	FILE			*debug_file;
-	t_pipeline		*pipeline;
+	t_pipeline		*head;
 	t_cmd			*cmd;
 }				t_shell;
 
@@ -147,5 +147,9 @@ int		ft_str_index(char *str, char c);
 void	my_env(char **env);
 char	*ft_specialjoin(char const *s1, char const *s2, char c);
 
+void	flip_line();
+char	*reflip(char *str);
+void	do_the_work(char **env);
+void	execute();
 
 #endif

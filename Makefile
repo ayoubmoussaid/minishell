@@ -6,13 +6,13 @@
 #    By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2020/12/14 10:29:45 by amoussai         ###   ########.fr        #
+#    Updated: 2021/02/01 17:00:33 by amoussai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=minishell
 LIBFT=libft.a
-SRCS= src/main.c src/builtins/*.c src/core/*.c
+SRCS=src/main.c src/builtins/*.c src/core/*.c src/parsing/variable_expansion.c src/execution/*.c
 
 
 OBJ=$(SRCS:.c=.o)

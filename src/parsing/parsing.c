@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 16:31:51 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/01 16:55:10 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -497,7 +497,7 @@ void    parse_line(t_getl *getl, t_shell *shell)
 	{
 
 		ft_putstr_fd("\033[92mminishell$> \033[39m", 1);
-    		if (get_next_line(0, &getl->line) > 0)
+    	if (get_next_line(0, &getl->line) > 0)
 		{
 			init_state(getl);
 			getl->i = -1;
@@ -515,8 +515,7 @@ void    parse_line(t_getl *getl, t_shell *shell)
 					{
 						getl->brake = 1;
 						break;
-					}
-						
+					}	
 				}
 				// if (getl->line[getl->i] == '$')
 				// 	verify_s_red_out(getl);
@@ -586,7 +585,7 @@ int     main(int argc, char **argv, char **env)
 	shell->debug_file = fopen("debug.txt", "w");
 	if (argc > 1)
 		argv = NULL;
-	my_env(env, shell);
+	my_env(env);
 	getl = (t_getl*)malloc(sizeof(t_getl));
 	shell->head = NULL;
     parse_line(getl, shell);
