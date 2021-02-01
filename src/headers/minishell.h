@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 16:58:09 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/01 17:31:34 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,6 @@ void	flip_line();
 char	*reflip(char *str);
 void	do_the_work(char **env);
 void	execute();
+void	parse_line(t_getl *getl, t_shell *shell);
 
 #endif
