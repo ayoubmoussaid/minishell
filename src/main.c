@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 11:19:17 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/01 15:31:11 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,7 +411,7 @@ void flip_line()
 		}
 		if(d == 1 && g_shell->line[i] == '\\' && check_for_after_backslash(g_shell->line[i + 1]))
 			override_str(g_shell->line, i);
-		if(d || s)
+		if((d || s) && g_shell->line[i] > 0)
 			g_shell->line[i] = -g_shell->line[i];
 	}
 	if(d || s)
@@ -421,8 +421,9 @@ void flip_line()
 
 // void check_line()
 // {
-// 	int i = 0;
-
+// 	int		i = -1;
+// 	//t_cmd	*cmd;
+	
 // 	while(g_shell->line[++i] != '\0')
 // 	{
 // 		if(g_shell->line[i] == '>' || g_shell->line[i] == '<')
@@ -436,6 +437,7 @@ void flip_line()
 // 		else
 // 		{
 // 			//add variable to command
+			
 // 		}
 // 	}
 // }

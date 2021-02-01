@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/22 09:21:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 11:18:16 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/01 14:46:01 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		ft_str_index(char *str, char c)
 	while (str && str[i] != '\0')
 	{
 		if (str[i] == c)
-			return (i) ;
+			return (i);
 		i++;
 	}
 	return (-1);
@@ -40,7 +40,10 @@ void	my_env(char **env)
 		if ((index = ft_str_index(env[j], '=')) != -1)
 		{
 			key = ft_substr(env[j], 0, index);
-			value = ft_substr(env[j], index + 1, ft_strlen(env[j]));
+			if (ft_strcmp(key, "OLDPWD") == 0)
+				value = NULL;
+			else
+				value = ft_substr(env[j], index + 1, ft_strlen(env[j]));
 			elt = create_new_var(key, ft_strlen(value) == 0 ? NULL : value);
 			add_env_var(elt);
 			free(key);

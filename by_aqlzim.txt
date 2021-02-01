@@ -79,3 +79,8 @@ export hi=salam
 echo hello world > $hi +> it works, creates file named salam
 export hi=
 echo hello world > $hi   => bash: $hi: ambiguous redirect
+
+
+
+
+export ksf=_

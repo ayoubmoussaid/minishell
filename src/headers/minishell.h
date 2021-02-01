@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/31 16:09:46 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/01 16:20:23 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,11 @@ typedef struct  s_pipeline
 typedef struct	s_shell{
 	int				exit_status;
 	char			*line;
+	//char			**splitted;
 	t_env			*envs;
 	FILE			*debug_file;
 	t_pipeline		*pipeline;
+	t_cmd			*cmd;
 }				t_shell;
 
 
