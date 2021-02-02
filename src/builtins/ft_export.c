@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 09:43:12 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 11:24:17 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/02 11:46:48 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	export_no_args(){
 	}
 }
 
-void	ft_export(t_cmd *cmd)
+int		ft_export(t_cmd *cmd)
 {
 	int		i;
 	int		ret;
@@ -39,8 +39,10 @@ void	ft_export(t_cmd *cmd)
 	char	*key;
 	char	*value;
 	int		index;
+	int		ex;
 
 	i = 1;
+	ex = 1;
 	while (cmd->args && cmd->args[i] != 0)
 	{
 		index = ft_str_index(cmd->args[i], '=');
@@ -62,9 +64,11 @@ void	ft_export(t_cmd *cmd)
 			ft_putstr_fd("minishell: export: `", STDOUT_FILENO);
 			ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
 			ft_putstr_fd("': not a valid identifier\n", STDOUT_FILENO);
+			ex = 0;
 		}
 		i++;
 	}
 	if (cmd->args[1] == NULL)
 		export_no_args();
+	return (ex);
 }

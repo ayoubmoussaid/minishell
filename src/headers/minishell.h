@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 16:58:09 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/02 11:27:16 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,9 @@
 # define INFILE 3
 # define PIPE 4
 # define COMMAD 5
-#define RED 6
-#define INFILED 7
-#define OUTFILE 8
-
-
-
+# define RED 6
+# define INFILED 7
+# define OUTFILE 8
 
 
 static char		*(g_mishell_err[]) =
@@ -53,6 +50,7 @@ static char		*(g_mishell_err[]) =
 	""
 };
 
+static char	*g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void*)0};
 
 typedef struct	s_getl{
 	char	*line;
@@ -124,13 +122,13 @@ typedef struct	s_shell{
 t_shell *g_shell;
 
 
-void	ft_env(t_cmd *cmd);
-void	ft_pwd(t_cmd *cmd);
-void	ft_cd(t_cmd *cmd);
-void	ft_echo(t_cmd *cmd);
-void	ft_export(t_cmd	*cmd);
-void	ft_unset(t_cmd *cmd);
-void	ft_exit(t_cmd *cmd);
+int		ft_env(t_cmd *cmd);
+int		ft_pwd(t_cmd *cmd);
+int		ft_cd(t_cmd *cmd);
+int		ft_echo(t_cmd *cmd);
+int		ft_export(t_cmd	*cmd);
+int		ft_unset(t_cmd *cmd);
+int		ft_exit(t_cmd *cmd);
 
 
 int		ft_len(char **tab);
@@ -151,5 +149,12 @@ void	flip_line();
 char	*reflip(char *str);
 void	do_the_work(char **env);
 void	execute();
+void	signal_handler(int sig);
+int		parse_files(t_cmd *cmd);
+void	dup_close(int fd1, int fd2);
+int		prepare_fd(t_cmd *cmd, int p[2], int std[2]);
+void	finish_fd(t_cmd *cmd, int p[2], int std[2]);
+char	**get_env(t_env *env);
+int		get_real_cmd(t_cmd *cmd);
 
 #endif

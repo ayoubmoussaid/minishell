@@ -1,22 +1,8 @@
 
 #include "../headers/minishell.h"
 
-char	*g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void*)0};
 
 
-void signal_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		ft_putendl_fd("\n", STDOUT_FILENO);
-		g_shell->exit_status = 128 + sig;
-	}
-	if (sig == SIGQUIT)
-	{
-		//if (getpid() == 0)
-		write(1, "\b \b\b \b", 6);
-	}
-}
 
 t_cmd *create_one(char *c, char **args, t_files *files)
 {
@@ -50,10 +36,8 @@ t_cmd	*create_fake_cmd()
 	cmd = (t_cmd*)malloc((sizeof(t_cmd)));
 	char **tab = (char**)malloc(sizeof(char*)*5);
 	tab[0] = ft_strdup("echo");
-	tab[1] = ft_strdup("-n");
-	tab[2] = ft_strdup("-n");
-	tab[3] = ft_strdup("what");
-	tab[4] = NULL;
+	tab[1] = ft_strdup("what");
+	tab[2] = NULL;
 	cmd = create_one(tab[0], tab, NULL);
 	// char **tab1 = (char**)malloc(sizeof(char*)*3);
 	// tab1[0] = ft_strdup("cat");
@@ -79,168 +63,12 @@ t_cmd	*create_fake_cmd()
 	// pipeline->next->next = NULL;
 	return (cmd);
 }
-
-int parse_files(t_cmd *cmd)
-{
-	t_files *iterator;
-
-	cmd->fdr = -2;
-	cmd->fdw = -2;
-	iterator = cmd->files;
-	int no_error = 1;
-	while(iterator && no_error)
-	{
-		if (iterator->type == 'a' || iterator->type == '>')
-		{
-			close(cmd->fdw);
-			if((cmd->fdw = open(iterator->name, O_WRONLY | O_CREAT | (iterator->type == '>' ? O_TRUNC : O_APPEND), 0644)) < 0)
-				no_error = 0;
-		}
-		else
-		{
-			close(cmd->fdr);
-			if((cmd->fdr = open(iterator->name, O_RDONLY)) < 0)
-				no_error = 0;
-		}
-		iterator = iterator->next;
-	}
-	if(!no_error){
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);
-		return (0);
-	}
-	return (1);
-}
-
-void dup_close(int fd1, int fd2)
-{
-	dup2(fd1, fd2);
-	close(fd1);
-}
-
-int	prepare_fd(t_cmd *cmd, int p[2], int std[2])
-{
-	int check = parse_files(cmd);
-	if(cmd->next && pipe(p) == 0)
-		dup_close(p[WRITE], STDOUT_FILENO);
-	if(cmd->next == NULL)
-		dup2(std[WRITE], STDOUT_FILENO);
-	if(cmd->files && cmd->fdw > 0)
-		dup_close(cmd->fdw, STDOUT_FILENO);
-	if(cmd->files && cmd->fdr > 0)
-		dup_close(cmd->fdr, STDIN_FILENO);
-	return check;
-}
-
-void	finish_fd(t_cmd *cmd, int p[2], int std[2])
-{
-	if(g_shell && cmd->next && p[READ] != -1)
-		dup2(p[READ], STDIN_FILENO);
-	else
-	{
-		dup2(std[READ], STDIN_FILENO);
-		dup2(std[WRITE], STDOUT_FILENO);
-	}
-}
-
-int		check_for_slash(char *str)
-{
-	int i;
-
-	i = -1;
-	while (str && str[++i] != '\0')
-		if (str[i] == '/')
-			return (1);
-	return (0);	
-}
-
-int		check_builtins(char *str)
-{
-	int i;
-
-	i = -1;
-	while(g_builtins[++i])
-		if(ft_strcmp(g_builtins[i], str) == 0)
-			return (i);
-	return (-1);
-}
-
-char	*get_path( t_cmd	*cmd)
-{
-	char			*path;
-	char			**all_paths;
-	int				i;
-	DIR				*dfd;
-	struct dirent	*dp;
-	struct stat		stbuf;
-
-	i = -1;
-	path = get_env_var("PATH");
-	all_paths = ft_split(path, ':');
-	while (all_paths[++i] != 0)
-	{
-		//fprintf(g_shell->debug_file, "************ %s ************\n", all_paths[i]);
-		if ((dfd = opendir(all_paths[i])) == NULL)
-			continue;
-		while ((dp = readdir(dfd)) != NULL)
-		{
-			path = ft_specialjoin(all_paths[i], dp->d_name, '/');
-			//ft_putendl_fd(path, 1);
-			if (stat(path, &stbuf) == -1){
-				//ft_putendl_fd(strerror(errno), STDERR_FILENO);
-				continue;
-			}
-			if ((stbuf.st_mode & S_IFMT) == S_IFDIR)
-				continue;
-			//fprintf(g_shell->debug_file, "*** %s ***\n", dp->d_name);
-			if(ft_strcmp(dp->d_name, cmd->c) == 0)
-				return (path);
-		}
-		closedir(dfd);
-	}
-	return "hi";
-}
-
-int 	get_real_cmd( t_cmd *cmd)
-{
-	int		index;
-
-	index = -1;
-	
-	if(check_for_slash(cmd->c) || (index = check_builtins(cmd->c)) != -1)
-		cmd->executable = cmd->c;
-	else
-		cmd->executable = get_path(cmd);
-	return (index);
-}
+//--------------------------------------------------------------------------
 
 void	execute_builtin( t_cmd *cmd, int index)
 {
-	static void (*builtin_functions[7])( t_cmd *cmd) = {ft_echo, ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
+	static int (*builtin_functions[7])(t_cmd *cmd) = {ft_echo, ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
 	builtin_functions[index](cmd);
-}
-
-char **get_env(t_env *env)
-{
-	int len = 0;
-	t_env *cur = env;
-	while(cur)
-	{
-		len++;
-		cur = cur->next;
-	}
-	len++;
-	char **tab = (char**)malloc(sizeof(char*)*len);
-	cur = env;
-	int i = 0;
-	while(cur)
-	{
-		tab[i] = ft_specialjoin(cur->key, cur->value, '=');
-		//ft_putendl_fd(tab[i], 1);
-		i++;
-		cur = cur->next;
-	}
-	tab[i] = NULL;
-	return tab;
 }
 
 void	execute_non_builtin( t_cmd *cmd)
@@ -283,11 +111,19 @@ void	execute()
 	{
 		fprintf(g_shell->debug_file, "-- %s --\n", cmd->c);
 		prepare_fd(cmd, p, std);
-		if ((index = get_real_cmd(cmd)) != -1)
+		if ((index = get_real_cmd(cmd)) >= 0)
 			execute_builtin(cmd, index);
-		else
+		else if(index == -1)
 		{
 			execute_non_builtin(cmd);
+		}
+		else
+		{
+			char *error = ft_strjoin("minishell: ", cmd->c);
+			char *tmp = ft_strjoin(error, ": command not found");
+			ft_putendl_fd(tmp, STDERR_FILENO);
+			free(error);
+			free(tmp);
 		}
 		fprintf(g_shell->debug_file, "command: %s\n", cmd->executable);
 		finish_fd(cmd, p, std);
@@ -295,7 +131,6 @@ void	execute()
 	}
 
 }
-
 
 void	do_the_work(char **env)
 {
@@ -305,16 +140,15 @@ void	do_the_work(char **env)
 	//write(1, "\n=============================\n", 31);
 	g_shell->debug_file = fopen("debug.txt", "w");
 	my_env(env);
-	//execute();
 }
 
 
-char  *reflip(char *str)
-{
-	int i = -1;
+// char  *reflip(char *str)
+// {
+// 	int i = -1;
 
-	while(str[++i] != '\0')
-		if(str[i] < 0)
-			str[i] = -str[i];
-	return str;
-}
+// 	while(str[++i] != '\0')
+// 		if(str[i] < 0)
+// 			str[i] = -str[i];
+// 	return str;
+// }

@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 15:30:59 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/02 12:02:25 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ char	*ft_specialjoin(char const *s1, char const *s2, char c)
 	return (newstr);
 }
 
-void	ft_updatepwd( const char *prop, char *value)
+void	ft_updatepwd(const char *prop, char *value)
 {
 	t_env	*current;
 
 	current = g_shell->envs;
-	while (g_shell->envs != NULL && current != NULL)
+	while (current != NULL)
 	{
 		if (ft_strcmp(current->key, prop) == 0)
 		{
@@ -55,7 +55,7 @@ void	ft_updatepwd( const char *prop, char *value)
 	}
 }
 
-void	ft_cd( t_cmd	*cmd)
+int		ft_cd(t_cmd	*cmd)
 {
 	char	*olddir;
 	char	*newdir;
@@ -91,6 +91,7 @@ void	ft_cd( t_cmd	*cmd)
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 	free(olddir);
 	free(newdir);
+	return (1);
 }
 
 
