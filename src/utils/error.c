@@ -1,14 +1,6 @@
 
 #include "../headers/minishell.h";
 
-# define E_CNF 0; //command not found
-# define E_STANDARD 1; //standard errors that include command name + error in errno
-# define E_FILE 2; // errors related to opening files
-# define E_TMA 4; //too many arguments
-# define E_CD_NOFOD 5; //NO such file or directory for cd
-# define E_CD_HOME 6; //HOME not set
-# define E_EXPORT_NOTVAID 7; // export not valid iderntifier
-# define E_UNSET_NOTVAID 8;// unset not valid identifier
 
 char concat_strings(char *str1, char *str2, char *str3)
 {
@@ -21,8 +13,20 @@ char concat_strings(char *str1, char *str2, char *str3)
 	return (tmp2);
 }
 
-void	error(int err, int exit_code, char	*need)
+int	error(int err, int exit_code, char	*need)
 {
+	char *str;
+
+	str = NULL;
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	
+	(err == E_CNF) ? ft_putendl_fd((str = ft_strjoin(need, ": command not found")), STDERR_FILENO) : NULL;
+	(err == E_STANDARD) ? ft_putendl_fd((str = ft_strjoin(need, strerror(errno))), STDERR_FILENO) : NULL;
+	(err == E_FILE) ? ft_putendl_fd((str = concat_strings(need, ": ", strerror(errno))), STDERR_FILENO) : NULL;
+	(err == E_TMA) ? ft_putendl_fd((str = ft_strjoin1(need, ": too many arguments")), STDERR_FILENO) : NULL;
+	(err == E_CD_NOFOD) ? ft_putendl_fd((str = concat_strings("cd: ", need, ": No such file or directory")), STDERR_FILENO) : NULL;
+	(err == E_CD_HOME) ? ft_putendl_fd((str = ft_strdup("cd: No such file or directory")), STDERR_FILENO) : NULL;
+	(err == E_EXPORT_NOTVAID) ? ft_putendl_fd((str = concat_strings("export: `", need, "': not a valid identifier")), STDERR_FILENO) : NULL;
+	(err == E_UNSET_NOTVAID) ? ft_putendl_fd((str = concat_strings("unset: `", need, "': not a valid identifier")), STDERR_FILENO) : NULL;
+	g_shell->exit_status = exit_code;
+	return (1);
 }

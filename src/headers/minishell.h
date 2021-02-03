@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/02 11:27:16 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/03 12:44:52 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,17 @@
 #include <sys/stat.h>
 #include "../../libft/libft.h"
 #include "../../gnl/get_next_line.h"
+
+
+
+# define E_CNF 0
+# define E_STANDARD 1
+# define E_FILE 2
+# define E_TMA 4
+# define E_CD_NOFOD 5
+# define E_CD_HOME 6
+# define E_EXPORT_NOTVAID 7
+# define E_UNSET_NOTVAID 8
 
 
 # define READ 0
@@ -156,5 +167,6 @@ int		prepare_fd(t_cmd *cmd, int p[2], int std[2]);
 void	finish_fd(t_cmd *cmd, int p[2], int std[2]);
 char	**get_env(t_env *env);
 int		get_real_cmd(t_cmd *cmd);
+int	error(int err, int exit_code, char	*need);
 
 #endif
