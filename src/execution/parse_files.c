@@ -13,13 +13,15 @@ int		parse_files(t_cmd *cmd)
 	{
 		if (iterator->type == 'a' || iterator->type == '>')
 		{
-			close(cmd->fdw);
+			if(cmd->fdw != -2)
+				close(cmd->fdw);
 			if((cmd->fdw = open(iterator->name, O_WRONLY | O_CREAT | (iterator->type == '>' ? O_TRUNC : O_APPEND), 0644)) < 0)
 				no_error = 0;
 		}
 		else
 		{
-			close(cmd->fdr);
+			if(cmd->fdr != -2)
+				close(cmd->fdr);
 			if((cmd->fdr = open(iterator->name, O_RDONLY)) < 0)
 				no_error = 0;
 		}
@@ -34,17 +36,22 @@ int		parse_files(t_cmd *cmd)
 
 void	dup_close(int fd1, int fd2)
 {
-	dup2(fd1, fd2);
-	close(fd1);
+	//printf("fd1 == %d fd2 == %d\n", fd1, fd2);
+	if (dup2(fd1, fd2) == -1)
+		perror("Dup1");
 }
 
-int		prepare_fd(t_cmd *cmd, int p[2], int std[2])
+int		prepare_fd(t_cmd *cmd, int *p, int std[2])
 {
 	int check = parse_files(cmd);
 	if(cmd->next && pipe(p) == 0)
+	{
+		//printf("p[0] == %d p[1] == %d\n", p[0], p[1]);
 		dup_close(p[WRITE], STDOUT_FILENO);
+	}
 	if(cmd->next == NULL)
-		dup2(std[WRITE], STDOUT_FILENO);
+		if (dup2(std[STDOUT_FILENO], STDOUT_FILENO) == -1)
+			perror("Dup2");
 	if(cmd->files && cmd->fdw > 0)
 		dup_close(cmd->fdw, STDOUT_FILENO);
 	if(cmd->files && cmd->fdr > 0)
@@ -52,13 +59,13 @@ int		prepare_fd(t_cmd *cmd, int p[2], int std[2])
 	return check;
 }
 
-void	finish_fd(t_cmd *cmd, int p[2], int std[2])
+void	finish_fd(t_cmd *cmd, int *p, int *std)
 {
-	if(cmd->next && p[READ] != -1)
-		dup2(p[READ], STDIN_FILENO);
+	if(cmd->next)
+		dup_close(p[READ], STDIN_FILENO);
 	else
 	{
-		dup2(std[READ], STDIN_FILENO);
-		dup2(std[WRITE], STDOUT_FILENO);
+		dup_close(std[STDIN_FILENO], STDIN_FILENO);
+		dup_close(std[STDOUT_FILENO], STDOUT_FILENO);
 	}
 }

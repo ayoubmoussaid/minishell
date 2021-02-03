@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/03 12:44:52 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/03 18:05:21 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,6 @@ typedef struct	s_getl{
 	char	**sp_c; // split with semicolone
 	char	**sp_p; //split with pipe
 	char 	**sp_re; // split with redirection
-
-	
-	
 }				t_getl;
 
 
@@ -109,6 +106,7 @@ typedef struct  s_cmd{
     t_files         *files;
 	int				fdr;
 	int				fdw;
+	pid_t			pid;
 }               t_cmd;
 
 
@@ -130,9 +128,11 @@ typedef struct	s_shell{
 }				t_shell;
 
 
-t_shell *g_shell;
 
-
+t_shell	*g_shell;
+pid_t		g_pid;
+pid_t		g_pids[100];
+pid_t		g_index;
 int		ft_env(t_cmd *cmd);
 int		ft_pwd(t_cmd *cmd);
 int		ft_cd(t_cmd *cmd);
@@ -167,6 +167,6 @@ int		prepare_fd(t_cmd *cmd, int p[2], int std[2]);
 void	finish_fd(t_cmd *cmd, int p[2], int std[2]);
 char	**get_env(t_env *env);
 int		get_real_cmd(t_cmd *cmd);
-int	error(int err, int exit_code, char	*need);
+int		error_handle(int err, int exit_code, char	*need);
 
 #endif

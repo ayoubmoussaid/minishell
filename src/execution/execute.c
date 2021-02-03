@@ -35,14 +35,21 @@ t_cmd	*create_fake_cmd()
 	t_cmd *cmd;
 	cmd = (t_cmd*)malloc((sizeof(t_cmd)));
 	char **tab = (char**)malloc(sizeof(char*)*5);
-	tab[0] = ft_strdup("echo");
-	tab[1] = ft_strdup("what");
+	tab[0] = ft_strdup("cat");
+	tab[1] = NULL;
 	tab[2] = NULL;
 	cmd = create_one(tab[0], tab, NULL);
-	// char **tab1 = (char**)malloc(sizeof(char*)*3);
-	// tab1[0] = ft_strdup("cat");
-	// tab1[1] = ft_strdup("-e");
-	// tab1[2] = NULL;
+	char **tab1 = (char**)malloc(sizeof(char*)*3);
+	tab1[0] = ft_strdup("ls");
+	tab1[1] = NULL;
+	tab1[2] = NULL;
+	cmd->next = create_one(tab1[0], tab1, NULL);
+	// char **tab2 = (char**)malloc(sizeof(char*)*4);
+	// tab2[0] = ft_strdup("grep");
+	// tab2[1] = ft_strdup("-o");
+	// tab2[2] = ft_strdup("/");
+	// tab2[3] = NULL;
+	// cmd->next->next = create_one(tab2[0], tab2, NULL);
 	// pipeline->pipe->next = create_one(tab1[0], tab1, NULL);
 	// char **tab2 = (char**)malloc(sizeof(char*)*3);
 	// tab2[0] = ft_strdup("grep");
@@ -65,71 +72,60 @@ t_cmd	*create_fake_cmd()
 }
 //--------------------------------------------------------------------------
 
-void	execute_builtin( t_cmd *cmd, int index)
+int	execute_builtin(t_cmd *cmd, int index)
 {
 	static int (*builtin_functions[7])(t_cmd *cmd) = {ft_echo, ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
-	builtin_functions[index](cmd);
+	return (builtin_functions[index](cmd));
 }
 
-void	execute_non_builtin( t_cmd *cmd)
+void	execute_command(t_cmd *cmd, int index)
 {
-	pid_t pid = fork();
-	if(pid == 0)
+	if((g_pid = fork()) == 0)
 	{
-		char **envp = get_env(g_shell->envs);
-		fprintf(g_shell->debug_file, "executable: %s\n",cmd->executable);
-		int x = execve(cmd->executable, cmd->args, envp);
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);
-		exit(x);
+		
+		if(index >= 0)
+			exit(execute_builtin(cmd, index));
+		else
+			exit(execve(cmd->executable, cmd->args, get_env(g_shell->envs)));	
 	}
-	else if (pid > 0)
-	{
-		int status;
-
-		status = 2;
-		fprintf(g_shell->debug_file, "parent process here\n");
-		if(!cmd->next){
-			waitpid(pid, &status, 0);
-			g_shell->exit_status = status;
-		}
-		fprintf(g_shell->debug_file, "child process exited %d | %d --- status:%d\n", pid, getpid(), status);
-	}
+	else if(g_pid > 0)
+		g_pids[g_index++] = g_pid;
+	if(g_pid < 0)
+		error_handle(E_STANDARD, 1, NULL);
 }
 
 void	execute()
 {
 	t_cmd		*cmd;
-	int p[2];
-	int std[2];
-	int index;
-
+	int			*p;
+	int			*std;
+	int			index;
+	
+	p = (int*)malloc(sizeof(int) * 2);
+	std = (int*)malloc(sizeof(int) * 2);
+	g_index = 0;
 	cmd = g_shell->cmd;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	fprintf(g_shell->debug_file, "------------------------------\n");
 	while(cmd)
 	{
-		fprintf(g_shell->debug_file, "-- %s --\n", cmd->c);
 		prepare_fd(cmd, p, std);
-		if ((index = get_real_cmd(cmd)) >= 0)
-			execute_builtin(cmd, index);
-		else if(index == -1)
-		{
-			execute_non_builtin(cmd);
-		}
+		if((index = get_real_cmd(cmd)) != -2)
+			execute_command(cmd, index);
 		else
-		{
-			char *error = ft_strjoin("minishell: ", cmd->c);
-			char *tmp = ft_strjoin(error, ": command not found");
-			ft_putendl_fd(tmp, STDERR_FILENO);
-			free(error);
-			free(tmp);
-		}
-		fprintf(g_shell->debug_file, "command: %s\n", cmd->executable);
+			error_handle(E_CNF, errno, cmd->c);
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
 	}
-
+	close(p[0]);
+	close(p[1]);
+	close(std[0]);
+	close(std[1]);
+	while(--g_index >= 0)
+	{
+		waitpid(g_pids[g_index], &(g_shell->exit_status), 0);
+		printf("closed pid: %d\n", g_pids[g_index]);
+	}
 }
 
 void	do_the_work(char **env)
@@ -137,18 +133,7 @@ void	do_the_work(char **env)
 	g_shell = (t_shell*)malloc(sizeof(t_shell));
 	g_shell->envs = NULL;
 	g_shell->cmd = create_fake_cmd();
-	//write(1, "\n=============================\n", 31);
 	g_shell->debug_file = fopen("debug.txt", "w");
 	my_env(env);
 }
 
-
-// char  *reflip(char *str)
-// {
-// 	int i = -1;
-
-// 	while(str[++i] != '\0')
-// 		if(str[i] < 0)
-// 			str[i] = -str[i];
-// 	return str;
-// }
