@@ -50,24 +50,7 @@ t_cmd	*create_fake_cmd()
 	// tab2[2] = ft_strdup("/");
 	// tab2[3] = NULL;
 	// cmd->next->next = create_one(tab2[0], tab2, NULL);
-	// pipeline->pipe->next = create_one(tab1[0], tab1, NULL);
-	// char **tab2 = (char**)malloc(sizeof(char*)*3);
-	// tab2[0] = ft_strdup("grep");
-	// tab2[1] = ft_strdup("l");
-	// tab2[2] = NULL;
-	// pipeline->pipe->next->next = create_one(tab2[0], tab2, NULL);
 
-	// char **tab3 = (char**)malloc(sizeof(char*)*2);
-	// tab3[0] = ft_strdup("pwd");
-	// tab3[1] = NULL;
-	// pipeline->next = (t_pipeline*)malloc(sizeof(t_pipeline));
-	// pipeline->next->pipe = create_one(tab3[0], tab3, NULL);
-	// char **tab2 = (char**)malloc(sizeof(char*)*3);
-	// tab2[0] = ft_strdup("grep");
-	// tab2[1] = ft_strdup("l");
-	// tab2[2] = NULL;
-	// pipeline->next->pipe->next = create_one(tab2[0], tab2, NULL);
-	// pipeline->next->next = NULL;
 	return (cmd);
 }
 //--------------------------------------------------------------------------
@@ -78,11 +61,10 @@ int	execute_builtin(t_cmd *cmd, int index)
 	return (builtin_functions[index](cmd));
 }
 
-void	execute_command(t_cmd *cmd, int index)
+void	execute_command(t_cmd *cmd, int index/* , int *p, int *std */)
 {
 	if((g_pid = fork()) == 0)
 	{
-		
 		if(index >= 0)
 			exit(execute_builtin(cmd, index));
 		else
@@ -100,10 +82,12 @@ void	execute()
 	int			*p;
 	int			*std;
 	int			index;
+	int 		i = -1;
 	
 	p = (int*)malloc(sizeof(int) * 2);
 	std = (int*)malloc(sizeof(int) * 2);
 	g_index = 0;
+	g_fd_index = 0;
 	cmd = g_shell->cmd;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
@@ -111,20 +95,26 @@ void	execute()
 	{
 		prepare_fd(cmd, p, std);
 		if((index = get_real_cmd(cmd)) != -2)
-			execute_command(cmd, index);
+			execute_command(cmd, index/* , p, std */);
 		else
 			error_handle(E_CNF, errno, cmd->c);
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
 	}
-	close(p[0]);
-	close(p[1]);
-	close(std[0]);
-	close(std[1]);
+	// while(++i < g_fd_index)
+	// {
+	// 	ft_putstr_fd("closing: ", 2);
+	// 	ft_putnbr_fd(g_fd_table[i], 2);
+	// 	ft_putstr_fd("\n", 2);
+	// 	close(g_fd_table[i]);
+	// }
+		
 	while(--g_index >= 0)
 	{
 		waitpid(g_pids[g_index], &(g_shell->exit_status), 0);
-		printf("closed pid: %d\n", g_pids[g_index]);
+		ft_putstr_fd("closing pid: ", 2);
+		ft_putnbr_fd(g_pids[g_index], 2);
+		ft_putstr_fd("\n", 2);
 	}
 }
 

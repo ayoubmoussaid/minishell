@@ -36,12 +36,16 @@ int		parse_files(t_cmd *cmd)
 
 void	dup_close(int fd1, int fd2)
 {
-	//printf("fd1 == %d fd2 == %d\n", fd1, fd2);
+	ft_putstr_fd("fd1: ", 2);
+	ft_putnbr_fd(fd1, 2);
+	ft_putstr_fd("\n", 2);
 	if (dup2(fd1, fd2) == -1)
 		perror("Dup1");
+	close(fd1);
+	//g_fd_table[g_fd_index++] = fd1;
 }
 
-int		prepare_fd(t_cmd *cmd, int *p, int std[2])
+int		prepare_fd(t_cmd *cmd, int *p, int *std)
 {
 	int check = parse_files(cmd);
 	if(cmd->next && pipe(p) == 0)
@@ -50,8 +54,9 @@ int		prepare_fd(t_cmd *cmd, int *p, int std[2])
 		dup_close(p[WRITE], STDOUT_FILENO);
 	}
 	if(cmd->next == NULL)
-		if (dup2(std[STDOUT_FILENO], STDOUT_FILENO) == -1)
-			perror("Dup2");
+	{
+		dup_close(std[STDOUT_FILENO], STDOUT_FILENO);
+	}
 	if(cmd->files && cmd->fdw > 0)
 		dup_close(cmd->fdw, STDOUT_FILENO);
 	if(cmd->files && cmd->fdr > 0)
@@ -66,6 +71,6 @@ void	finish_fd(t_cmd *cmd, int *p, int *std)
 	else
 	{
 		dup_close(std[STDIN_FILENO], STDIN_FILENO);
-		dup_close(std[STDOUT_FILENO], STDOUT_FILENO);
+		//dup_close(std[STDOUT_FILENO], STDOUT_FILENO);
 	}
 }

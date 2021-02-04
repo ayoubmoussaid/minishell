@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/03 18:05:21 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/04 09:05:04 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,10 @@ typedef struct	s_shell{
 t_shell	*g_shell;
 pid_t		g_pid;
 pid_t		g_pids[100];
+int			g_fd_table[100];
 pid_t		g_index;
+int			g_fd_index;
+
 int		ft_env(t_cmd *cmd);
 int		ft_pwd(t_cmd *cmd);
 int		ft_cd(t_cmd *cmd);
