@@ -35,21 +35,22 @@ t_cmd	*create_fake_cmd()
 	t_cmd *cmd;
 	cmd = (t_cmd*)malloc((sizeof(t_cmd)));
 	char **tab = (char**)malloc(sizeof(char*)*5);
-	tab[0] = ft_strdup("export");
-	tab[1] = ft_strdup("%wef");
-	tab[2] = NULL;
+	tab[0] = ft_strdup("echo");
+	tab[1] = ft_strdup("wassup");
+	tab[2] = ft_strdup("bro");
+	tab[3] = NULL;
 	cmd = create_one(tab[0], tab, NULL);
-	// char **tab1 = (char**)malloc(sizeof(char*)*3);
-	// tab1[0] = ft_strdup("ls");
-	// tab1[1] = NULL;
-	// tab1[2] = NULL;
-	// cmd->next = create_one(tab1[0], tab1, NULL);
-	// char **tab2 = (char**)malloc(sizeof(char*)*4);
-	// tab2[0] = ft_strdup("grep");
-	// tab2[1] = ft_strdup("-o");
-	// tab2[2] = ft_strdup("/");
-	// tab2[3] = NULL;
-	// cmd->next->next = create_one(tab2[0], tab2, NULL);
+	char **tab1 = (char**)malloc(sizeof(char*)*3);
+	tab1[0] = ft_strdup("echo");
+	tab1[1] = NULL;
+	tab1[2] = NULL;
+	cmd->next = create_one(tab1[0], tab1, get_one_file("bro2", '>'));
+	char **tab2 = (char**)malloc(sizeof(char*)*4);
+	tab2[0] = ft_strdup("echo");
+	tab2[1] = ft_strdup("hello");
+	tab2[2] = NULL;
+	tab2[3] = NULL;
+	cmd->next->next = create_one(tab2[0], tab2, NULL);
 
 	return (cmd);
 }
@@ -90,7 +91,11 @@ void	execute()
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	while(cmd)
 	{
-		prepare_fd(cmd, p, std);
+		if(!prepare_fd(cmd, p, std))
+		{
+			cmd = cmd->next;
+			continue ;
+		}
 		if((index = get_real_cmd(cmd)) != -2)
 			execute_command(cmd, index);
 		else
@@ -105,6 +110,8 @@ void	execute()
 		kill(cmd->pid, SIGPIPE);
 		cmd = cmd->next;
 	}
+	free(p);
+	free(std);
 }
 
 void	do_the_work(char **env)

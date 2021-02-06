@@ -25,10 +25,11 @@ int		parse_files(t_cmd *cmd)
 			if((cmd->fdr = open(iterator->name, O_RDONLY)) < 0)
 				no_error = 0;
 		}
-		iterator = iterator->next;
+		if(no_error)
+			iterator = iterator->next;
 	}
 	if(!no_error){
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		error_handle(E_STANDARD, 1, iterator->name);
 		return (0);
 	}
 	return (1);
@@ -39,7 +40,6 @@ void	dup_close(int fd1, int fd2)
 	if (dup2(fd1, fd2) == -1)
 		error_handle(E_STANDARD, 1, NULL);
 	close(fd1);
-	//g_fd_table[g_fd_index++] = fd1;
 }
 
 int		prepare_fd(t_cmd *cmd, int *p, int *std)

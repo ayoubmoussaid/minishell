@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/06 11:04:14 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/06 15:14:48 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define E_CNF 0
 //Standard error related to a command or file, error from errno
 # define E_STANDARD 1
-# define E_FILE 2
 //Too many argumanets
 # define E_TMA 4
 //cd: No such file or directory

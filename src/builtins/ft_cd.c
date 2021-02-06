@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/06 12:57:02 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/06 15:08:20 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		ft_cd(t_cmd	*cmd)
 		ft_updatepwd("PWD", newdir);
 	}
 	else
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);//add error handle here
+		error_handle(E_STANDARD, 1, "cd");
 	free(olddir);
 	free(newdir);
 	return (1);
