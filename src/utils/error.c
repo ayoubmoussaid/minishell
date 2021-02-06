@@ -22,11 +22,11 @@ int	error_handle(int err, int exit_code, char *need)
 	if(!need)
 		need = "";
 	(err == E_CNF) ? ft_putendl_fd((str = ft_strjoin(need, ": command not found")), STDERR_FILENO) : NULL;
-	(err == E_STANDARD) ? ft_putendl_fd((str = ft_strjoin(need, strerror(errno))), STDERR_FILENO) : NULL;
+	(err == E_STANDARD) ? ft_putendl_fd((str = concat_strings(need, ": ",strerror(errno))), STDERR_FILENO) : NULL;
 	(err == E_FILE) ? ft_putendl_fd((str = concat_strings(need, ": ", strerror(errno))), STDERR_FILENO) : NULL;
 	(err == E_TMA) ? ft_putendl_fd((str = ft_strjoin1(need, ": too many arguments")), STDERR_FILENO) : NULL;
 	(err == E_CD_NOFOD) ? ft_putendl_fd((str = concat_strings("cd: ", need, ": No such file or directory")), STDERR_FILENO) : NULL;
-	(err == E_CD_HOME) ? ft_putendl_fd((str = ft_strdup("cd: No such file or directory")), STDERR_FILENO) : NULL;
+	(err == E_CD_HOME) ? ft_putendl_fd((str = ft_strdup("cd: HOME not set")), STDERR_FILENO) : NULL;
 	(err == E_EXPORT_NOTVAID) ? ft_putendl_fd((str = concat_strings("export: `", need, "': not a valid identifier")), STDERR_FILENO) : NULL;
 	(err == E_UNSET_NOTVAID) ? ft_putendl_fd((str = concat_strings("unset: `", need, "': not a valid identifier")), STDERR_FILENO) : NULL;
 	g_shell->exit_status = exit_code;

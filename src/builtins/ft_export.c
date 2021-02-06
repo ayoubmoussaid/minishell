@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 09:43:12 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/02 11:46:48 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/06 10:39:19 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	export_no_args(){
+void	export_no_args(void){
 	t_env *current;
 
 	current = g_shell->envs;
@@ -61,9 +61,7 @@ int		ft_export(t_cmd *cmd)
 		}
 		else if (ret == 0)
 		{
-			ft_putstr_fd("minishell: export: `", STDOUT_FILENO);
-			ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
-			ft_putstr_fd("': not a valid identifier\n", STDOUT_FILENO);
+			error_handle(E_EXPORT_NOTVAID, 1, cmd->args[i]);
 			ex = 0;
 		}
 		i++;

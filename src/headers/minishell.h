@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/04 09:05:04 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/06 11:04:14 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 #include <sys/errno.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -23,14 +24,20 @@
 #include "../../gnl/get_next_line.h"
 
 
-
+//Command not found
 # define E_CNF 0
+//Standard error related to a command or file, error from errno
 # define E_STANDARD 1
 # define E_FILE 2
+//Too many argumanets
 # define E_TMA 4
+//cd: No such file or directory
 # define E_CD_NOFOD 5
+//cd: Home not set
 # define E_CD_HOME 6
+//export: xxxx: not a valid identifier
 # define E_EXPORT_NOTVAID 7
+//unset: xxxx: not a valid identifier
 # define E_UNSET_NOTVAID 8
 
 
@@ -131,10 +138,6 @@ typedef struct	s_shell{
 
 t_shell	*g_shell;
 pid_t		g_pid;
-pid_t		g_pids[100];
-int			g_fd_table[100];
-pid_t		g_index;
-int			g_fd_index;
 
 int		ft_env(t_cmd *cmd);
 int		ft_pwd(t_cmd *cmd);

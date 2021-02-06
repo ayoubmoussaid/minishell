@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/02 12:02:25 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/06 12:57:02 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int		ft_cd(t_cmd	*cmd)
 		dir = ft_strjoin(get_env_var("HOME"), cmd->args[1] + 1);
 		if (ft_strlen(dir) == 1)
 		{
-			ft_putendl_fd("bash: cd: HOME not set", STDERR_FILENO);
-			exit(0);
+			error_handle(E_CD_HOME, 1, "");
+			return (0);
 		}
 	}
 	else
@@ -88,7 +88,7 @@ int		ft_cd(t_cmd	*cmd)
 		ft_updatepwd("PWD", newdir);
 	}
 	else
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);//add error handle here
 	free(olddir);
 	free(newdir);
 	return (1);

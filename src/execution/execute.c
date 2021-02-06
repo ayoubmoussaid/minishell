@@ -35,15 +35,15 @@ t_cmd	*create_fake_cmd()
 	t_cmd *cmd;
 	cmd = (t_cmd*)malloc((sizeof(t_cmd)));
 	char **tab = (char**)malloc(sizeof(char*)*5);
-	tab[0] = ft_strdup("cat");
-	tab[1] = NULL;
+	tab[0] = ft_strdup("export");
+	tab[1] = ft_strdup("%wef");
 	tab[2] = NULL;
 	cmd = create_one(tab[0], tab, NULL);
-	char **tab1 = (char**)malloc(sizeof(char*)*3);
-	tab1[0] = ft_strdup("ls");
-	tab1[1] = NULL;
-	tab1[2] = NULL;
-	cmd->next = create_one(tab1[0], tab1, NULL);
+	// char **tab1 = (char**)malloc(sizeof(char*)*3);
+	// tab1[0] = ft_strdup("ls");
+	// tab1[1] = NULL;
+	// tab1[2] = NULL;
+	// cmd->next = create_one(tab1[0], tab1, NULL);
 	// char **tab2 = (char**)malloc(sizeof(char*)*4);
 	// tab2[0] = ft_strdup("grep");
 	// tab2[1] = ft_strdup("-o");
@@ -61,7 +61,7 @@ int	execute_builtin(t_cmd *cmd, int index)
 	return (builtin_functions[index](cmd));
 }
 
-void	execute_command(t_cmd *cmd, int index/* , int *p, int *std */)
+void	execute_command(t_cmd *cmd, int index)
 {
 	if((g_pid = fork()) == 0)
 	{
@@ -71,7 +71,7 @@ void	execute_command(t_cmd *cmd, int index/* , int *p, int *std */)
 			exit(execve(cmd->executable, cmd->args, get_env(g_shell->envs)));	
 	}
 	else if(g_pid > 0)
-		g_pids[g_index++] = g_pid;
+		cmd->pid = g_pid;
 	if(g_pid < 0)
 		error_handle(E_STANDARD, 1, NULL);
 }
@@ -82,12 +82,9 @@ void	execute()
 	int			*p;
 	int			*std;
 	int			index;
-	int 		i = -1;
 	
 	p = (int*)malloc(sizeof(int) * 2);
 	std = (int*)malloc(sizeof(int) * 2);
-	g_index = 0;
-	g_fd_index = 0;
 	cmd = g_shell->cmd;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
@@ -95,26 +92,18 @@ void	execute()
 	{
 		prepare_fd(cmd, p, std);
 		if((index = get_real_cmd(cmd)) != -2)
-			execute_command(cmd, index/* , p, std */);
+			execute_command(cmd, index);
 		else
 			error_handle(E_CNF, errno, cmd->c);
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
 	}
-	// while(++i < g_fd_index)
-	// {
-	// 	ft_putstr_fd("closing: ", 2);
-	// 	ft_putnbr_fd(g_fd_table[i], 2);
-	// 	ft_putstr_fd("\n", 2);
-	// 	close(g_fd_table[i]);
-	// }
-		
-	while(--g_index >= 0)
+	waitpid(g_pid, &(g_shell->exit_status), 0);
+	cmd = g_shell->cmd;
+	while (cmd->next)
 	{
-		waitpid(g_pids[g_index], &(g_shell->exit_status), 0);
-		ft_putstr_fd("closing pid: ", 2);
-		ft_putnbr_fd(g_pids[g_index], 2);
-		ft_putstr_fd("\n", 2);
+		kill(cmd->pid, SIGPIPE);
+		cmd = cmd->next;
 	}
 }
 

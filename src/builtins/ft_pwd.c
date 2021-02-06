@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:14:06 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/02 11:33:17 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/06 10:53:13 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_pwd(t_cmd *cmd)
 	dir = getcwd(dir, 0);
 	if (!dir)
 	{
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		error_handle(E_FILE, 1, "pwd");
 		return (0);
 	}
 	ft_putendl_fd(dir, 1);
