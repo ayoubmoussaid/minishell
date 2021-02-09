@@ -6,13 +6,13 @@
 #    By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2021/02/01 17:32:08 by fmehdaou         ###   ########.fr        #
+#    Updated: 2021/02/02 18:07:58 by fmehdaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=minishell
 LIBFT=libft.a
-SRCS=src/main.c src/builtins/*.c src/core/*.c src/parsing/*.c src/execution/*.c
+SRCS=src/main.c src/builtins/*.c src/core/*.c src/parsing/*.c src/execution/*.c src/utils/*.c 
 
 
 OBJ=$(SRCS:.c=.o)

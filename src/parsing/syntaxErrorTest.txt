@@ -1,0 +1,35 @@
+hello ;; 
+;
+;;
+hello ;  |
+hello ;|
+hello ;>
+hello;'
+hello;"
+hello;;
+;;;
+                 ;                 ;
+hello >;
+hello ;> /*syntax error near unexpected token `newline'*/
+hello ||            /*li bghiti*/
+
+hello |            /*li bghiti*/ 
+
+||                /*syntax error near unexpected token `||'*/we dont have t 
+
+fjkhbv |  ^\
+
+
+"hey heki ; abefbef ; hefh >>> < |||||||| kgbv ;;;;; '''''''' " ; qkufcv
+
+not Yet
+hello;\
+\
+
+
+ hello ; hey ; hi ; hhoho
+ hello | hey ; hi ; hhoho
+
+ hello | hey>file ; hi ; hhoho
+
+echo hi >>file | something

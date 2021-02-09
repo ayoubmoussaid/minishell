@@ -6,27 +6,25 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 17:30:58 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/09 10:17:39 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-int     main(int argc, char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
-	
+
 	//signal(SIGINT, signal_handler);
 	//signal(SIGQUIT, signal_handler);
-	t_shell *shell;
-    t_getl *getl;
-	shell = (t_shell*)malloc(sizeof(t_shell));
+	t_getl *getl;
 	if (argc > 1)
 		argv = NULL;
 	do_the_work(env);
 	g_shell->exit_status = 0;
-	getl = (t_getl*)malloc(sizeof(t_getl));
-	shell->head = NULL;
-    parse_line(getl, shell);
+	getl = (t_getl *)malloc(sizeof(t_getl));
+	g_shell->cmd = NULL;
+	parse_line(getl);
 	// while(1)
 	// {
 	// 	ft_putstr_fd("minishell $> ", STDOUT_FILENO);
@@ -41,5 +39,3 @@ int     main(int argc, char **argv, char **env)
 	// fclose(g_shell->debug_file);
 	return (0);
 }
-
-
