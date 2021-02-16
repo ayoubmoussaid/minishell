@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/09 10:29:48 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/15 17:22:33 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ typedef struct s_getl
 	int brake;
 	char **sp_c; // split with semicolone
 	char **sp_p; //split with pipe
-	char **sp_s; // split with space
 
 } t_getl;
 

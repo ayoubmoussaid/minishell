@@ -33,3 +33,11 @@ hello;\
  hello | hey>file ; hi ; hhoho
 
 echo hi >>file | something
+
+
+
+echo hi > file1                > file2           >>          file3
+ echo hi   > file1  < file2       >> file3   < file4 l p lp
+ echo hi > file1         <       file2      >> file3 | ls -l -a > file7 < file8 >> file9
+ echo hi  > file1   > file2   < file3 < file4   |    cat -e file5 | cat -e file6 > file 7
+ hscjhhjw
