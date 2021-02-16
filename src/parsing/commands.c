@@ -2,13 +2,13 @@
 
 void ft_print_list(t_cmd *cmd)
 {
-	t_files *current = cmd->files;
+	t_files *current = cmd->files->next;
+
 	while (current)
 	{
-		printf("|%s|%c|%p|\n\n", current->name, current->type, current->next);
+		printf("|%s|\n\n", current->name);
 		current = current->next;
 	}
-
 	write(1, "endlist\n\n\n", 10);
 }
 
@@ -81,7 +81,17 @@ char *get_file_name(char **str, int *index, int count)
 
 void add_file_to_list(t_cmd *cmd, t_files *file)
 {
-	printf("%p|%s|%p\n", cmd->files, file->name, file);
+	// printf("---------------%s|%p|%p\n", file->name, file, cmd);
+	t_files *current = cmd->files;
+	if (current == NULL)
+		cmd->files = file;
+	else
+	{
+		printf("here\n");
+		while (current->next)
+			current = current->next;
+		current->next = file;
+	}
 }
 
 void ft_find_file(char **str, t_cmd *cmd)
@@ -160,8 +170,8 @@ void fill_cmd(t_getl *getl, int i)
 		ft_find_file(&getl->sp_p[index], cmd);
 		cmd->args = ft_split(getl->sp_p[index], ' ');
 		cmd->c = cmd->args[0];
-		// ft_print_list(cmd);
-		// ft_print_tab(cmd->args);
+		ft_print_list(cmd);
+		ft_print_tab(cmd->args);
 		// add_cmd_to_list(cmd);
 	}
 }
