@@ -84,3 +84,6 @@ echo hello world > $hi   => bash: $hi: ambiguous redirect
 
 
 export ksf=_
+
+
+  echo hi > f1 < f2>>          f3 > f4 |         cat             -e o1      < o2> o3 lll | open -s < t1 ppp 

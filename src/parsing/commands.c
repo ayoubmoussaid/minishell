@@ -1,15 +1,15 @@
 #include "../headers/minishell.h"
 
-void ft_print_list(t_cmd *cmd)
+void ft_print_files_list(t_cmd *cmd)
 {
 	t_files *current = cmd->files->next;
-
+	write(1, "\nstar tfiles list\n\n\n", 15);
 	while (current)
 	{
-		printf("|%s|\n\n", current->name);
+		printf("----|%s|%c|\n\n", current->name, current->type);
 		current = current->next;
 	}
-	write(1, "endlist\n\n\n", 10);
+	write(1, "end files list\n\n\n", 15);
 }
 
 void ft_print_tab(char **args)
@@ -17,9 +17,25 @@ void ft_print_tab(char **args)
 	int i = 0;
 	while (args[i])
 	{
-		printf("args[%d] = %s\n", i, args[i]);
+		printf("---args[%d] = %s\n", i, args[i]);
 		i++;
 	}
+}
+
+void ft_print_cmd_list(t_cmd *cmd)
+{
+	t_cmd *current;
+
+	current = cmd;
+	while (current)
+	{
+		printf("startlist cmd*********************\n");
+		ft_print_tab(current->args);
+		printf("myyyyyyy c %s\n", current->c);
+		ft_print_files_list(current);
+		current = current->next;
+	}
+	write(1, "*******************end list cmd\n\n", 13);
 }
 
 void ft_free(char **s)
@@ -87,7 +103,6 @@ void add_file_to_list(t_cmd *cmd, t_files *file)
 		cmd->files = file;
 	else
 	{
-		printf("here\n");
 		while (current->next)
 			current = current->next;
 		current->next = file;
@@ -133,22 +148,17 @@ void ft_find_file(char **str, t_cmd *cmd)
 void add_cmd_to_list(t_cmd *cmd)
 {
 	t_cmd *current;
-	current = (t_cmd *)malloc(sizeof(t_cmd));
-	current = g_shell->cmd;
 
+	current = g_shell->cmd;
 	if (current == NULL)
 	{
-		current = cmd;
-		// printf("%s|%p|\n", cmd->c, cmd->next);
-		// ft_print_list(cmd);
+		g_shell->cmd = cmd;
 	}
 	else
 	{
-		while (current)
+		while (current->next)
 			current = current->next;
-		current = cmd;
-		// printf("%s|%p|\n", cmd->c, cmd->next);
-		// ft_print_list(cmd);
+		current->next = cmd;
 	}
 }
 
@@ -165,15 +175,55 @@ void fill_cmd(t_getl *getl, int i)
 	getl->sp_p = ft_split(getl->sp_c[i], '|');
 	while (getl->sp_p[++index])
 	{
-		//clear ;
-
 		ft_find_file(&getl->sp_p[index], cmd);
 		cmd->args = ft_split(getl->sp_p[index], ' ');
 		cmd->c = cmd->args[0];
-		ft_print_list(cmd);
-		ft_print_tab(cmd->args);
-		// add_cmd_to_list(cmd);
+		// ft_print_list(cmd);
+		// ft_print_tab(cmd->args);
+		add_cmd_to_list(cmd);
+		cmd = (t_cmd *)malloc(sizeof(t_cmd));
+		cmd->files = (t_files *)malloc(sizeof(t_files));
 	}
+}
+
+void ft_clear_files_list(t_cmd *cmd)
+{
+	t_files *current = cmd->files->next;
+	t_files *next = NULL;
+
+	ft_print_files_list(cmd);
+	while (current)
+	{
+		next = current->next;
+		free(current);
+		current = NULL;
+		current = next;
+	}
+	cmd->files->next = NULL;
+	ft_print_files_list(cmd);
+	printf("\n\n\n\n\n\n\n\n");
+}
+
+void ft_clear_cmd_list(t_cmd *cmd)
+{
+	// ft_print_cmd_list(cmd);
+	t_cmd *current;
+	t_cmd *next;
+
+	current = cmd;
+	next = NULL;
+	while (current)
+	{
+
+		next = current->next;
+		ft_clear_files_list(current);
+		// ft_free(current->args);
+		free(current->c);
+		// free(current);
+		current = next;
+	}
+	g_shell->cmd = NULL;
+	// ft_print_cmd_list(cmd);
 }
 
 void get_command(t_getl *getl)
@@ -184,8 +234,14 @@ void get_command(t_getl *getl)
 	getl->sp_c = ft_split(getl->line, ';');
 	while (getl->sp_c[++i])
 	{
+		//clear linked list of cmd->cmd->cmd->cmd(cmd1); and move to cmd2 (cmd1;cmd2;)
 		//cear g_shell->cmd for the second command to be filled
+
+		ft_clear_cmd_list(g_shell->cmd);
 		fill_cmd(getl, i);
+		// ft_print_cmd_list(g_shell->cmd);
 	}
+
+	// ft_clear_cmd_list(g_shell->cmd);
 	ft_free(getl->sp_c);
 }
