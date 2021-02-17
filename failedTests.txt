@@ -1,0 +1,15 @@
+minishell$> echo ";;;;;;;>>>>>>>"
+No such file or directory
+;;;;;;;
+
+minishell$> echo "pl;P;'''''''"
+Syntax error near unexpected token  `''
+
+
+minishell$> "llll"
+No such file or directory
+
+
+
+minishell$> "echo l"
+l

@@ -222,6 +222,19 @@ void ft_clear_cmd_list(t_cmd *cmd)
 	g_shell->cmd = NULL;
 }
 
+void ft_to_pos(char **s)
+{
+	int i;
+
+	i = 0;
+	while ((*s)[i])
+	{
+		if ((*s)[i] < 0)
+			(*s)[i] = -(*s)[i];
+		i++;
+	}
+}
+
 void get_command(t_getl *getl)
 {
 	int i;
@@ -233,6 +246,7 @@ void get_command(t_getl *getl)
 		//clear linked list of cmd->cmd->cmd->cmd(cmd1); and move to cmd2 (cmd1;cmd2;)
 		//cear g_shell->cmd for the second command to be filled
 		flip_line(&(getl->sp_c[i]));
+		ft_to_pos(&(getl->sp_c[i]));
 		ft_clear_cmd_list(g_shell->cmd);
 		fill_cmd(getl, i);
 		// ft_print_cmd_list(g_shell->cmd);

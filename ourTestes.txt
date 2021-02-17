@@ -1,0 +1,10 @@
+minishell$> mkdir testing
+minishell$> cat -e testing
+cat: testing: Is a directory
+
+
+minishell$> echo ';
+Syntax error near unexpected token  `'' 
+
+
+minishell$> "echo"
