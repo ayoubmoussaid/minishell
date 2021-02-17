@@ -2,8 +2,8 @@
 
 void ft_print_files_list(t_cmd *cmd)
 {
-	t_files *current = cmd->files->next;
-	write(1, "\nstar tfiles list\n\n\n", 15);
+	t_files *current = cmd->files;
+	write(1, "\nstar files list\n\n\n", 18);
 	while (current)
 	{
 		printf("----|%s|%c|\n\n", current->name, current->type);
@@ -24,32 +24,30 @@ void ft_print_tab(char **args)
 
 void ft_print_cmd_list(t_cmd *cmd)
 {
+	printf("*********************startlist cmd*********************\n");
 	t_cmd *current;
 
 	current = cmd;
 	while (current)
 	{
-		printf("startlist cmd*********************\n");
 		ft_print_tab(current->args);
 		printf("myyyyyyy c %s\n", current->c);
 		ft_print_files_list(current);
 		current = current->next;
 	}
-	write(1, "*******************end list cmd\n\n", 13);
+	printf("*********************end list cmd*********************\n");
 }
 
-void ft_free(char **s)
+void ft_free(char **str)
 {
 	int i;
 
-	i = -1;
-	while (s[++i])
+	i = 0;
+	while (str[i])
 	{
-		free(s[i]);
-		s[i] = NULL;
+		free(str[i]);
+		i++;
 	}
-	free(s);
-	s = NULL;
 }
 
 int sp_len(char **str)
@@ -169,9 +167,8 @@ void fill_cmd(t_getl *getl, int i)
 
 	index = -1;
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	cmd->files = (t_files *)malloc(sizeof(t_files));
+	cmd->files = NULL;
 	cmd->next = NULL;
-	cmd->files->next = NULL;
 	getl->sp_p = ft_split(getl->sp_c[i], '|');
 	while (getl->sp_p[++index])
 	{
@@ -182,16 +179,15 @@ void fill_cmd(t_getl *getl, int i)
 		// ft_print_tab(cmd->args);
 		add_cmd_to_list(cmd);
 		cmd = (t_cmd *)malloc(sizeof(t_cmd));
-		cmd->files = (t_files *)malloc(sizeof(t_files));
+		cmd->files = NULL;
 	}
 }
 
 void ft_clear_files_list(t_cmd *cmd)
 {
-	t_files *current = cmd->files->next;
+	t_files *current = cmd->files;
 	t_files *next = NULL;
 
-	ft_print_files_list(cmd);
 	while (current)
 	{
 		next = current->next;
@@ -199,9 +195,7 @@ void ft_clear_files_list(t_cmd *cmd)
 		current = NULL;
 		current = next;
 	}
-	cmd->files->next = NULL;
-	ft_print_files_list(cmd);
-	printf("\n\n\n\n\n\n\n\n");
+	cmd->files = NULL;
 }
 
 void ft_clear_cmd_list(t_cmd *cmd)
@@ -218,12 +212,14 @@ void ft_clear_cmd_list(t_cmd *cmd)
 		next = current->next;
 		ft_clear_files_list(current);
 		// ft_free(current->args);
-		free(current->c);
-		// free(current);
+		// ft_print_tab(current->args);
+		// printf("----------\n");
+
+		free(current);
+		current = NULL;
 		current = next;
 	}
 	g_shell->cmd = NULL;
-	// ft_print_cmd_list(cmd);
 }
 
 void get_command(t_getl *getl)
@@ -236,12 +232,13 @@ void get_command(t_getl *getl)
 	{
 		//clear linked list of cmd->cmd->cmd->cmd(cmd1); and move to cmd2 (cmd1;cmd2;)
 		//cear g_shell->cmd for the second command to be filled
-
+		flip_line(&(getl->sp_c[i]));
 		ft_clear_cmd_list(g_shell->cmd);
 		fill_cmd(getl, i);
 		// ft_print_cmd_list(g_shell->cmd);
+		execute();
 	}
 
 	// ft_clear_cmd_list(g_shell->cmd);
-	ft_free(getl->sp_c);
+	//ft_free(getl->sp_c);
 }

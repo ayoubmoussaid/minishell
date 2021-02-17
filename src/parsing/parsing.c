@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/16 19:33:45 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:56:03 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,9 @@ void parse_line(t_getl *getl)
 	while (1)
 	{
 		ft_putstr_fd("\033[92mminishell$> \033[39m", 1);
-		// getl->line = "ls -la              > f1               >>f2";
+		//getl->line = ft_strdup("echo hi  > file1   > file2   < file3 < file4   |    cat -e file5 | cat -e file6 > file 7 ; ls -l > pp | cat -opp > jjjjj < p  ppppppp ; top -s > poker < pokerface | poker -a > o78");
 		if (get_next_line(0, &getl->line) > 0)
-		// if (1)
+		//if (1)
 		{
 			init_state(getl);
 			getl->i = -1;

@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/16 16:28:30 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/17 16:17:24 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int ft_str_index(char *str, char c);
 void my_env(char **env);
 char *ft_specialjoin(char const *s1, char const *s2, char c);
 
-void flip_line();
+void flip_line(char **line);
 char *reflip(char *str);
 void do_the_work(char **env);
 void execute();
