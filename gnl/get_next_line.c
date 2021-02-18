@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 18:02:49 by amoussai          #+#    #+#             */
-/*   Updated: 2020/01/20 10:21:53 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:50:44 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*str_checker(char *str, int nm)
 		n++;
 	if (nm == 1)
 		return (ft_substr1(str, 0, n));
-	return (ft_substr1(str, n + 1, ft_strlen(str) - n - 1));
+	return (ft_substr1(str, n + 1, ft_strlen1(str) - n - 1));
 }
 
 int		does_it_end(char *str)

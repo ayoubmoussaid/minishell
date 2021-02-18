@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 09:03:37 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 09:40:30 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:35:31 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	free_env_var(t_env *del)
+void free_env_var(t_env *del)
 {
 	free(del->key);
 	free(del->value);
 	free(del);
 }
 
-t_env	*create_new_var(char *key, char *value)
+t_env *create_new_var(char *key, char *value)
 {
-	t_env	*env;
+	t_env *env;
 
-	env = (t_env*)malloc(sizeof(t_env));
+	env = (t_env *)malloc(sizeof(t_env));
 	if (!env)
 		return (NULL);
 	env->key = ft_strdup(key);
@@ -32,9 +32,9 @@ t_env	*create_new_var(char *key, char *value)
 	return (env);
 }
 
-void	add_env_var(t_env *new)
+void add_env_var(t_env *new)
 {
-	t_env	*current;
+	t_env *current;
 
 	if (g_shell->envs)
 	{
@@ -44,10 +44,10 @@ void	add_env_var(t_env *new)
 			free(current->value);
 			current->value = ft_strdup(new->value);
 			free_env_var(new);
-			return ;
+			return;
 		}
 		while (current->next != NULL &&
-			ft_strcmp(current->next->key, new->key) != 0)
+			   ft_strcmp(current->next->key, new->key) != 0)
 			current = current->next;
 		if (current->next == NULL)
 			current->next = new;
@@ -62,10 +62,10 @@ void	add_env_var(t_env *new)
 		g_shell->envs = new;
 }
 
-void	delete_env_var(char *key)
+void delete_env_var(char *key)
 {
-	t_env	*current;
-	t_env	*tobefreed;
+	t_env *current;
+	t_env *tobefreed;
 
 	if (g_shell->envs)
 	{
@@ -74,10 +74,10 @@ void	delete_env_var(char *key)
 		{
 			g_shell->envs = current->next;
 			free_env_var(current);
-			return ;
+			return;
 		}
 		while (current->next != NULL &&
-			ft_strcmp(current->next->key, key) != 0)
+			   ft_strcmp(current->next->key, key) != 0)
 			current = current->next;
 		if (current->next != NULL)
 		{
@@ -88,9 +88,9 @@ void	delete_env_var(char *key)
 	}
 }
 
-char	*get_env_var(char *key)
+char *get_env_var(char *key)
 {
-	t_env	*current;
+	t_env *current;
 
 	if (g_shell->envs)
 	{
@@ -98,14 +98,14 @@ char	*get_env_var(char *key)
 		while (current != NULL && ft_strcmp(current->key, key) != 0)
 			current = current->next;
 		if (current != NULL)
-			return (ft_strdup(current->value));
+			return (ft_strdup(current->value ? current->value : ft_strdup("")));
 	}
 	return (ft_strdup(""));
 }
 
-void	print_env(t_shell *g_shell)
+void print_env(t_shell *g_shell)
 {
-	t_env	*current;
+	t_env *current;
 
 	if (g_shell->envs)
 	{

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:12 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/06 11:06:16 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:04:57 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int	ft_env(t_cmd *cmd)
+int ft_env(t_cmd *cmd)
 {
 	t_env *current;
 
-	if (cmd->args)
+	if (ft_len(cmd->args) > 1)
 	{
 		error_handle(E_TMA, 1, "env");
 		return (0);

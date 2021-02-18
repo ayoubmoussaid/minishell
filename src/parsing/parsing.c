@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 10:25:53 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:58:14 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,9 +168,9 @@ void parse_line(t_getl *getl)
 	while (1)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
-		// getl->line = ft_strdup("echo  ");
+		// getl->line = ft_strdup("cd");
 		if (get_next_line(0, &getl->line) > 0)
-		//if (1)
+		// if (1)
 		{
 			init_state(getl);
 			getl->i = -1;

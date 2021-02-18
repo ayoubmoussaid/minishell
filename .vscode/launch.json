@@ -20,6 +20,10 @@
         {
           "name": "PWD",
           "value": "/Users/amoussai/Desktop/minishell"
+        },
+        {
+          "name": "HOME",
+          "value": "/Users/amoussai"
         }
       ],
       "externalConsole": false,

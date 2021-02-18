@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 18:22:22 by amoussai          #+#    #+#             */
-/*   Updated: 2020/01/20 10:21:04 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:51:30 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*ft_strdup(const char *src)
 	return (str);
 }
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen1(const char *str)
 {
 	size_t i;
 
@@ -64,8 +64,8 @@ char	*ft_strjoin1(char *s1, char *s2)
 
 	if (!s1 && !s2)
 		return (NULL);
-	n = ft_strlen((char*)s1);
-	m = ft_strlen((char*)s2);
+	n = ft_strlen1((char*)s1);
+	m = ft_strlen1((char*)s2);
 	newstr = (char*)malloc(n + m + 1);
 	if (newstr == NULL)
 		return (NULL);
@@ -93,7 +93,7 @@ char	*ft_substr1(char *s, unsigned int start,
 	if (s == NULL)
 		return (NULL);
 	i = 0;
-	max = ft_strlen(s);
+	max = ft_strlen1(s);
 	sub = (char*)malloc(len + 2);
 	if (sub == NULL)
 		return (NULL);

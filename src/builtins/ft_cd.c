@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/06 15:08:20 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:57:55 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	*ft_specialjoin(char const *s1, char const *s2, char c)
+char *ft_specialjoin(char const *s1, char const *s2, char c)
 {
-	char			*newstr;
-	unsigned int	i;
-	unsigned int	n;
-	unsigned int	m;
+	char *newstr;
+	unsigned int i;
+	unsigned int n;
+	unsigned int m;
 
 	if (!s1 || !s2)
 		return (NULL);
-	n = ft_strlen((char*)s1) + 1;
-	m = ft_strlen((char*)s2);
-	newstr = (char*)malloc(n + m + 1);
+	n = ft_strlen((char *)s1) + 1;
+	m = ft_strlen((char *)s2);
+	newstr = (char *)malloc(n + m + 1);
 	if (newstr == NULL)
 		return (NULL);
 	i = -1;
@@ -39,9 +39,9 @@ char	*ft_specialjoin(char const *s1, char const *s2, char c)
 	return (newstr);
 }
 
-void	ft_updatepwd(const char *prop, char *value)
+void ft_updatepwd(const char *prop, char *value)
 {
-	t_env	*current;
+	t_env *current;
 
 	current = g_shell->envs;
 	while (current != NULL)
@@ -55,22 +55,24 @@ void	ft_updatepwd(const char *prop, char *value)
 	}
 }
 
-int		ft_cd(t_cmd	*cmd)
+int ft_cd(t_cmd *cmd)
 {
-	char	*olddir;
-	char	*newdir;
-	int		ret;
-	int		len;
-	char	*dir;
+	char *olddir;
+	char *newdir;
+	int ret;
+	int len;
+	char *dir;
 
 	olddir = NULL;
 	newdir = NULL;
 	len = ft_len(cmd->args);
 	if (len > 2)
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO); //TODO fix error
 	else if (len == 1 || (len == 2 && cmd->args[1][0] == '~'))
 	{
-		dir = ft_strjoin(get_env_var("HOME"), cmd->args[1] + 1);
+		char *tmp1 = get_env_var("HOME");
+		char *tmp2 = cmd->args[1] ? cmd->args[1] + 1 : "";
+		dir = ft_strjoin(tmp1, tmp2);
 		if (ft_strlen(dir) == 1)
 		{
 			error_handle(E_CD_HOME, 1, "");
@@ -93,5 +95,3 @@ int		ft_cd(t_cmd	*cmd)
 	free(newdir);
 	return (1);
 }
-
-
