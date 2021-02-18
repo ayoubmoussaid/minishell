@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/06 15:14:48 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/09 07:54:39 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,5 +173,6 @@ void	finish_fd(t_cmd *cmd, int p[2], int std[2]);
 char	**get_env(t_env *env);
 int		get_real_cmd(t_cmd *cmd);
 int		error_handle(int err, int exit_code, char	*need);
+void	parse_line(t_getl *getl);
 
 #endif

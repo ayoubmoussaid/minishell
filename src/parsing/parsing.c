@@ -6,27 +6,17 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/01 16:55:10 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/08 11:02:38 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../headers/minishell.h"
 
 void	errrors(char *err)
 {
 	ft_putendl_fd(err, 1);
 }
 
-int		check_for_slash(char *str)
-{
-	int i;
-
-	i = -1;
-	while (str && str[++i] != '\0')
-		if (str[i] == '/')
-			return (1);
-	return (0);	
-}
 
 
 /*linekd list of cmd*/
@@ -437,7 +427,7 @@ void	add_new_pipe(t_shell *shell, t_getl *getl, int i)
 	t_pipeline *pipeline;
 	t_pipeline *current;
 
-	int i;
+	
 
 	current = NULL;
 	pipeline = NULL;
@@ -450,7 +440,7 @@ void	add_new_pipe(t_shell *shell, t_getl *getl, int i)
 	{
 		while(getl->sp_p[i])
 		{
-			get_new_cmd();
+			// get_new_cmd();
 			i++;
 		}
 		// pipeline->pipe->c = ft_strdup(getl->sp_c[i]);
@@ -477,27 +467,28 @@ void	add_new_pipe(t_shell *shell, t_getl *getl, int i)
 }
 
 
-void	get_command(t_getl *getl, t_shell *shell)
+void	get_command(t_getl *getl)
 {
 	int i;		
 
 	i = -1;
 	getl->sp_c = ft_split(getl->line, ';');
 	while(getl->sp_c[++i])
-		add_new_pipe(shell,getl,i);
+		add_new_pipe(g_shell,getl,i);
 	ft_free(getl->sp_c);	
-	print_list(shell);	
+	print_list(g_shell);	
 }
 
 
 
-void    parse_line(t_getl *getl, t_shell *shell)
+void    parse_line(t_getl *getl)
 {
     while (1)
 	{
 
 		ft_putstr_fd("\033[92mminishell$> \033[39m", 1);
-    	if (get_next_line(0, &getl->line) > 0)
+        getl->line = ft_strdup("helllo world \"salut\"");
+    	if (1/* get_next_line(0, &getl->line) > 0 */)
 		{
 			init_state(getl);
 			getl->i = -1;
@@ -559,7 +550,7 @@ void    parse_line(t_getl *getl, t_shell *shell)
 			else 
 			{
 				// get_command(getl, pipelines);
-				get_command(getl, shell);
+				get_command(getl);
 
 				// printf("%s\n",shell->head->pipe->c);
 				// print_list(shell);
@@ -569,27 +560,5 @@ void    parse_line(t_getl *getl, t_shell *shell)
 		}
         free(getl->line);
     }
-}
-
-
-
-
-int     main(int argc, char **argv, char **env)
-{
-	t_shell *shell;
-    t_getl *getl;
-
-
-	shell = (t_shell*)malloc(sizeof(t_shell));
-	shell->envs = NULL;
-	shell->debug_file = fopen("debug.txt", "w");
-	if (argc > 1)
-		argv = NULL;
-	my_env(env);
-	getl = (t_getl*)malloc(sizeof(t_getl));
-	shell->head = NULL;
-    parse_line(getl, shell);
-    fclose(shell->debug_file);
-	return (0);
 }
 

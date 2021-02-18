@@ -11,6 +11,7 @@
                 "${workspaceFolder}/src/core/*.c",
                 "${workspaceFolder}/src/execution/*.c",
                 "${workspaceFolder}/src/utils/*.c",
+                "${workspaceFolder}/src/parsing/*.c",
                 "${workspaceFolder}/gnl/get_next_line.c",
                 "${workspaceFolder}/gnl/get_next_line_utils.c",
                 "${workspaceFolder}/libft.a",
