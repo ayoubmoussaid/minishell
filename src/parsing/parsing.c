@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/17 16:56:03 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/18 10:25:53 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,16 @@ void verify_rest(t_getl *getl, int *i)
 
 int verify_s_quote(t_getl *getl)
 {
+	if (getl->d_quote)
+		return (getl->s_quote);
 	getl->s_quote = !(getl->s_quote);
 	return (getl->s_quote);
 }
 
 int verify_d_quote(t_getl *getl)
 {
+	if (getl->s_quote == 1 || (getl->d_quote && getl->line[getl->i - 1] == '\\'))
+		return (getl->d_quote);
 	if (!getl->d_quote)
 	{
 		getl->semicolon = 0;
@@ -163,8 +167,8 @@ void parse_line(t_getl *getl)
 
 	while (1)
 	{
-		ft_putstr_fd("\033[92mminishell$> \033[39m", 1);
-		//getl->line = ft_strdup("echo hi  > file1   > file2   < file3 < file4   |    cat -e file5 | cat -e file6 > file 7 ; ls -l > pp | cat -opp > jjjjj < p  ppppppp ; top -s > poker < pokerface | poker -a > o78");
+		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
+		// getl->line = ft_strdup("echo  ");
 		if (get_next_line(0, &getl->line) > 0)
 		//if (1)
 		{

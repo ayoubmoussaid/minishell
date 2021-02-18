@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:14:06 by amoussai          #+#    #+#             */
-/*   Updated: 2021/01/30 15:23:16 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/06 15:15:22 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	ft_pwd(t_cmd *cmd)
+int	ft_pwd(t_cmd *cmd)
 {
 	char	*dir;
 
@@ -20,6 +20,12 @@ void	ft_pwd(t_cmd *cmd)
 		ft_putstr_fd("", STDERR_FILENO);
 	dir = NULL;
 	dir = getcwd(dir, 0);
+	if (!dir)
+	{
+		error_handle(E_STANDARD, 1, "pwd");
+		return (0);
+	}
 	ft_putendl_fd(dir, 1);
 	free(dir);
+	return (1);
 }

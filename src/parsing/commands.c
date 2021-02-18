@@ -160,6 +160,35 @@ void add_cmd_to_list(t_cmd *cmd)
 	}
 }
 
+void ft_to_pos(char **s)
+{
+	int i;
+
+	i = 0;
+	while ((*s)[i])
+	{
+		if ((*s)[i] < 0)
+			(*s)[i] = -(*s)[i];
+		i++;
+	}
+}
+
+void ft_fix_neg_cmd(t_cmd *cmd)
+{
+	t_files *file;
+	int i;
+
+	i = -1;
+	file = cmd->files;
+	while (file)
+	{
+		ft_to_pos(&(file->name));
+		file = file->next;
+	}
+	while (cmd->args[++i])
+		ft_to_pos(&(cmd->args[i]));
+}
+
 void fill_cmd(t_getl *getl, int i)
 {
 	t_cmd *cmd;
@@ -177,6 +206,7 @@ void fill_cmd(t_getl *getl, int i)
 		cmd->c = cmd->args[0];
 		// ft_print_list(cmd);
 		// ft_print_tab(cmd->args);
+		ft_fix_neg_cmd(cmd);
 		add_cmd_to_list(cmd);
 		cmd = (t_cmd *)malloc(sizeof(t_cmd));
 		cmd->files = NULL;
@@ -222,19 +252,6 @@ void ft_clear_cmd_list(t_cmd *cmd)
 	g_shell->cmd = NULL;
 }
 
-void ft_to_pos(char **s)
-{
-	int i;
-
-	i = 0;
-	while ((*s)[i])
-	{
-		if ((*s)[i] < 0)
-			(*s)[i] = -(*s)[i];
-		i++;
-	}
-}
-
 void get_command(t_getl *getl)
 {
 	int i;
@@ -246,7 +263,7 @@ void get_command(t_getl *getl)
 		//clear linked list of cmd->cmd->cmd->cmd(cmd1); and move to cmd2 (cmd1;cmd2;)
 		//cear g_shell->cmd for the second command to be filled
 		flip_line(&(getl->sp_c[i]));
-		ft_to_pos(&(getl->sp_c[i]));
+		//ft_to_pos(&(getl->sp_c[i]));
 		ft_clear_cmd_list(g_shell->cmd);
 		fill_cmd(getl, i);
 		// ft_print_cmd_list(g_shell->cmd);

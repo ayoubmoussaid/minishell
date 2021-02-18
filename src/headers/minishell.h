@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/17 16:17:24 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/18 08:47:10 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,27 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 #include <sys/errno.h>
 #include <dirent.h>
 #include <sys/stat.h>
 #include "../../libft/libft.h"
 #include "../../gnl/get_next_line.h"
+
+//Command not found
+#define E_CNF 0
+//Standard error related to a command or file, error from errno
+#define E_STANDARD 1
+//Too many argumanets
+#define E_TMA 4
+//cd: No such file or directory
+#define E_CD_NOFOD 5
+//cd: Home not set
+#define E_CD_HOME 6
+//export: xxxx: not a valid identifier
+#define E_EXPORT_NOTVAID 7
+//unset: xxxx: not a valid identifier
+#define E_UNSET_NOTVAID 8
 
 #define READ 0
 #define WRITE 1
@@ -33,7 +49,6 @@
 #define RED 6
 #define INFILED 7
 #define OUTFILE 8
-#define PIPED 9
 
 static char *(g_mishell_err[]) =
 	{
@@ -46,8 +61,9 @@ static char *(g_mishell_err[]) =
 		"syntax error near unexpected token `newline'",
 		"Syntax error near unexpected token  `>>' ",
 		"Syntax error near unexpected token  `<' ",
-		"Syntax error near unexpected token  `||'"
 		""};
+
+static char *g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void *)0};
 
 typedef struct s_getl
 {
@@ -63,9 +79,9 @@ typedef struct s_getl
 	int append;	   // >>
 	int pipe;
 	int brake;
-	char **sp_c; // split with semicolone
-	char **sp_p; //split with pipe
-
+	char **sp_c;  // split with semicolone
+	char **sp_p;  //split with pipe
+	char **sp_re; // split with redirection
 } t_getl;
 
 typedef struct s_env
@@ -92,27 +108,28 @@ typedef struct s_cmd
 	t_files *files;
 	int fdr;
 	int fdw;
+	pid_t pid;
 } t_cmd;
 
 typedef struct s_shell
 {
 	int exit_status;
 	char *line;
-	//char			**splitted;
 	t_env *envs;
 	FILE *debug_file;
 	t_cmd *cmd;
 } t_shell;
 
 t_shell *g_shell;
+pid_t g_pid;
 
-void ft_env(t_cmd *cmd);
-void ft_pwd(t_cmd *cmd);
-void ft_cd(t_cmd *cmd);
-void ft_echo(t_cmd *cmd);
-void ft_export(t_cmd *cmd);
-void ft_unset(t_cmd *cmd);
-void ft_exit(t_cmd *cmd);
+int ft_env(t_cmd *cmd);
+int ft_pwd(t_cmd *cmd);
+int ft_cd(t_cmd *cmd);
+int ft_echo(t_cmd *cmd);
+int ft_export(t_cmd *cmd);
+int ft_unset(t_cmd *cmd);
+int ft_exit(t_cmd *cmd);
 
 int ft_len(char **tab);
 int ft_isvalid(char *str);
@@ -129,7 +146,6 @@ void my_env(char **env);
 char *ft_specialjoin(char const *s1, char const *s2, char c);
 
 void flip_line(char **line);
-char *reflip(char *str);
 void do_the_work(char **env);
 void execute();
 void parse_line(t_getl *getl);
@@ -139,5 +155,14 @@ void init_state(t_getl *getl);
 int is_special_char(char c);
 int is_all_off(t_getl *getl);
 int is_on(t_getl *getl);
+
+void signal_handler(int sig);
+int parse_files(t_cmd *cmd);
+void dup_close(int fd1, int fd2);
+int prepare_fd(t_cmd *cmd, int p[2], int std[2]);
+void finish_fd(t_cmd *cmd, int p[2], int std[2]);
+char **get_env(t_env *env);
+int get_real_cmd(t_cmd *cmd);
+int error_handle(int err, int exit_code, char *need);
 
 #endif
