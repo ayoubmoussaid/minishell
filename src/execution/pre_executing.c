@@ -23,48 +23,61 @@ int		check_builtins(char *str)
 	return (-1);
 }
 
-char	*get_path(t_cmd	*cmd)
+static	char	*parse_path(char *all_paths, char *name)
+{
+	char	**path;
+	int		index;
+	char	*full_path;
+	struct stat buf;
+
+	index = 0;
+	path = ft_split(all_paths, ':');
+	while (path[index])
+	{
+		if (path[index][ft_strlen(path[index])] == '/')
+			path[index][ft_strlen(path[index])] = 0;
+		full_path = ft_strjoin(path[index], name);
+		if (stat(full_path, &buf) == 0 && !S_ISDIR(buf.st_mode))
+		{
+			ft_free(path);
+			return (full_path);
+		}
+		free(full_path);
+		index++;
+	}
+	ft_free(path);
+	return (NULL);
+}
+
+void	get_path(t_cmd	*cmd)
 {
 	char			*path;
-	char			**all_paths;
-	int				i;
-	DIR				*dfd;
-	struct dirent	*dp;
-	struct stat		stbuf;
+	char 			*name;
 
-	i = -1;
+	name = ft_strjoin("/", cmd->c);
 	path = get_env_var("PATH");
-	all_paths = ft_split(path, ':');
-	while (all_paths[++i] != 0)
-	{
-		if ((dfd = opendir(all_paths[i])) == NULL)
-			continue;
-		while ((dp = readdir(dfd)) != NULL)
-		{
-			path = ft_specialjoin(all_paths[i], dp->d_name, '/');
-			if (stat(path, &stbuf) == -1)
-				continue;
-			if ((stbuf.st_mode & S_IFMT) == S_IFDIR)
-				continue;
-			if(ft_strcmp(dp->d_name, cmd->c) == 0)
-				return (path);
-		}
-		closedir(dfd);
-	}
-	return NULL;
+	cmd->executable = parse_path(path, name);
+	free(name);
+	free(path);
 }
 
 int 	get_real_cmd(t_cmd *cmd)
 {
 	int		index;
+	struct	stat	buf;
 
-	index = -1;
-	
-	if(check_for_slash(cmd->c) || (index = check_builtins(cmd->c)) != -1)
+	index = -2;
+	if((index = check_builtins(cmd->c)) != -1 || check_for_slash(cmd->c))
 		cmd->executable = cmd->c;
 	else
-		cmd->executable = get_path(cmd);
-	if(cmd->executable == NULL)
-		index = -2;
+		get_path(cmd);
+	if(index == -1 && cmd->executable == NULL)
+		error_handle(E_CNF, 127, cmd->c);
+	else if (index == -1 &&  stat(cmd->executable, &buf) != 0){
+		error_handle(E_WPATH, 127, cmd->executable);
+	}		
+	else if (index == -1 &&  S_ISDIR(buf.st_mode)){
+		error_handle(E_ISDIR, 126, cmd->executable);
+	}
 	return (index);
 }

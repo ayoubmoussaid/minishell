@@ -45,12 +45,9 @@ void execute()
 		}
 		if(cmd->c)//TODO verify the change here
 		{
-			if ((index = get_real_cmd(cmd)) != -2)
-			execute_command(cmd, index);
-			else
-			error_handle(E_CNF, 127, cmd->c);
+			if ((index = get_real_cmd(cmd)) != -2 && cmd->executable)
+				execute_command(cmd, index);
 		}
-		
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
 	}

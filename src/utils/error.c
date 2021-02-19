@@ -21,6 +21,8 @@ int error_handle(int err, int exit_code, char *need)
 	if (!need)
 		need = "";
 	(err == E_CNF) ? ft_putendl_fd((str = ft_strjoin(need, ": command not found")), STDERR_FILENO) : NULL;
+	(err == E_WPATH) ? ft_putendl_fd((str = ft_strjoin(need, ": No such file or directory")), STDERR_FILENO) : NULL;
+	(err == E_ISDIR) ? ft_putendl_fd((str = ft_strjoin(need, ": is a directory")), STDERR_FILENO) : NULL;
 	(err == E_STANDARD) ? ft_putendl_fd((str = concat_strings(need, ": ", strerror(errno))), STDERR_FILENO) : NULL;
 	(err == E_TMA) ? ft_putendl_fd((str = ft_strjoin(need, ": too many arguments")), STDERR_FILENO) : NULL;
 	(err == E_CD_NOFOD) ? ft_putendl_fd((str = concat_strings("cd: ", need, ": No such file or directory")), STDERR_FILENO) : NULL;
