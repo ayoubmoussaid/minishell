@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 11:57:55 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/20 12:19:31 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int ft_cd(t_cmd *cmd)
 		if (ft_strlen(dir) == 1)
 		{
 			error_handle(E_CD_HOME, 1, "");
-			return (0);
+			return (1);
 		}
 	}
 	else
@@ -93,5 +93,5 @@ int ft_cd(t_cmd *cmd)
 		error_handle(E_STANDARD, 1, "cd");
 	free(olddir);
 	free(newdir);
-	return (1);
+	return (0);
 }

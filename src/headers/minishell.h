@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/19 11:51:27 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/20 16:44:48 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 #define E_WPATH 9
 //is directory
 #define E_ISDIR 10
+
+#define E_EXIT_ARG 11
 
 #define READ 0
 #define WRITE 1
@@ -166,7 +168,7 @@ void dup_close(int fd1, int fd2);
 int prepare_fd(t_cmd *cmd, int p[2], int std[2]);
 void finish_fd(t_cmd *cmd, int p[2], int std[2]);
 char **get_env(t_env *env);
-int get_real_cmd(t_cmd *cmd);
+int get_real_cmd(t_cmd *cmd, int *index);
 int error_handle(int err, int exit_code, char *need);
 
 void	ft_free(char **tab);

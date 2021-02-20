@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+         #
+#    By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2021/02/18 08:45:38 by fmehdaou         ###   ########.fr        #
+#    Updated: 2021/02/20 16:50:32 by amoussai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ all: $(NAME)
 $(NAME):
 	@$(MAKE) -C ./libft
 	@mv ./libft/$(LIBFT) .
-	$(CC) $(FLAGS) $(SRCS) $(CFLAGS) -o $(NAME)
+	$(CC) $(FLAGS) -g $(SRCS) $(CFLAGS) -o $(NAME)
 
 clean:
 	$(MAKE) -C ./libft clean

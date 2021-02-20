@@ -61,23 +61,19 @@ void	get_path(t_cmd	*cmd)
 	free(path);
 }
 
-int 	get_real_cmd(t_cmd *cmd)
+int 	get_real_cmd(t_cmd *cmd, int *index)
 {
-	int		index;
 	struct	stat	buf;
 
-	index = -2;
-	if((index = check_builtins(cmd->c)) != -1 || check_for_slash(cmd->c))
+	if((*index = check_builtins(cmd->c)) != -1 || check_for_slash(cmd->c))
 		cmd->executable = cmd->c;
 	else
 		get_path(cmd);
-	if(index == -1 && cmd->executable == NULL)
-		error_handle(E_CNF, 127, cmd->c);
-	else if (index == -1 &&  stat(cmd->executable, &buf) != 0){
-		error_handle(E_WPATH, 127, cmd->executable);
-	}		
-	else if (index == -1 &&  S_ISDIR(buf.st_mode)){
-		error_handle(E_ISDIR, 126, cmd->executable);
-	}
-	return (index);
+	if(*index == -1 && cmd->executable == NULL)
+		return (error_handle(E_CNF, 127, cmd->c));
+	else if (*index == -1 && stat(cmd->executable, &buf) != 0)
+		return (error_handle(E_WPATH, 127, cmd->executable));	
+	else if (*index == -1 && S_ISDIR(buf.st_mode))
+		return (error_handle(E_ISDIR, 126, cmd->executable));
+	return (0);
 }

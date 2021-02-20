@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:14:06 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/06 15:15:22 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/20 12:20:19 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	ft_pwd(t_cmd *cmd)
 	if (!dir)
 	{
 		error_handle(E_STANDARD, 1, "pwd");
-		return (0);
+		return (1);
 	}
 	ft_putendl_fd(dir, 1);
 	free(dir);
-	return (1);
+	return (0);
 }
