@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 11:58:14 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:44:13 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ int verify_final(t_getl *getl)
 
 void parse_line(t_getl *getl)
 {
+
 
 	while (1)
 	{
