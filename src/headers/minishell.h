@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 08:47:10 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/20 16:44:48 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #define E_CNF 0
 //Standard error related to a command or file, error from errno
 #define E_STANDARD 1
-//Too many argumanets
+//Too many arguments
 #define E_TMA 4
 //cd: No such file or directory
 #define E_CD_NOFOD 5
@@ -37,6 +37,12 @@
 #define E_EXPORT_NOTVAID 7
 //unset: xxxx: not a valid identifier
 #define E_UNSET_NOTVAID 8
+//No Such file or directory
+#define E_WPATH 9
+//is directory
+#define E_ISDIR 10
+
+#define E_EXIT_ARG 11
 
 #define READ 0
 #define WRITE 1
@@ -162,7 +168,9 @@ void dup_close(int fd1, int fd2);
 int prepare_fd(t_cmd *cmd, int p[2], int std[2]);
 void finish_fd(t_cmd *cmd, int p[2], int std[2]);
 char **get_env(t_env *env);
-int get_real_cmd(t_cmd *cmd);
+int get_real_cmd(t_cmd *cmd, int *index);
 int error_handle(int err, int exit_code, char *need);
+
+void	ft_free(char **tab);
 
 #endif

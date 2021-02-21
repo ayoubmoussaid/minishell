@@ -10,7 +10,7 @@ int execute_builtin(t_cmd *cmd, int index)
 void execute_command(t_cmd *cmd, int index)
 {
 	if (index >= 0 && cmd->next == NULL)
-		execute_builtin(cmd, index);
+		g_shell->exit_status = execute_builtin(cmd, index);
 	if (!(index >= 0 && cmd->next == NULL) && (g_pid = fork()) == 0)
 	{
 		if (index >= 0)
@@ -43,10 +43,11 @@ void execute()
 			cmd = cmd->next;
 			continue;
 		}
-		if ((index = get_real_cmd(cmd)) != -2)
-			execute_command(cmd, index);
-		else
-			error_handle(E_CNF, errno, cmd->c);
+		if(cmd->c)//TODO verify the change here
+		{
+			if (get_real_cmd(cmd, &index) == 0 && cmd->executable)
+				execute_command(cmd, index);
+		}
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
 	}
@@ -57,6 +58,7 @@ void execute()
 		kill(cmd->pid, SIGPIPE);
 		cmd = cmd->next;
 	}
+	g_pid = 0;
 	free(p);
 	free(std);
 }

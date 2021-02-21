@@ -23,48 +23,57 @@ int		check_builtins(char *str)
 	return (-1);
 }
 
-char	*get_path(t_cmd	*cmd)
+static	char	*parse_path(char *all_paths, char *name)
 {
-	char			*path;
-	char			**all_paths;
-	int				i;
-	DIR				*dfd;
-	struct dirent	*dp;
-	struct stat		stbuf;
+	char	**path;
+	int		index;
+	char	*full_path;
+	struct stat buf;
 
-	i = -1;
-	path = get_env_var("PATH");
-	all_paths = ft_split(path, ':');
-	while (all_paths[++i] != 0)
+	index = 0;
+	path = ft_split(all_paths, ':');
+	while (path[index])
 	{
-		if ((dfd = opendir(all_paths[i])) == NULL)
-			continue;
-		while ((dp = readdir(dfd)) != NULL)
+		if (path[index][ft_strlen(path[index])] == '/')
+			path[index][ft_strlen(path[index])] = 0;
+		full_path = ft_strjoin(path[index], name);
+		if (stat(full_path, &buf) == 0 && !S_ISDIR(buf.st_mode))
 		{
-			path = ft_specialjoin(all_paths[i], dp->d_name, '/');
-			if (stat(path, &stbuf) == -1)
-				continue;
-			if ((stbuf.st_mode & S_IFMT) == S_IFDIR)
-				continue;
-			if(ft_strcmp(dp->d_name, cmd->c) == 0)
-				return (path);
+			ft_free(path);
+			return (full_path);
 		}
-		closedir(dfd);
+		free(full_path);
+		index++;
 	}
-	return NULL;
+	ft_free(path);
+	return (NULL);
 }
 
-int 	get_real_cmd(t_cmd *cmd)
+void	get_path(t_cmd	*cmd)
 {
-	int		index;
+	char			*path;
+	char 			*name;
 
-	index = -1;
-	
-	if(check_for_slash(cmd->c) || (index = check_builtins(cmd->c)) != -1)
+	name = ft_strjoin("/", cmd->c);
+	path = get_env_var("PATH");
+	cmd->executable = parse_path(path, name);
+	free(name);
+	free(path);
+}
+
+int 	get_real_cmd(t_cmd *cmd, int *index)
+{
+	struct	stat	buf;
+
+	if((*index = check_builtins(cmd->c)) != -1 || check_for_slash(cmd->c))
 		cmd->executable = cmd->c;
 	else
-		cmd->executable = get_path(cmd);
-	if(cmd->executable == NULL)
-		index = -2;
-	return (index);
+		get_path(cmd);
+	if(*index == -1 && cmd->executable == NULL)
+		return (error_handle(E_CNF, 127, cmd->c));
+	else if (*index == -1 && stat(cmd->executable, &buf) != 0)
+		return (error_handle(E_WPATH, 127, cmd->executable));	
+	else if (*index == -1 && S_ISDIR(buf.st_mode))
+		return (error_handle(E_ISDIR, 126, cmd->executable));
+	return (0);
 }

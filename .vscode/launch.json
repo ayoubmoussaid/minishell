@@ -5,6 +5,14 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "(lldb) Attach",
+      "type": "cppdbg",
+      "request": "attach",
+      "program": "/Users/amoussai/Desktop/minishell/minishell",
+      "processId": "${command:pickProcess}",
+      "MIMode": "lldb"
+    },
+    {
       "name": "gcc - Build and debug active file",
       "type": "cppdbg",
       "request": "launch",

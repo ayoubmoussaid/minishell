@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 09:43:12 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/06 10:39:19 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/20 12:20:08 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		ft_export(t_cmd *cmd)
 	int		ex;
 
 	i = 1;
-	ex = 1;
+	ex = 0;
 	while (cmd->args && cmd->args[i] != 0)
 	{
 		index = ft_str_index(cmd->args[i], '=');
@@ -62,7 +62,7 @@ int		ft_export(t_cmd *cmd)
 		else if (ret == 0)
 		{
 			error_handle(E_EXPORT_NOTVAID, 1, cmd->args[i]);
-			ex = 0;
+			ex = 1;
 		}
 		i++;
 	}

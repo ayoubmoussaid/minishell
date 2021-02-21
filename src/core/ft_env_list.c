@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 09:03:37 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 11:35:31 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/20 15:11:09 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void add_env_var(t_env *new)
 		if (ft_strcmp(current->key, new->key) == 0)
 		{
 			free(current->value);
-			current->value = ft_strdup(new->value);
+			current->value = new->value ? ft_strdup(new->value) : NULL;
 			free_env_var(new);
 			return;
 		}
@@ -54,7 +54,7 @@ void add_env_var(t_env *new)
 		else
 		{
 			free(current->next->value);
-			current->next->value = ft_strdup(new->value);
+			current->next->value = new->value ? ft_strdup(new->value) : NULL;
 			free_env_var(new);
 		}
 	}

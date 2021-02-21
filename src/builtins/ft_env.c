@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:12 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 11:04:57 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/20 12:19:02 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int ft_env(t_cmd *cmd)
 	if (ft_len(cmd->args) > 1)
 	{
 		error_handle(E_TMA, 1, "env");
-		return (0);
+		return (1);
 	}
 	current = g_shell->envs;
 	while (current)
@@ -33,5 +33,5 @@ int ft_env(t_cmd *cmd)
 		}
 		current = current->next;
 	}
-	return (1);
+	return (0);
 }
