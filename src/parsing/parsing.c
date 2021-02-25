@@ -167,10 +167,10 @@ void parse_line(t_getl *getl)
 	while (1)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
-		getl->line = ft_strdup("sleep 3 | echo");	
-		if (0/* (ret = get_next_line(0, &getl->line)) == -1 */)
+		//getl->line = ft_strdup("sleep 3 | echo");	
+		if ((ret = get_next_line(0, &getl->line)) == -1)
 			error_handle(E_STANDARD, errno, "");
-		else if (0/* ret == 0 */)
+		else if (ft_strlen(getl->line) == 0 && ret == 0)
 		{
 			write(STDOUT_FILENO, "exit\n", 5);
 			exit(0);

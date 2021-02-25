@@ -12,5 +12,7 @@ void signal_handler(int sig)
 	{
 		if (g_pid == 0)
 			write(1, "\b \b\b \b", 6);
+		else 
+			write(1, "Quit\n", 5);
 	}
 }

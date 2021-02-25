@@ -58,7 +58,6 @@ void execute()
 		kill(cmd->pid, SIGPIPE);
 		cmd = cmd->next;
 	}
-	g_pid = 0;
 	free(p);
 	free(std);
 }
