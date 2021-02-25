@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 08:46:47 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/02/25 14:33:25 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int main(int argc, char **argv, char **env)
 {
 
-	//signal(SIGINT, signal_handler);
-	//signal(SIGQUIT, signal_handler);
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 	t_getl *getl;
 	if (argc > 1)
 		argv = NULL;

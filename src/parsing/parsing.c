@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/25 10:07:14 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/25 14:55:30 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,15 +167,12 @@ void parse_line(t_getl *getl)
 	while (1)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
-		// getl->line = ft_strdup("./ls");	
-		if ((ret = get_next_line(0, &getl->line)) == -1)
+		getl->line = ft_strdup("sleep 3 | echo");	
+		if (0/* (ret = get_next_line(0, &getl->line)) == -1 */)
+			error_handle(E_STANDARD, errno, "");
+		else if (0/* ret == 0 */)
 		{
-			//error_handle(E_STANDARD, );
-			//show proper error
-		}
-		else if (ret == 0)
-		{
-			write(STDOUT_FILENO, "exit\n", 4);
+			write(STDOUT_FILENO, "exit\n", 5);
 			exit(0);
 		}
 		else
