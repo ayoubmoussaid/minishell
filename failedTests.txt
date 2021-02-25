@@ -1,15 +1,18 @@
-minishell$> echo ";;;;;;;>>>>>>>"
-No such file or directory
-;;;;;;;
-
-minishell$> echo "pl;P;'''''''"
-Syntax error near unexpected token  `''
 
 
-minishell$> "llll"
-No such file or directory
+echo "pl;P;'''''''"
+
+"llll"
+
+"echo l"
+
+echo ~
+
+echo ~/123
+echo ~/123/456
 
 
+"''''''$USER'''''"
+khbrwaf 
 
-minishell$> "echo l"
-l
+"echo $\"PWD\"" | bash

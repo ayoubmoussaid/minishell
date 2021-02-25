@@ -6,12 +6,11 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/24 08:01:23 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/02/25 10:07:14 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
 void verify_rest(t_getl *getl, int *i)
 {
 	//TODO check the on and make it off
@@ -169,7 +168,8 @@ void parse_line(t_getl *getl)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
 		// getl->line = ft_strdup("./ls");	
-		if ((ret = get_next_line(0, &getl->line)) == -1){
+		if ((ret = get_next_line(0, &getl->line)) == -1)
+		{
 			//error_handle(E_STANDARD, );
 			//show proper error
 		}
