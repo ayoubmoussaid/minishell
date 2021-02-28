@@ -44,7 +44,7 @@ int		does_it_end(char *str)
 	return (0);
 }
 
-char	*read_buffer(int fd, char *buffer)
+char	*read_buffer(int fd, char *buffer, char *line)
 {
 	size_t	x;
 	char	*str;
@@ -54,13 +54,13 @@ char	*read_buffer(int fd, char *buffer)
 		return (NULL);
 	x = read(fd, str, BUFFER_SIZE);
 	str[x] = '\0';
-	free(buffer);
-	if (x == 0)
+	//free(buffer);
+	if (x == 0 && (line == NULL || *line == '\0') && (buffer == NULL || *buffer == '\0'))
 	{
 		free(str);
 		return (NULL);
 	}
-	buffer = ft_strjoin1(ft_strdup(""), str);
+	buffer = ft_strjoin1(buffer, str);
 	return (buffer);
 }
 
@@ -81,7 +81,7 @@ char	*verify_line(char **line, char *buffer, int x)
 
 int		get_next_line(int fd, char **line)
 {
-	static char *buffer;
+	static char *buffer = NULL;
 
 	if (fd < 0 || !line || read(fd, buffer, 0) == -1)
 		return (-1);
@@ -90,18 +90,15 @@ int		get_next_line(int fd, char **line)
 	{
 		if ((buffer != NULL) && *buffer != '\0' &&
 			((ft_strchr(buffer, '\n') == 0) || does_it_end(buffer) == 0))
-			buffer = verify_line(line, buffer, 0);
+				buffer = verify_line(line, buffer, 0);
 		else if ((buffer != NULL) && (does_it_end(buffer) == 1))
 			break ;
-		if ((buffer = read_buffer(fd, buffer)) == NULL)
+		if ((buffer = read_buffer(fd, buffer, *line)) == NULL)
 			return (0);
 		if (does_it_end(buffer) == 1)
 			break ;
 		if (does_it_end(buffer) == 2)
-		{
-			*line = ft_strjoin1(*line, buffer);
-			return (0);
-		}
+			continue;
 		buffer = verify_line(line, buffer, 0);
 	}
 	buffer = verify_line(line, buffer, 1);
