@@ -9,9 +9,9 @@ int execute_builtin(t_cmd *cmd, int index)
 
 void execute_command(t_cmd *cmd, int index)
 {
-	if (index >= 0 && cmd->next == NULL)
+	if (index >= 0 && simple_cmd)
 		g_shell->exit_status = execute_builtin(cmd, index);
-	if (!(index >= 0 && cmd->next == NULL) && (g_pid = fork()) == 0)
+	if (!(index >= 0 && simple_cmd) && (g_pid = fork()) == 0)
 	{
 		if (index >= 0)
 			exit(execute_builtin(cmd, index));
@@ -58,6 +58,7 @@ void execute()
 	cmd = g_shell->cmd;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
+	simple_cmd = cmd->next == NULL ? 1 : 0;
 	while (cmd)
 	{
 		if (!prepare_fd(cmd, p, std))
