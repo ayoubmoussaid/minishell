@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 09:24:53 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 10:13:29 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/03/04 12:06:51 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void ft_specialprint(char *s, int fd)
 int verify_echo_n(char *str)
 {
 	int i = 0;
+	if (str && str[i] == '\0')
+		return (0);
 	while (str[i] != '\0')
 	{
 		if ((i == 0 && str[i] != '-') || (i != 0 && str[i] != 'n'))

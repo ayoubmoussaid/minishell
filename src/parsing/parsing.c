@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/21 10:33:39 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/03/04 12:07:20 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,38 @@ void verify_rest(t_getl *getl, int *i)
 		getl->red_out = 0;
 }
 
-int verify_s_quote(t_getl *getl)
+
+int	quote_handler(t_getl *getl, char c)
 {
-	if (getl->d_quote)
-		return (getl->s_quote);
+	if(getl->line[getl->i] == c && getl->line[getl->i + 1] == c )
+	{
+		if ((getl->i == 0 || (getl->line[getl->i - 1] && getl->line[getl->i - 1] == ' ')) &&
+		 ((getl->line[getl->i + 2] && getl->line[getl->i + 2] == ' ') || getl->line[getl->i + 2] == '\0' ))
+		{
+			getl->line[getl->i] = -getl->line[getl->i];
+			getl->line[getl->i + 1] = -getl->line[getl->i + 1];
+			return (1);
+		}
+	}
+	return (0);
+}
+
+
+
+void verify_s_quote(t_getl *getl)
+{
+	if (quote_handler(getl, '\'') || getl->d_quote)
+		return ;
 	getl->s_quote = !(getl->s_quote);
-	return (getl->s_quote);
 }
 
 int verify_d_quote(t_getl *getl)
 {
+	if(quote_handler(getl, '\"'))
+		return (getl->d_quote);
 	if (getl->s_quote == 1 || (getl->d_quote && getl->line[getl->i - 1] == '\\'))
 		return (getl->d_quote);
-	if (!getl->d_quote)
+	else if (!getl->d_quote)
 	{
 		getl->semicolon = 0;
 		getl->pipe = 0;
@@ -167,7 +186,7 @@ void parse_line(t_getl *getl)
 	while (1)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
-		// getl->line = ft_strdup("./ls");
+		// getl->line = ft_strdup("echo \"\"");
 		if (get_next_line(0, &getl->line) > 0)
 		// if (1)
 		{

@@ -171,6 +171,11 @@ void ft_to_pos(char **s)
 			(*s)[i] = -(*s)[i];
 		i++;
 	}
+	if(ft_strcmp(*s, "\"\"") == 0 || ft_strcmp(*s, "\'\'") == 0)
+	{
+		free(*s);
+		*s = ft_strdup("");
+	}
 }
 
 void ft_fix_neg_cmd(t_cmd *cmd)
@@ -201,12 +206,12 @@ void fill_cmd(t_getl *getl, int i)
 	getl->sp_p = ft_split(getl->sp_c[i], '|');
 	while (getl->sp_p[++index])
 	{
-		ft_find_file(&getl->sp_p[index], cmd);
+		ft_find_file(&getl->sp_p[index], cmd); //TODO to fix the allowed cmd 
 		cmd->args = ft_split(getl->sp_p[index], ' ');
+		ft_fix_neg_cmd(cmd);
 		cmd->c = cmd->args[0];
 		// ft_print_list(cmd);
 		// ft_print_tab(cmd->args);
-		ft_fix_neg_cmd(cmd);
 		add_cmd_to_list(cmd);
 		cmd = (t_cmd *)malloc(sizeof(t_cmd));
 		cmd->files = NULL;
