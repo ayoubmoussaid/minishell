@@ -63,7 +63,6 @@ void finish_fd(t_cmd *cmd, int *p, int *std)
 		dup_close(p[READ], STDIN_FILENO);
 	else
 	{
-		close(p[READ]);
 		dup2(std[STDIN_FILENO], STDIN_FILENO);
 		dup2(std[STDOUT_FILENO], STDOUT_FILENO);
 	}

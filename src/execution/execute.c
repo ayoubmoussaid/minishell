@@ -7,12 +7,14 @@ int execute_builtin(t_cmd *cmd, int index)
 	return (builtin_functions[index](cmd));
 }
 
-void execute_command(t_cmd *cmd, int index)
+void execute_command(t_cmd *cmd, int index, int *p)
 {
 	if (index >= 0 && simple_cmd)
 		g_shell->exit_status = execute_builtin(cmd, index);
 	if (!(index >= 0 && simple_cmd) && (g_pid = fork()) == 0)
 	{
+		if(!simple_cmd)
+			close(p[READ]);
 		if (index >= 0)
 			exit(execute_builtin(cmd, index));
 		else
@@ -34,6 +36,7 @@ static	void	set_return()
 	data = 0;
 	while (ret != -1)
 	{
+		//write(2, "hi\n", 3);
 		ret = wait(&data);
 		if (ret == g_pid && WIFEXITED(data))
 			g_shell->exit_status = WEXITSTATUS(data);
@@ -69,7 +72,7 @@ void execute()
 		if(cmd->c)//TODO verify the change here
 		{
 			if (get_real_cmd(cmd, &index) == 0 && cmd->executable)
-				execute_command(cmd, index);
+				execute_command(cmd, index, p);
 		}
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
