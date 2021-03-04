@@ -147,6 +147,7 @@ void add_cmd_to_list(t_cmd *cmd)
 {
 	t_cmd *current;
 
+	cmd->next = NULL;
 	current = g_shell->cmd;
 	if (current == NULL)
 	{

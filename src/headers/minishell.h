@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/20 16:44:48 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/01 09:01:10 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ static char *(g_mishell_err[]) =
 		"Syntax error near unexpected token  `<' ",
 		""};
 
-static char *g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void *)0};
 
 typedef struct s_getl
 {
@@ -126,8 +125,11 @@ typedef struct s_shell
 	t_cmd *cmd;
 } t_shell;
 
-t_shell *g_shell;
-pid_t g_pid;
+static char	*g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void *)0};
+t_shell		*g_shell;
+pid_t		g_pid;
+int			simple_cmd;
+
 
 int ft_env(t_cmd *cmd);
 int ft_pwd(t_cmd *cmd);
