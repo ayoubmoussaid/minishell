@@ -2,14 +2,15 @@
 
 void signal_handler(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT && g_pid == 0)
 	{
-		ft_putendl_fd("\n", STDOUT_FILENO);
+		ft_putstr_fd("\033[91m\nminishell$> \033[39m", STDOUT_FILENO);
 		g_shell->exit_status = 128 + sig;
+		//get_next_line(-5, NULL);
 	}
 	if (sig == SIGQUIT)
 	{
-		//if (getpid() == 0)
-		write(1, "\b \b\b \b", 6);
+		if (g_pid == 0)
+			write(1, "\b \b\b \b", 6);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/04 12:07:20 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/03/04 12:14:24 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,13 +182,19 @@ int verify_final(t_getl *getl)
 
 void parse_line(t_getl *getl)
 {
-
+	int ret;
 	while (1)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
-		// getl->line = ft_strdup("echo \"\"");
-		if (get_next_line(0, &getl->line) > 0)
-		// if (1)
+		//getl->line = ft_strdup("sleep 3 | echo");	
+		if ((ret = get_next_line(0, &getl->line)) == -1)
+			error_handle(E_STANDARD, errno, "");
+		else if (ft_strlen(getl->line) == 0 && ret == 0)
+		{
+			write(STDOUT_FILENO, "exit\n", 5);
+			exit(0);
+		}
+		else
 		{
 			init_state(getl);
 			getl->i = -1;

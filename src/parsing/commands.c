@@ -273,6 +273,7 @@ void get_command(t_getl *getl)
 		fill_cmd(getl, i);
 		// ft_print_cmd_list(g_shell->cmd);
 		execute();
+		g_pid = 0;
 	}
 
 	// ft_clear_cmd_list(g_shell->cmd);

@@ -28,7 +28,7 @@ char			*ft_strchr(const char *s, int c);
 char			*ft_strdup(const char *src);
 char			*str_checker(char *str, int nm);
 int				does_it_end(char *str);
-char			*read_buffer(int fd, char *buffer);
+char			*read_buffer(int fd, char *buffer, char *line);
 char			*verify_line(char **line, char *buffer, int x);
 
 #endif

@@ -5,6 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+<<<<<<< HEAD
+=======
+      "name": "gcc - attach the active process",
+      "type": "cppdbg",
+      "processId":"${command:pickProcess}",
+      "request": "attach",
+      "program": "${workspaceFolder}/minishell",
+      "MIMode": "lldb",
+      "preLaunchTask": "C/C++: gcc build active file"
+    },
+    {
+>>>>>>> 825b8f2d24ac99653752946844d74c684ff3572a
       "name": "gcc - Build and debug active file",
       "type": "cppdbg",
       "request": "launch",

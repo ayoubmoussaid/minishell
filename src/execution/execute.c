@@ -24,6 +24,28 @@ void execute_command(t_cmd *cmd, int index)
 		error_handle(E_STANDARD, 1, NULL);
 }
 
+
+static	void	set_return()
+{
+	int			ret;
+	int			data;
+
+	ret = 0;
+	data = 0;
+	while (ret != -1)
+	{
+		ret = wait(&data);
+		if (ret == g_pid && WIFEXITED(data))
+			g_shell->exit_status = WEXITSTATUS(data);
+		else if (ret == g_pid && WIFSIGNALED(data))
+		{
+			g_shell->exit_status = 128 + WTERMSIG(data);
+			WTERMSIG(data) == SIGQUIT ? write(1, "Quit\n", 5) : 1;
+		}
+	}
+	g_pid = 0;
+}
+
 void execute()
 {
 	t_cmd *cmd;
@@ -51,14 +73,7 @@ void execute()
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
 	}
-	waitpid(g_pid, &(g_shell->exit_status), 0);
-	cmd = g_shell->cmd;
-	while (cmd->next)
-	{
-		kill(cmd->pid, SIGPIPE);
-		cmd = cmd->next;
-	}
-	g_pid = 0;
+	set_return();
 	free(p);
 	free(std);
 }
