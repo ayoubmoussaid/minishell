@@ -195,7 +195,7 @@ void ft_fix_neg_cmd(t_cmd *cmd)
 		ft_to_pos(&(cmd->args[i]));
 }
 
-void fill_cmd(t_getl *getl, int i)
+void fill_cmd(t_getl *g_getl, int i)
 {
 	t_cmd *cmd;
 	int index;
@@ -204,11 +204,11 @@ void fill_cmd(t_getl *getl, int i)
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	cmd->files = NULL;
 	cmd->next = NULL;
-	getl->sp_p = ft_split(getl->sp_c[i], '|');
-	while (getl->sp_p[++index])
+	g_getl->sp_p = ft_split(g_getl->sp_c[i], '|');
+	while (g_getl->sp_p[++index])
 	{
-		ft_find_file(&getl->sp_p[index], cmd); //TODO to fix the allowed cmd 
-		cmd->args = ft_split(getl->sp_p[index], ' ');
+		ft_find_file(&g_getl->sp_p[index], cmd); //TODO to fix the allowed cmd 
+		cmd->args = ft_split(g_getl->sp_p[index], ' ');
 		ft_fix_neg_cmd(cmd);
 		cmd->c = cmd->args[0];
 		// ft_print_list(cmd);
@@ -258,25 +258,25 @@ void ft_clear_cmd_list(t_cmd *cmd)
 	g_shell->cmd = NULL;
 }
 
-void get_command(t_getl *getl)
+void get_command(t_getl *g_getl)
 {
 	int i;
 
 	i = -1;
-	getl->sp_c = ft_split(getl->line, ';');
-	while (getl->sp_c[++i])
+	g_getl->sp_c = ft_split(g_getl->line, ';');
+	while (g_getl->sp_c[++i])
 	{
 		//clear linked list of cmd->cmd->cmd->cmd(cmd1); and move to cmd2 (cmd1;cmd2;)
 		//cear g_shell->cmd for the second command to be filled
-		flip_line(&(getl->sp_c[i]));
-		//ft_to_pos(&(getl->sp_c[i]));
+		flip_line(&(g_getl->sp_c[i]));
+		//ft_to_pos(&(g_getl->sp_c[i]));
 		ft_clear_cmd_list(g_shell->cmd);
-		fill_cmd(getl, i);
+		fill_cmd(g_getl, i);
 		// ft_print_cmd_list(g_shell->cmd);
 		execute();
 		g_pid = 0;
 	}
 
 	// ft_clear_cmd_list(g_shell->cmd);
-	//ft_free(getl->sp_c);
+	//ft_free(g_getl->sp_c);
 }

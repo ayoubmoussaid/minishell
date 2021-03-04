@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/02 18:04:10 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:21:02 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@ void	errrors(char *err)
 	ft_putendl_fd(err, 1);
 }
 
-void	init_state(t_getl *getl)
+void	init_state(t_getl *g_getl)
 {
-	getl->s_quote = 0;
-	getl->d_quote = 0;
-	getl->dollar = 0;
-	getl->semicolon = 0;
-	getl->red_in = 0;
-	getl->append = 0;
-	getl->append = 0;
-	getl->pipe = 0;
-	getl->brake = 0;
-	getl->red_out = 0;
+	g_getl->s_quote = 0;
+	g_getl->d_quote = 0;
+	g_getl->dollar = 0;
+	g_getl->semicolon = 0;
+	g_getl->red_in = 0;
+	g_getl->append = 0;
+	g_getl->append = 0;
+	g_getl->pipe = 0;
+	g_getl->brake = 0;
+	g_getl->red_out = 0;
 }
 
 int is_special_char(char c)
@@ -36,25 +36,25 @@ int is_special_char(char c)
 	return (c == ';' || c == '|' || c == ' ');
 }
 
-int is_all_off(t_getl *getl)
+int is_all_off(t_getl *g_getl)
 {
-	return (getl->pipe || getl->semicolon ||  getl->red_in || getl->append || getl->red_out);
+	return (g_getl->pipe || g_getl->semicolon ||  g_getl->red_in || g_getl->append || g_getl->red_out);
 }
 
-int is_on(t_getl *getl)
+int is_on(t_getl *g_getl)
 {
 	int is_on;
 
 	is_on = 0;
-	if (getl->semicolon)
+	if (g_getl->semicolon)
 		is_on = 1;
-	else if (getl->pipe)
+	else if (g_getl->pipe)
 		is_on = 2;
-	else if (getl->red_in)
+	else if (g_getl->red_in)
 		is_on = 3;
-	else if (getl->append)
+	else if (g_getl->append)
 		is_on = 4;
-	else if (getl->red_out)
+	else if (g_getl->red_out)
 		is_on = 5;
 	return (is_on);// 0
 }

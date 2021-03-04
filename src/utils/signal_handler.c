@@ -5,7 +5,10 @@ void signal_handler(int sig)
 	if (sig == SIGINT && g_pid == 0)
 	{
 		ft_putstr_fd("\033[91m\nminishell$> \033[39m", STDOUT_FILENO);
-		g_shell->exit_status = 128 + sig;
+		if(ft_strlen(g_getl->line) == 0)
+			g_shell->exit_status = 1;
+		else
+			g_shell->exit_status = 128 + sig;
 	}
 	if (sig == SIGQUIT)
 	{

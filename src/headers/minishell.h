@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/01 09:01:10 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/04 15:21:02 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ typedef struct s_cmd
 typedef struct s_shell
 {
 	int exit_status;
-	char *line;
 	t_env *envs;
 	FILE *debug_file;
 	t_cmd *cmd;
@@ -127,6 +126,7 @@ typedef struct s_shell
 
 static char	*g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exit", (void *)0};
 t_shell		*g_shell;
+t_getl		*g_getl;
 pid_t		g_pid;
 int			simple_cmd;
 
@@ -156,13 +156,13 @@ char *ft_specialjoin(char const *s1, char const *s2, char c);
 void flip_line(char **line);
 void do_the_work(char **env);
 void execute();
-void parse_line(t_getl *getl);
-void get_command(t_getl *getl);
+void parse_line(t_getl *g_getl);
+void get_command(t_getl *g_getl);
 void errrors(char *err);
-void init_state(t_getl *getl);
+void init_state(t_getl *g_getl);
 int is_special_char(char c);
-int is_all_off(t_getl *getl);
-int is_on(t_getl *getl);
+int is_all_off(t_getl *g_getl);
+int is_on(t_getl *g_getl);
 
 void signal_handler(int sig);
 int parse_files(t_cmd *cmd);

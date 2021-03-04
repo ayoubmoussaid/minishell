@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/20 12:19:31 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/04 16:25:40 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void ft_updatepwd(const char *prop, char *value)
 
 int ft_cd(t_cmd *cmd)
 {
+	//TODO fix the cd with empty strings
 	char *olddir;
 	char *newdir;
 	int ret;
@@ -66,9 +67,7 @@ int ft_cd(t_cmd *cmd)
 	olddir = NULL;
 	newdir = NULL;
 	len = ft_len(cmd->args);
-	if (len > 2)
-		ft_putendl_fd(strerror(errno), STDERR_FILENO); //TODO fix error
-	else if (len == 1 || (len == 2 && cmd->args[1][0] == '~'))
+	if (len == 1 || (len == 2 && cmd->args[1][0] == '~'))
 	{
 		char *tmp1 = get_env_var("HOME");
 		char *tmp2 = cmd->args[1] ? cmd->args[1] + 1 : "";
@@ -90,7 +89,7 @@ int ft_cd(t_cmd *cmd)
 		ft_updatepwd("PWD", newdir);
 	}
 	else
-		error_handle(E_STANDARD, 1, "cd");
+		error_handle(E_CD_NOFOD, 1, cmd->args[1]);
 	free(olddir);
 	free(newdir);
 	return (0);
