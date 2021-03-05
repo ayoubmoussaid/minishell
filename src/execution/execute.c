@@ -9,11 +9,11 @@ int execute_builtin(t_cmd *cmd, int index)
 
 void execute_command(t_cmd *cmd, int index, int *p)
 {
-	if (index >= 0 && simple_cmd)
+	if (index >= 0 && g_simple_cmd)
 		g_shell->exit_status = execute_builtin(cmd, index);
-	if (!(index >= 0 && simple_cmd) && (g_pid = fork()) == 0)
+	if (!(index >= 0 && g_simple_cmd) && (g_pid = fork()) == 0)
 	{
-		if(!simple_cmd)
+		if(!g_simple_cmd)
 			close(p[READ]);
 		if (index >= 0)
 			exit(execute_builtin(cmd, index));
@@ -63,7 +63,7 @@ void execute()
 	cmd = g_shell->cmd;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	simple_cmd = cmd->next == NULL ? 1 : 0;
+	g_simple_cmd = cmd->next == NULL ? 1 : 0;
 	while (cmd && to_break)
 	{
 		if (prepare_fd(cmd, p, std) && cmd->c)
@@ -75,6 +75,8 @@ void execute()
 		cmd = cmd->next;
 	}
 	set_return();
+	close(std[0]);
+	close(std[1]);
 	free(p);
 	free(std);
 }
