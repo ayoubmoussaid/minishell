@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/05 09:18:58 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 11:48:01 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ void parse_line(t_getl *g_getl)
 	while (1)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
-		//g_getl->line = ft_strdup("ls -la | ls -la | ls -la");	
+		// g_getl->line = ft_strdup("echo '$USER'"123$USER123""text" > tmp/file ; cat tmp/file");	
 		if ((ret = get_next_line(0, &g_getl->line)) == -1)
 			error_handle(E_STANDARD, errno, "");
 		else if (ft_strlen(g_getl->line) == 0 && ret == 0)
