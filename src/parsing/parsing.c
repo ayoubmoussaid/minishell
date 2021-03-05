@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/05 11:48:01 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 16:21:06 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ int verify_s_semicolon(t_getl *g_getl, int *i)
 	else if (is_all_off(g_getl) || !g_getl->i)
 	{
 		if (g_getl->line[*i - 1] == ';' || (g_getl->line[*i + 1] && g_getl->line[*i + 1] == ';'))
-			errrors(g_mishell_err[COMMAD]);
+			error_handle(E_SYNTAX, 258, g_mishell_err[COMMAD]);
 		else
-			errrors(g_mishell_err[COMMA]);
+			error_handle(E_SYNTAX, 258, g_mishell_err[COMMA]);
 		return (1);
 	}
 	else
@@ -100,7 +100,7 @@ int verify_s_pipe(t_getl *g_getl, int *i)
 		g_getl->line[*i] = -g_getl->line[*i];
 	else if (is_all_off(g_getl) || !g_getl->i)
 	{
-		errrors(g_mishell_err[PIPE]);
+		error_handle(E_SYNTAX, 258, g_mishell_err[PIPE]);
 		return (1);
 	}
 	else
@@ -117,7 +117,7 @@ int verify_s_red(t_getl *g_getl, int *i)
 	{
 		if (g_getl->red_in || g_getl->red_out || g_getl->append)
 		{
-			errrors(g_mishell_err[INFILED]);
+			error_handle(E_SYNTAX, 258, g_mishell_err[INFILED]);
 			return 1;
 		}
 		g_getl->append = 1;
@@ -127,7 +127,7 @@ int verify_s_red(t_getl *g_getl, int *i)
 	{
 		if (g_getl->red_in || g_getl->red_out || g_getl->append)
 		{
-			errrors(g_mishell_err[INFILE]);
+			error_handle(E_SYNTAX, 258, g_mishell_err[INFILE]);
 			return 1;
 		}
 		g_getl->red_in = 1;
@@ -145,7 +145,7 @@ int verify_s_red_out(t_getl *g_getl, int *i)
 	{
 		if (g_getl->red_in || g_getl->red_out || g_getl->append)
 		{
-			errrors(g_mishell_err[OUTFILE]);
+			error_handle(E_SYNTAX, 258, g_mishell_err[OUTFILE]);
 			return 1;
 		}
 		g_getl->red_out = 1;
@@ -162,19 +162,15 @@ int verify_final(t_getl *g_getl)
 	if (g_getl->s_quote || g_getl->d_quote)
 	{
 		err = (g_getl->s_quote) ? QUOTES : QUOTED;
-		errrors(g_mishell_err[err]);
+		error_handle(E_SYNTAX, 258, g_mishell_err[err]);
 		return (1);
 	}
 	else if ((err = is_on(g_getl)) > 1)
 	{
 		if (err == 2)
-			errrors(g_mishell_err[PIPE]);
-		// else if (err == 5 && err == 3)
-		// 	errrors(g_mishell_err[INFILE]);
-		// else if (err == 5 && err == 3)
-		// 	errrors(g_mishell_err[INFILED]);
+			error_handle(E_SYNTAX, 258, g_mishell_err[PIPE]);
 		else if (err == 3 || err == 4 || err == 5)
-			errrors(g_mishell_err[RED]);
+			error_handle(E_SYNTAX, 258, g_mishell_err[RED]);
 		return (1);
 	}
 	return (0);

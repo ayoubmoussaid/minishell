@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/04 15:21:02 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 16:20:16 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	errrors(char *err)
-{
-	ft_putendl_fd(err, 1);
-}
+
 
 void	init_state(t_getl *g_getl)
 {

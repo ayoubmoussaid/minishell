@@ -30,6 +30,7 @@ int error_handle(int err, int exit_code, char *need)
 	(err == E_EXPORT_NOTVAID) ? ft_putendl_fd((str = concat_strings("export: `", need, "': not a valid identifier")), STDERR_FILENO) : NULL;
 	(err == E_EXIT_ARG) ? ft_putendl_fd((str = concat_strings("exit: ", need, ": numeric argument required")), STDERR_FILENO) : NULL;
 	(err == E_UNSET_NOTVAID) ? ft_putendl_fd((str = concat_strings("unset: `", need, "': not a valid identifier")), STDERR_FILENO) : NULL;
+	(err == E_SYNTAX) ? ft_putendl_fd(need, STDERR_FILENO) : 1;
 	g_shell->exit_status = exit_code;
 	free(str);
 	return (exit_code);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/04 15:21:02 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 16:12:13 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 #define E_ISDIR 10
 
 #define E_EXIT_ARG 11
+//minihell syntax errors
+#define E_SYNTAX 12
 
 #define READ 0
 #define WRITE 1
@@ -58,15 +60,15 @@
 
 static char *(g_mishell_err[]) =
 	{
-		"Syntax error near unexpected token `;' ",
-		"Syntax error near unexpected token  `\"' ",
-		"Syntax error near unexpected token  `\'' ",
-		"Syntax error near unexpected token  `>' ",
-		"Syntax error near unexpected token  `|' ",
-		"Syntax error near unexpected token `;;'",
+		"syntax error near unexpected token `;' ",
+		"syntax error near unexpected token  `\"' ",
+		"syntax error near unexpected token  `\'' ",
+		"syntax error near unexpected token  `>' ",
+		"syntax error near unexpected token  `|' ",
+		"syntax error near unexpected token `;;'",
 		"syntax error near unexpected token `newline'",
-		"Syntax error near unexpected token  `>>' ",
-		"Syntax error near unexpected token  `<' ",
+		"syntax error near unexpected token  `>>' ",
+		"syntax error near unexpected token  `<' ",
 		""};
 
 
