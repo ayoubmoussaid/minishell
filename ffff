@@ -1,0 +1,13 @@
+cmd {
+	c = ls 
+	args = [ls , -la]
+	files = NULL
+	next -> cmd {
+		c = cat
+		args = [cat, -e]
+		next = NULL
+	}
+}
+
+
+cmd 
