@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/04 15:21:02 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 18:03:26 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ static char	*g_builtins[] = {"echo", "pwd", "cd", "env", "export", "unset", "exi
 t_shell		*g_shell;
 t_getl		*g_getl;
 pid_t		g_pid;
-int			simple_cmd;
+int			g_simple_cmd;
 
 
 int ft_env(t_cmd *cmd);

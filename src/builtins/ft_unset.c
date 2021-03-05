@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 10:24:24 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/05 11:34:21 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 17:26:57 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_unset(t_cmd *cmd)
 	int ex;
 
 	ex = 0;
-	i = 0;
+	i = 1;
 	while (cmd->args && cmd->args[i] != 0)
 	{
 		ret = ft_isvalid_unset(cmd->args[i]);
