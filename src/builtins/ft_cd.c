@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/04 16:25:40 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 08:21:03 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char *ft_specialjoin(char const *s1, char const *s2, char c)
+char	*ft_specialjoin(char const *s1, char const *s2, char c)
 {
 	char *newstr;
 	unsigned int i;
@@ -55,7 +55,7 @@ void ft_updatepwd(const char *prop, char *value)
 	}
 }
 
-int ft_cd(t_cmd *cmd)
+int		ft_cd(t_cmd *cmd)
 {
 	//TODO fix the cd with empty strings
 	char *olddir;
@@ -73,10 +73,7 @@ int ft_cd(t_cmd *cmd)
 		char *tmp2 = cmd->args[1] ? cmd->args[1] + 1 : "";
 		dir = ft_strjoin(tmp1, tmp2);
 		if (ft_strlen(dir) == 1)
-		{
-			error_handle(E_CD_HOME, 1, "");
-			return (1);
-		}
+			return (error_handle(E_CD_HOME, 1, ""));
 	}
 	else
 		dir = cmd->args[1];
@@ -89,7 +86,7 @@ int ft_cd(t_cmd *cmd)
 		ft_updatepwd("PWD", newdir);
 	}
 	else
-		error_handle(E_CD_NOFOD, 1, cmd->args[1]);
+		return (error_handle(E_CD_NOFOD, 1, cmd->args[1]));
 	free(olddir);
 	free(newdir);
 	return (0);

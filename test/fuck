@@ -1,0 +1,22 @@
+total 248
+drwxr-xr-x  21 amoussai  candidate    714 Mar  5 09:41 .
+drwxr-xr-x  17 amoussai  candidate    578 Mar  1 07:45 ..
+drwxr-xr-x  15 amoussai  candidate    510 Mar  4 18:05 .git
+drwxr-xr-x   5 amoussai  candidate    170 Mar  4 12:25 .vscode
+-rw-r--r--   1 amoussai  candidate   1420 Feb 25 10:08 Makefile
+-rw-r--r--   1 amoussai  candidate     87 Feb  1 17:02 README.md
+-rw-r--r--   1 amoussai  candidate   2125 Mar  4 12:50 by_aqlzim.txt
+-rw-r--r--   1 amoussai  candidate    713 Feb  1 16:36 cases.txt
+-rw-r--r--   1 amoussai  candidate      0 Mar  5 09:41 debug.txt
+-rw-r--r--   1 amoussai  candidate    128 Feb 25 10:08 failedTests.txt
+-rw-r--r--   1 amoussai  candidate      0 Mar  5 09:01 ffff
+drwxr-xr-x   6 amoussai  candidate    204 Mar  1 08:59 gnl
+drwxr-xr-x  93 amoussai  candidate   3162 Mar  5 09:41 libft
+-rw-r--r--   1 amoussai  candidate  38648 Mar  5 09:41 libft.a
+-rwxr-xr-x   1 amoussai  candidate  50208 Mar  5 09:41 minishell
+drwxr-xr-x   3 amoussai  candidate    102 Feb  1 17:02 minishell.dSYM
+-rw-r--r--   1 amoussai  candidate    166 Feb 25 10:08 ourTestes.txt
+drwxr-xr-x  10 amoussai  candidate    340 Mar  1 08:59 src
+-rw-r--r--   1 amoussai  candidate   1006 Feb 25 10:08 syntaxErrorTest.txt
+drwxr-xr-x  13 amoussai  candidate    442 Mar  5 09:38 test
+-rw-r--r--   1 amoussai  candidate    208 Feb 25 10:08 to retest

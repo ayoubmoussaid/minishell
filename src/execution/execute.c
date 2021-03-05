@@ -55,21 +55,18 @@ void execute()
 	int *p;
 	int *std;
 	int index;
+	int to_break;
 
+	to_break = 1;
 	p = (int *)malloc(sizeof(int) * 2);
 	std = (int *)malloc(sizeof(int) * 2);
 	cmd = g_shell->cmd;
 	std[STDIN_FILENO] = dup(STDIN_FILENO);
 	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
 	simple_cmd = cmd->next == NULL ? 1 : 0;
-	while (cmd)
+	while (cmd && to_break)
 	{
-		if (!prepare_fd(cmd, p, std))
-		{
-			cmd = cmd->next;
-			continue;
-		}
-		if(cmd->c)//TODO verify the change here
+		if (prepare_fd(cmd, p, std) && cmd->c)
 		{
 			if (get_real_cmd(cmd, &index) == 0 && cmd->executable)
 				execute_command(cmd, index, p);

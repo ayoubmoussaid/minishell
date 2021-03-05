@@ -56,8 +56,7 @@ void flip_line(char **line)
 	//TODO variable expansion and backslash handle in double quotes
 	while ((*line)[++i] != '\0')
 	{
-		while (check_for_simple_double(line, &i, &s, &d))
-			;
+		while (check_for_simple_double(line, &i, &s, &d));
 		if ((*line)[i] == '$' && s == 0)
 		{
 			char *tmp1;
