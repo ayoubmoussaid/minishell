@@ -80,6 +80,8 @@ void flip_line(char **line)
 				tmp2 = ft_strjoin((*line), tmp1);
 				free((*line));
 				(*line) = tmp2;
+				if((*line)[i] == '\"')
+					i--;
 			}
 		}
 		if (d == 1 && (*line)[i] == '\\' && check_for_after_backslash((*line)[i + 1]))
