@@ -1,11 +1,1 @@
-/ => return value is not correct
-./ls => the same as before
-
-
-when running minishell multiple times a var called SHLVL in the env must be added to 1 
-
-
-"" => check this
-
-
-type exit after Ctrl+D & after exit 
+echo "$9USER" "'$USER=12$SOMETHING'"

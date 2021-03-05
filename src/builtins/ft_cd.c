@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/05 08:21:03 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 16:00:01 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int		ft_cd(t_cmd *cmd)
 			return (error_handle(E_CD_HOME, 1, ""));
 	}
 	else
-		dir = cmd->args[1];
+		dir = ft_strlen(cmd->args[1]) == 0 ? ft_strdup(".") : cmd->args[1];
 	olddir = getcwd(olddir, 0);
 	ret = chdir(dir);
 	newdir = getcwd(newdir, 0);
