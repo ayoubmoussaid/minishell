@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/05 18:14:15 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/05 19:06:13 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ typedef struct s_shell
 {
 	int exit_status;
 	t_env *envs;
-	FILE *debug_file;
 	t_cmd *cmd;
 } t_shell;
 

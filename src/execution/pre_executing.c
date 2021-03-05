@@ -66,7 +66,7 @@ int 	get_real_cmd(t_cmd *cmd, int *index)
 	struct	stat	buf;
 
 	if((*index = check_builtins(cmd->c)) != -1 || check_for_slash(cmd->c))
-		cmd->executable = cmd->c;
+		cmd->executable = ft_strdup(cmd->c);
 	else
 		get_path(cmd);
 	if(*index == -1 && cmd->executable == NULL)

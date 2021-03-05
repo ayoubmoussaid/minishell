@@ -48,6 +48,7 @@ void ft_free(char **str)
 		free(str[i]);
 		i++;
 	}
+	free(str);
 }
 
 int sp_len(char **str)
@@ -79,16 +80,12 @@ char *get_file_name(char **str, int *index, int count)
 		index_e++;
 	}
 	tmp = ft_substr(*str, save + count + index_s, index_e);
-	// printf("file name:|%s|\n", tmp);
 	char *tmp1 = ft_substr(*str, *index, ft_strlen(*str));
 	(*str)[save] = '\0';
 	char *tmp2 = *str;
 	*str = ft_strjoin(tmp2, tmp1);
-
-	// printf("new str:|%s|\n", *str);
-	// free(tmp1); ///////// showen err break Point: freed was not allocated
-	// free(tmp2);
-	// tmp1 = tmp2 = NULL;
+	free(tmp1);
+	free(tmp2);
 	*index = save - 1;
 	return (tmp);
 }
@@ -140,6 +137,7 @@ void ft_find_file(char **str, t_cmd *cmd)
 		}
 		i++;
 	}
+	free(file);
 	// printf("+++++%s\n", *str);
 }
 
@@ -201,22 +199,19 @@ void fill_cmd(t_getl *g_getl, int i)
 	int index;
 
 	index = -1;
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	cmd->files = NULL;
-	cmd->next = NULL;
 	g_getl->sp_p = ft_split(g_getl->sp_c[i], '|');
 	while (g_getl->sp_p[++index])
 	{
-		ft_find_file(&g_getl->sp_p[index], cmd); //TODO to fix the allowed cmd 
-		cmd->args = ft_split(g_getl->sp_p[index], ' ');
-		ft_fix_neg_cmd(cmd);
-		cmd->c = cmd->args[0];
-		// ft_print_list(cmd);
-		// ft_print_tab(cmd->args);
-		add_cmd_to_list(cmd);
 		cmd = (t_cmd *)malloc(sizeof(t_cmd));
 		cmd->files = NULL;
+		cmd->next = NULL;
+		ft_find_file(&g_getl->sp_p[index], cmd);
+		cmd->args = ft_split(g_getl->sp_p[index], ' '); //TODO check the split here
+		ft_fix_neg_cmd(cmd);
+		cmd->c = cmd->args[0];
+		add_cmd_to_list(cmd);
 	}
+	ft_free(g_getl->sp_p);
 }
 
 void ft_clear_files_list(t_cmd *cmd)
@@ -227,6 +222,7 @@ void ft_clear_files_list(t_cmd *cmd)
 	while (current)
 	{
 		next = current->next;
+		free(current->name);
 		free(current);
 		current = NULL;
 		current = next;
@@ -234,23 +230,21 @@ void ft_clear_files_list(t_cmd *cmd)
 	cmd->files = NULL;
 }
 
-void ft_clear_cmd_list(t_cmd *cmd)
+void ft_clear_cmd_list()
 {
-	// ft_print_cmd_list(cmd);
 	t_cmd *current;
 	t_cmd *next;
 
-	current = cmd;
+	current = g_shell->cmd;
 	next = NULL;
 	while (current)
 	{
-
 		next = current->next;
 		ft_clear_files_list(current);
-		// ft_free(current->args);
-		// ft_print_tab(current->args);
-		// printf("----------\n");
-
+		free(current->executable);
+		ft_free(current->args);
+		current->args = NULL;
+		current->executable = NULL;
 		free(current);
 		current = NULL;
 		current = next;
@@ -266,17 +260,13 @@ void get_command(t_getl *g_getl)
 	g_getl->sp_c = ft_split(g_getl->line, ';');
 	while (g_getl->sp_c[++i])
 	{
-		//clear linked list of cmd->cmd->cmd->cmd(cmd1); and move to cmd2 (cmd1;cmd2;)
-		//cear g_shell->cmd for the second command to be filled
+
 		flip_line(&(g_getl->sp_c[i]));
-		//ft_to_pos(&(g_getl->sp_c[i]));
-		ft_clear_cmd_list(g_shell->cmd);
+		//it was here
 		fill_cmd(g_getl, i);
-		// ft_print_cmd_list(g_shell->cmd);
 		execute();
+		ft_clear_cmd_list();
 		g_pid = 0;
 	}
-
-	// ft_clear_cmd_list(g_shell->cmd);
-	//ft_free(g_getl->sp_c);
+	ft_free(g_getl->sp_c);
 }

@@ -78,6 +78,7 @@ void flip_line(char **line)
 				free(tmp2);
 				(*line)[i] = '\0';
 				tmp2 = ft_strjoin((*line), tmp1);
+				free(tmp1);
 				free((*line));
 				(*line) = tmp2;
 				if((*line)[i] == '\"')

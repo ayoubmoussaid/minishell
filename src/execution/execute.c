@@ -85,6 +85,5 @@ void do_the_work(char **env)
 {
 	g_shell = (t_shell *)malloc(sizeof(t_shell));
 	g_shell->envs = NULL;
-	g_shell->debug_file = fopen("debug.txt", "w");
 	my_env(env);
 }
