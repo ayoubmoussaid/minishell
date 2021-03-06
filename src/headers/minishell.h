@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 16:01:11 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 18:50:37 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,5 +175,10 @@ int get_real_cmd(t_cmd *cmd, int *index);
 int error_handle(int err, int exit_code, char *need);
 
 void	ft_free(char **tab);
+
+int		get_index_of_separator(char *str);
+void	override_str(char **str, int index);
+int		check_for_simple_double(char **line, int *i, int *s, int *d);
+int		check_for_after_backslash(char c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 09:03:37 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 16:12:08 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:13:13 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	*get_env_var(char *key)
 		while (current != NULL && ft_strcmp(current->key, key) != 0)
 			current = current->next;
 		if (current != NULL)
-			return (ft_strdup(current->value ? current->value : ft_strdup("")));
+			return (ft_strdup(current->value ? current->value : ""));
 	}
 	return (ft_strdup(""));
 }
