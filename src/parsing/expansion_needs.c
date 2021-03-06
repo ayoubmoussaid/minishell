@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_needs.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 18:49:30 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 18:50:30 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:58:14 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		get_index_of_separator(char *str)
 	while (str[i] != '\0')
 	{
 		if (!ft_isalnum(str[i]))
-			break;
+			break ;
 		i++;
 	}
 	return (i);
