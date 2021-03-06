@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 18:50:37 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:55:57 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,18 @@ static char *(g_mishell_err[]) =
 		"syntax error near unexpected token  `>>' ",
 		"syntax error near unexpected token  `<' ",
 		""};
+
+
+typedef struct s_get_file{
+	int save;
+	char *tmp2;
+	char *tmp;
+	char *tmp1;
+	int index_s;
+	int index_e;
+
+
+}t_get_file;
 
 
 typedef struct s_getl
@@ -173,8 +185,27 @@ void finish_fd(t_cmd *cmd, int p[2], int std[2]);
 char **get_env(t_env *env);
 int get_real_cmd(t_cmd *cmd, int *index);
 int error_handle(int err, int exit_code, char *need);
+void	ft_free(char **str);
+void	ft_clear_files_list(t_cmd *cmd);
+void	ft_clear_cmd_list(void);
+void	ft_find_file(char **str, t_cmd *cmd);
+void	add_file_to_list(t_cmd *cmd, t_files *file);
+char	*get_file_name(char **str, int *index, int count);
+int verify_final(t_getl *g_getl);
+int verify_s_pipe(t_getl *g_getl, int *i);
+int verify_s_red(t_getl *g_getl, int *i);
+int verify_s_red_out(t_getl *g_getl, int *i);
+void verify_rest(t_getl *g_getl, int *i);
+void verify_s_quote(t_getl *g_getl);
+int verify_d_quote(t_getl *g_getl);
+int	quote_handler(t_getl *g_getl, char c);
+int verify_s_semicolon(t_getl *g_getl, int *i);
+void verify_space(t_getl *g_getl, int *i);
 
-void	ft_free(char **tab);
+
+
+
+
 
 int		get_index_of_separator(char *str);
 void	override_str(char **str, int index);

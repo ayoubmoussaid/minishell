@@ -3,18 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+         #
+#    By: fmehdaou <fmehdaou@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/10 15:30:39 by amoussai          #+#    #+#              #
-#    Updated: 2021/02/20 16:50:32 by amoussai         ###   ########.fr        #
+#    Updated: 2021/03/06 15:19:26 by fmehdaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME=minishell
 LIBFT=libft.a
-SRCS=src/main.c src/builtins/*.c src/core/*.c src/parsing/*.c src/execution/*.c src/utils/*.c 
-
-
+SRCS=	src/main.c \
+		src/builtins/*.c \
+		src/core/*.c \
+		src/parsing/*.c \
+		src/execution/*.c \
+		src/utils/*.c \
+		
 OBJ=$(SRCS:.c=.o)
 GNL=./gnl/get_next_line.c ./gnl/get_next_line_utils.c
 FLAGS=-Wall -Werror -Wextra
