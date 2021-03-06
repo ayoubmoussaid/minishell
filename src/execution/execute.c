@@ -1,19 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/06 16:17:38 by amoussai          #+#    #+#             */
+/*   Updated: 2021/03/06 16:27:07 by amoussai         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int execute_builtin(t_cmd *cmd, int index)
+int			execute_builtin(t_cmd *cmd, int index)
 {
-	static int (*builtin_functions[7])(t_cmd * cmd) = {ft_echo, ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
+	static int (*builtin_functions[7])(t_cmd *cmd) = {ft_echo,
+		ft_pwd, ft_cd, ft_env, ft_export, ft_unset, ft_exit};
+
 	return (builtin_functions[index](cmd));
 }
 
-void execute_command(t_cmd *cmd, int index, int *p)
+void		execute_command(t_cmd *cmd, int index, int *p)
 {
 	if (index >= 0 && g_simple_cmd)
 		g_shell->exit_status = execute_builtin(cmd, index);
 	if (!(index >= 0 && g_simple_cmd) && (g_pid = fork()) == 0)
 	{
-		if(!g_simple_cmd)
+		if (!g_simple_cmd)
 			close(p[READ]);
 		if (index >= 0)
 			exit(execute_builtin(cmd, index));
@@ -26,8 +39,7 @@ void execute_command(t_cmd *cmd, int index, int *p)
 		error_handle(E_STANDARD, 1, NULL);
 }
 
-
-static	void	set_return()
+static void	set_return(void)
 {
 	int			ret;
 	int			data;
@@ -36,7 +48,6 @@ static	void	set_return()
 	data = 0;
 	while (ret != -1)
 	{
-		//write(2, "hi\n", 3);
 		ret = wait(&data);
 		if (ret == g_pid && WIFEXITED(data))
 			g_shell->exit_status = WEXITSTATUS(data);
@@ -49,21 +60,26 @@ static	void	set_return()
 	g_pid = 0;
 }
 
-void execute()
+void		init_execute(int **std, int **p, int *to_break, int check)
 {
-	t_cmd *cmd;
-	int *p;
-	int *std;
-	int index;
-	int to_break;
+	*to_break = 1;
+	*p = (int *)malloc(sizeof(int) * 2);
+	*std = (int *)malloc(sizeof(int) * 2);
+	(*std)[STDIN_FILENO] = dup(STDIN_FILENO);
+	(*std)[STDOUT_FILENO] = dup(STDOUT_FILENO);
+	g_simple_cmd = check ? 1 : 0;
+}
 
-	to_break = 1;
-	p = (int *)malloc(sizeof(int) * 2);
-	std = (int *)malloc(sizeof(int) * 2);
+void		execute(void)
+{
+	t_cmd	*cmd;
+	int		*p;
+	int		*std;
+	int		index;
+	int		to_break;
+
 	cmd = g_shell->cmd;
-	std[STDIN_FILENO] = dup(STDIN_FILENO);
-	std[STDOUT_FILENO] = dup(STDOUT_FILENO);
-	g_simple_cmd = cmd->next == NULL ? 1 : 0;
+	init_execute(&std, &p, &to_break, cmd->next == NULL);
 	while (cmd && to_break)
 	{
 		if (prepare_fd(cmd, p, std) && cmd->c)
@@ -81,11 +97,4 @@ void execute()
 	close(std[1]);
 	free(p);
 	free(std);
-}
-
-void do_the_work(char **env)
-{
-	g_shell = (t_shell *)malloc(sizeof(t_shell));
-	g_shell->envs = NULL;
-	my_env(env);
 }

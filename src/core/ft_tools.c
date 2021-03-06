@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 10:41:42 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/02 10:39:19 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 16:15:36 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,64 @@ int		ft_len(char **tab)
 	return (i);
 }
 
-char **get_env(t_env *env)
+char	**get_env(t_env *env)
 {
-	int len = 0;
-	t_env *cur = env;
-	while(cur)
+	char	**tab;
+	int		len;
+	t_env	*cur;
+	int		i;
+
+	len = 0;
+	cur = env;
+	while (cur)
 	{
 		len++;
 		cur = cur->next;
 	}
 	len++;
-	char **tab = (char**)malloc(sizeof(char*)*len);
+	tab = (char**)malloc(sizeof(char*) * len);
 	cur = env;
-	int i = 0;
-	while(cur)
+	i = 0;
+	while (cur)
 	{
 		tab[i] = ft_specialjoin(cur->key, cur->value, '=');
-		//ft_putendl_fd(tab[i], 1);
 		i++;
 		cur = cur->next;
 	}
 	tab[i] = NULL;
-	return tab;
+	return (tab);
+}
+
+char	*ft_specialjoin(char const *s1, char const *s2, char c)
+{
+	char			*newstr;
+	unsigned int	i;
+	unsigned int	n;
+	unsigned int	m;
+
+	if (!s1 || !s2)
+		return (NULL);
+	n = ft_strlen((char *)s1) + 1;
+	m = ft_strlen((char *)s2);
+	newstr = (char *)malloc(n + m + 1);
+	if (newstr == NULL)
+		return (NULL);
+	i = -1;
+	while (++i < n - 1)
+		newstr[i] = s1[i];
+	newstr[i++] = c;
+	while (i - n < m)
+	{
+		newstr[i] = s2[i - n];
+		i++;
+	}
+	newstr[i] = '\0';
+	return (newstr);
+}
+
+void	free_env_var(t_env *del)
+{
+	free(del->key);
+	free(del->value);
+	free(del);
 }

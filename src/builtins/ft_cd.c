@@ -6,42 +6,15 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 11:14:41 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 17:05:40 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-char	*ft_specialjoin(char const *s1, char const *s2, char c)
+void	ft_updatepwd(const char *prop, char *value)
 {
-	char *newstr;
-	unsigned int i;
-	unsigned int n;
-	unsigned int m;
-
-	if (!s1 || !s2)
-		return (NULL);
-	n = ft_strlen((char *)s1) + 1;
-	m = ft_strlen((char *)s2);
-	newstr = (char *)malloc(n + m + 1);
-	if (newstr == NULL)
-		return (NULL);
-	i = -1;
-	while (++i < n - 1)
-		newstr[i] = s1[i];
-	newstr[i++] = c;
-	while (i - n < m)
-	{
-		newstr[i] = s2[i - n];
-		i++;
-	}
-	newstr[i] = '\0';
-	return (newstr);
-}
-
-void ft_updatepwd(const char *prop, char *value)
-{
-	t_env *current;
+	t_env	*current;
 
 	current = g_shell->envs;
 	while (current != NULL)
@@ -55,46 +28,68 @@ void ft_updatepwd(const char *prop, char *value)
 	}
 }
 
-int		ft_cd(t_cmd *cmd)
+void	norm_free(char **str1, char **str2, char **str3)
 {
-	//TODO fix the cd with empty strings
-	char *olddir;
-	char *newdir;
-	int ret;
-	int len;
-	char *dir;
+	free(*str1);
+	free(*str2);
+	free(*str3);
+}
 
-	olddir = NULL;
-	newdir = NULL;
-	len = ft_len(cmd->args);
-	if (len == 1 || (len == 2 && cmd->args[1][0] == '~'))
+int		norm_reduce(char **dir, char **args)
+{
+	char	*tmp1;
+	char	*tmp2;
+
+	tmp1 = get_env_var("HOME");
+	tmp2 = args[1] ? args[1] + 1 : "";
+	free(tmp1);
+	*dir = ft_strjoin(tmp1, tmp2);
+	if (ft_strlen(*dir) == 1)
 	{
-		char *tmp1 = get_env_var("HOME");
-		char *tmp2 = cmd->args[1] ? cmd->args[1] + 1 : "";
-		free(tmp1);
-		dir = ft_strjoin(tmp1, tmp2);
-		if (ft_strlen(dir) == 1)
-			return (error_handle(E_CD_HOME, 1, ""));
+		free(*dir);
+		return (error_handle(E_CD_HOME, 1, ""));
 	}
-	else
-		dir = ft_strlen(cmd->args[1]) == 0 ? ft_strdup(".") : ft_strdup(cmd->args[1]);
-	olddir = getcwd(olddir, 0);
-	ret = chdir(dir);
-	newdir = getcwd(newdir, 0);
-	if (ret == 0)
+	return (0);
+}
+
+int		norm_dir(char **args, char **dir)
+{
+	char	*olddir;
+	char	*newdir;
+	int		ret;
+
+	olddir = getcwd(NULL, 0);
+	ret = chdir(*dir);
+	newdir = getcwd(NULL, 0);
+	if (ret == 0 && olddir && newdir)
 	{
 		ft_updatepwd("OLDPWD", olddir);
 		ft_updatepwd("PWD", newdir);
 	}
 	else
 	{
-		free(olddir);
-		free(dir);
-		free(newdir);
-		return (error_handle(E_CD_NOFOD, 1, cmd->args[1]));
-	}	
-	free(dir);
-	free(olddir);
-	free(newdir);
+		norm_free(&olddir, dir, &newdir);
+		return (error_handle(E_CD_NOFOD, 1, args[1]));
+	}
+	norm_free(&olddir, dir, &newdir);
+	return (0);
+}
+
+int		ft_cd(t_cmd *cmd)
+{
+	int		len;
+	char	*dir;
+
+	len = ft_len(cmd->args);
+	if (len == 1 || (len == 2 && cmd->args[1][0] == '~'))
+	{
+		if (norm_reduce(&dir, cmd->args))
+			return (1);
+	}
+	else
+		dir = ft_strlen(cmd->args[1]) == 0 ?
+			ft_strdup(".") : ft_strdup(cmd->args[1]);
+	if (norm_dir(cmd->args, &dir))
+		return (1);
 	return (0);
 }

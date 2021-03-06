@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:25:05 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 10:38:01 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 16:01:11 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void print_env();
 int ft_str_index(char *str, char c);
 void my_env(char **env);
 char *ft_specialjoin(char const *s1, char const *s2, char c);
-
+void free_env_var(t_env *del);
 void flip_line(char **line);
 void do_the_work(char **env);
 void execute();

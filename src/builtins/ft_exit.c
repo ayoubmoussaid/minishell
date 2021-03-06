@@ -6,15 +6,11 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 10:41:49 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 12:40:51 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 15:27:43 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
-/*
-**	//TODO fix exit, later though
-*/
 
 void	to_exit(int value)
 {
@@ -22,14 +18,14 @@ void	to_exit(int value)
 	exit(value);
 }
 
-int	ft_is_valid_digit(int c, int i)
+int		ft_is_valid_digit(int c, int i)
 {
 	return ((c >= 48 && c <= 57) || ((c == '-' || c == '+') && i == 0));
 }
 
-int	ft_exit(t_cmd *cmd)
+int		ft_exit(t_cmd *cmd)
 {
-	int					index;
+	int			index;
 	long long	ret;
 
 	index = -1;
@@ -46,7 +42,7 @@ int	ft_exit(t_cmd *cmd)
 		error_handle(E_TMA, 1, cmd->c);
 		return (1);
 	}
-	if(cmd->args[1] && (ret = ft_atoi(cmd->args[1])) > __LONG_LONG_MAX__)
+	if (cmd->args[1] && (ret = ft_atoi(cmd->args[1])) > __LONG_LONG_MAX__)
 	{
 		ft_putendl_fd("exit", 1);
 		error_handle(E_EXIT_ARG, 2, cmd->args[1]);

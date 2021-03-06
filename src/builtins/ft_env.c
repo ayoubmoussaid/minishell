@@ -6,13 +6,13 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:12 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/20 12:19:02 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 15:27:07 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-int ft_env(t_cmd *cmd)
+int		ft_env(t_cmd *cmd)
 {
 	t_env *current;
 
