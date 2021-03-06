@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: fmehdaou <fmehdaou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 09:20:42 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 15:07:12 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
-
 
 void	init_state(t_getl *g_getl)
 {
@@ -54,4 +52,17 @@ int is_on(t_getl *g_getl)
 	else if (g_getl->red_out)
 		is_on = 5;
 	return (is_on);// 0
+}
+
+void	ft_free(char **str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
 }
