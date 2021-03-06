@@ -6,21 +6,26 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 16:28:50 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 17:13:29 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 17:22:00 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+t_files	*init_parse_files(t_cmd *cmd, int *no_error)
+{
+	cmd->fdr = -2;
+	cmd->fdw = -2;
+	*no_error = 1;
+	return (cmd->files);
+}
 
 int		parse_files(t_cmd *cmd)
 {
 	t_files	*iterator;
 	int		no_error;
 
-	cmd->fdr = -2;
-	cmd->fdw = -2;
-	iterator = cmd->files;
-	no_error = 1;
+	iterator = init_parse_files(cmd, &no_error);
 	while (iterator && no_error)
 	{
 		if (iterator->type == 'a' || iterator->type == '>')
