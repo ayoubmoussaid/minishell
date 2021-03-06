@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 17:08:59 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 12:25:12 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 14:04:09 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static char		*ft_isspace(char *str)
 	return (str);
 }
 
-long long				ft_atoi(const char *str)
+long long		ft_atoi(const char *str)
 {
 	long long	res;
-	int	neg;
-	int x;
+	int			neg;
+	int			x;
 
 	str = ft_isspace((char*)str);
 	neg = 1;

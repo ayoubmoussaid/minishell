@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/25 18:02:49 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/18 11:50:44 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/03/06 14:30:02 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ char	*read_buffer(int fd, char *buffer, char *line)
 		return (NULL);
 	x = read(fd, str, BUFFER_SIZE);
 	str[x] = '\0';
-	//free(buffer);
-	if (x == 0 && (line == NULL || *line == '\0') && (buffer == NULL || *buffer == '\0'))
+	if (x == 0 && (line == NULL || *line == '\0') &&
+		(buffer == NULL || *buffer == '\0'))
 	{
 		free(str);
 		return (NULL);
@@ -90,7 +90,7 @@ int		get_next_line(int fd, char **line)
 	{
 		if ((buffer != NULL) && *buffer != '\0' &&
 			((ft_strchr(buffer, '\n') == 0) || does_it_end(buffer) == 0))
-				buffer = verify_line(line, buffer, 0);
+			buffer = verify_line(line, buffer, 0);
 		else if ((buffer != NULL) && (does_it_end(buffer) == 1))
 			break ;
 		if ((buffer = read_buffer(fd, buffer, *line)) == NULL)
