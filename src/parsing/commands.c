@@ -240,16 +240,15 @@ void ft_clear_cmd_list()
 	while (current)
 	{
 		next = current->next;
-		ft_clear_files_list(current);
 		free(current->executable);
+		ft_clear_files_list(current);
 		ft_free(current->args);
 		current->args = NULL;
 		current->executable = NULL;
 		free(current);
-		current = NULL;
 		current = next;
 	}
-	g_shell->cmd = NULL;
+	//g_shell->cmd = NULL;
 }
 
 void get_command(t_getl *g_getl)
@@ -260,9 +259,8 @@ void get_command(t_getl *g_getl)
 	g_getl->sp_c = ft_split(g_getl->line, ';');
 	while (g_getl->sp_c[++i])
 	{
-
+		g_shell->cmd = NULL;
 		flip_line(&(g_getl->sp_c[i]));
-		//it was here
 		fill_cmd(g_getl, i);
 		execute();
 		ft_clear_cmd_list();

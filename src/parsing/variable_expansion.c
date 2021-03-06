@@ -72,7 +72,7 @@ void flip_line(char **line)
 				tmp2 = tmp2 ? tmp2 : ft_strdup("");
 				free(tmp1);
 			}
-			if (index != 0)
+			if (index != 0 || (index == 0 && d == 0 && s == 0 && ((*line)[i + 1] == '\'' || (*line)[i + 1] == '\"')))
 			{
 				tmp1 = ft_strjoin(tmp2, (*line) + i + index + 1);
 				free(tmp2);
@@ -81,7 +81,7 @@ void flip_line(char **line)
 				free(tmp1);
 				free((*line));
 				(*line) = tmp2;
-				if((*line)[i] == '\"')
+				if((*line)[i] == '\"' || (*line)[i] == '\'')
 					i--;
 			}
 		}

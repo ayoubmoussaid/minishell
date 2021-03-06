@@ -71,6 +71,8 @@ void execute()
 			if (get_real_cmd(cmd, &index) == 0 && cmd->executable)
 				execute_command(cmd, index, p);
 		}
+		else
+			cmd->executable = ft_strdup("");
 		finish_fd(cmd, p, std);
 		cmd = cmd->next;
 	}

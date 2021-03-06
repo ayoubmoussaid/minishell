@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fmehdaou <fmehdaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 14:33:21 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/05 18:22:12 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/03/06 10:37:47 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
 void verify_rest(t_getl *g_getl, int *i)
 {
 	//TODO check the on and make it off
@@ -182,7 +183,8 @@ void parse_line(t_getl *g_getl)
 	while (1)
 	{
 		g_shell->exit_status == 0 ? ft_putstr_fd("\033[92mminishell$> \033[39m", STDOUT_FILENO) : ft_putstr_fd("\033[91mminishell$> \033[39m", STDOUT_FILENO);
-		//g_getl->line = ft_strdup("|");	
+		g_getl->line = NULL;	
+		// g_getl->line = ft_strdup("echo hi | echo hi > f1 >f2 <f3 <f4 <f5 > f6 | ls -la | echo f10");	
 		if ((ret = get_next_line(0, &g_getl->line)) == -1)
 			error_handle(E_STANDARD, errno, "");
 		else if (ft_strlen(g_getl->line) == 0 && ret == 0)
@@ -210,10 +212,11 @@ void parse_line(t_getl *g_getl)
 				else
 					verify_rest(g_getl, &g_getl->i);
 			}
-			if (!g_getl->brake && verify_final(g_getl))
+			if ((!g_getl->brake && verify_final(g_getl)) || (g_getl->brake == 1))
+			{
+				free(g_getl->line);
 				continue;
-			else if (g_getl->brake == 1)
-				continue;
+			}
 			else
 				get_command(g_getl);
 		}

@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/05 12:30:33 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/05 16:00:01 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 11:14:41 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,13 @@ int		ft_cd(t_cmd *cmd)
 	{
 		char *tmp1 = get_env_var("HOME");
 		char *tmp2 = cmd->args[1] ? cmd->args[1] + 1 : "";
+		free(tmp1);
 		dir = ft_strjoin(tmp1, tmp2);
 		if (ft_strlen(dir) == 1)
 			return (error_handle(E_CD_HOME, 1, ""));
 	}
 	else
-		dir = ft_strlen(cmd->args[1]) == 0 ? ft_strdup(".") : cmd->args[1];
+		dir = ft_strlen(cmd->args[1]) == 0 ? ft_strdup(".") : ft_strdup(cmd->args[1]);
 	olddir = getcwd(olddir, 0);
 	ret = chdir(dir);
 	newdir = getcwd(newdir, 0);
@@ -86,7 +87,13 @@ int		ft_cd(t_cmd *cmd)
 		ft_updatepwd("PWD", newdir);
 	}
 	else
+	{
+		free(olddir);
+		free(dir);
+		free(newdir);
 		return (error_handle(E_CD_NOFOD, 1, cmd->args[1]));
+	}	
+	free(dir);
 	free(olddir);
 	free(newdir);
 	return (0);

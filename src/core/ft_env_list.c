@@ -6,7 +6,7 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/21 09:03:37 by amoussai          #+#    #+#             */
-/*   Updated: 2021/02/20 15:11:09 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/06 12:11:03 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,11 @@ void add_env_var(t_env *new)
 			current->next = new;
 		else
 		{
-			free(current->next->value);
-			current->next->value = new->value ? ft_strdup(new->value) : NULL;
+			if(new->value)
+			{
+				free(current->next->value);
+				current->next->value = new->value ? ft_strdup(new->value) : NULL;
+			}	
 			free_env_var(new);
 		}
 	}

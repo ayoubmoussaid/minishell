@@ -23,7 +23,7 @@ int		check_builtins(char *str)
 	return (-1);
 }
 
-static	char	*parse_path(char *all_paths, char *name)
+char	*parse_path(char *all_paths, char *name)
 {
 	char	**path;
 	int		index;
