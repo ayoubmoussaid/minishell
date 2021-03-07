@@ -6,48 +6,28 @@
 /*   By: amoussai <amoussai@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 10:41:49 by amoussai          #+#    #+#             */
-/*   Updated: 2021/03/06 15:27:43 by amoussai         ###   ########.fr       */
+/*   Updated: 2021/03/07 09:38:27 by amoussai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	to_exit(int value)
-{
-	ft_putendl_fd("exit", 1);
-	exit(value);
-}
-
-int		ft_is_valid_digit(int c, int i)
-{
-	return ((c >= 48 && c <= 57) || ((c == '-' || c == '+') && i == 0));
-}
-
 int		ft_exit(t_cmd *cmd)
 {
-	int			index;
-	long long	ret;
+	long long		index;
 
-	index = -1;
-	while (cmd->args[1] && cmd->args[1][++index])
-		if (!ft_is_valid_digit(cmd->args[1][index], index))
-		{
-			ft_putendl_fd("exit", 1);
-			error_handle(E_EXIT_ARG, 2, cmd->args[1]);
-			exit(255);
-		}
+	write(2, "exit\n", 5);
+	cmd->args[1] == NULL ? exit(0) : 1;
+	index = (cmd->args[1][0] == '-') || (cmd->args[1][0] == '+') ? 1 : 0;
+	while (cmd->args[1] && cmd->args[1][index])
+		if (!ft_isdigit(cmd->args[1][index++]))
+			exit(error_handle(E_EXIT_ARG, 255, cmd->args[1]));
 	if (ft_len(cmd->args) > 2)
-	{
-		ft_putendl_fd("exit", 1);
-		error_handle(E_TMA, 1, cmd->c);
-		return (1);
-	}
-	if (cmd->args[1] && (ret = ft_atoi(cmd->args[1])) > __LONG_LONG_MAX__)
-	{
-		ft_putendl_fd("exit", 1);
+		return (error_handle(E_TMA, 1, cmd->executable));
+	index = ft_atoi(cmd->args[1]);
+	if (cmd->args[1] && ((index < 0 && cmd->args[1][0] != '-')
+	|| (index >= 0 && cmd->args[1][0] == '-')))
 		error_handle(E_EXIT_ARG, 2, cmd->args[1]);
-		exit(255);
-	}
-	cmd->args[1] == NULL ? to_exit(0) : to_exit(ft_atoi(cmd->args[1]));
+	exit(index);
 	return (0);
 }
