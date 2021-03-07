@@ -6,7 +6,7 @@
 /*   By: fmehdaou <fmehdaou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 18:32:09 by fmehdaou          #+#    #+#             */
-/*   Updated: 2021/03/06 19:02:37 by fmehdaou         ###   ########.fr       */
+/*   Updated: 2021/03/07 08:15:16 by fmehdaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ int		quote_handler(t_getl *g_getl, char c)
 	&& g_getl->line[g_getl->i + 1] == c)
 	{
 		if ((g_getl->i == 0 ||
-		(g_getl->line[g_getl->i - 1] && g_getl->line[g_getl->i - 1] == ' '))
-		&& ((g_getl->line[g_getl->i + 2] && g_getl->line[g_getl->i + 2] == ' ')
+		(g_getl->line[g_getl->i - 1] && (g_getl->line[g_getl->i - 1] == ' '
+		|| g_getl->line[g_getl->i - 1] == ';')))
+		&& ((g_getl->line[g_getl->i + 2] && (g_getl->line[g_getl->i + 2] == ' '
+		|| g_getl->line[g_getl->i + 2] == ';'))
 		|| g_getl->line[g_getl->i + 2] == '\0'))
 		{
 			g_getl->line[g_getl->i] = -g_getl->line[g_getl->i];
